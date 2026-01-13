@@ -1,0 +1,180 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+---
+
+<BaseLayout title="Contact — Travis Smith" description="Get in touch with Travis Smith.">
+  <Navigation />
+  
+  <main class="contact">
+    <div class="container">
+      <div class="contact__grid">
+        <div class="contact__info">
+          <span class="label">Contact</span>
+          <h1 class="contact__title">Let's talk.</h1>
+          <p class="contact__description">
+            I'm always interested in hearing about new opportunities, whether that's a full-time role, consulting, or just chatting about design leadership.
+          </p>
+          
+          <div class="contact__methods">
+            <a href="mailto:hello@fully-operational.com" class="contact__method">
+              <span class="contact__method-label">Email</span>
+              <span class="contact__method-value">hello@fully-operational.com</span>
+            </a>
+            
+            <a href="https://www.linkedin.com/in/travisbsmithux/" target="_blank" rel="noopener noreferrer" class="contact__method">
+              <span class="contact__method-label">LinkedIn</span>
+              <span class="contact__method-value">linkedin.com/in/travisbsmithux</span>
+            </a>
+          </div>
+          
+          <div class="contact__location">
+            <span class="label">Location</span>
+            <p>Kansas City, MO — Available for remote work worldwide.</p>
+          </div>
+        </div>
+        
+        <div class="contact__status">
+          <div class="status-card">
+            <div class="status-card__indicator"></div>
+            <span class="status-card__label">Current Status</span>
+            <p class="status-card__text">Open to opportunities</p>
+            <p class="status-card__detail">Full-time, consulting, or advisory roles</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .contact {
+    padding-top: calc(64px + var(--space-16));
+    padding-bottom: var(--space-20);
+    min-height: 80vh;
+  }
+  
+  .contact__grid {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    gap: var(--space-16);
+    align-items: start;
+  }
+  
+  .contact__info .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+  
+  .contact__title {
+    font-size: var(--text-5xl);
+    font-weight: 500;
+    margin-bottom: var(--space-6);
+  }
+  
+  .contact__description {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    max-width: 480px;
+    margin-bottom: var(--space-12);
+  }
+  
+  .contact__methods {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    margin-bottom: var(--space-12);
+  }
+  
+  .contact__method {
+    display: block;
+    padding: var(--space-4) 0;
+    border-bottom: 1px solid var(--color-border);
+    transition: border-color var(--duration-fast) var(--ease);
+  }
+  
+  .contact__method:hover {
+    border-color: var(--color-text);
+  }
+  
+  .contact__method-label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-1);
+  }
+  
+  .contact__method-value {
+    font-size: var(--text-lg);
+    color: var(--color-text);
+  }
+  
+  .contact__location .label {
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+  
+  .contact__location p {
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  /* Status Card */
+  .status-card {
+    padding: var(--space-6);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+  }
+  
+  .status-card__indicator {
+    width: 8px;
+    height: 8px;
+    background: #22c55e;
+    border-radius: 50%;
+    margin-bottom: var(--space-4);
+    animation: pulse 2s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
+  }
+  
+  .status-card__label {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-2);
+  }
+  
+  .status-card__text {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-1);
+  }
+  
+  .status-card__detail {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  @media (max-width: 768px) {
+    .contact__grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .status-card {
+      max-width: 300px;
+    }
+  }
+</style>

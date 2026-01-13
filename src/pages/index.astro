@@ -1,0 +1,120 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Hero from '../components/Hero.astro';
+import WorkCard from '../components/WorkCard.astro';
+import Button from '../components/Button.astro';
+
+const allWork = await getCollection('work');
+const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
+---
+
+<BaseLayout title="Travis Smith — Design Leader">
+  <Navigation />
+  
+  <main>
+    <Hero 
+      title="Hi, I'm Travis and I love to <em>solve problems</em> and <em>make things</em>."
+      subtitle="For more than 17 years, I've been building products and leading cross-functional design teams. I thrive in environments where I can move quickly and grow products and teams that deliver measurable impact for our customers and our business. I'm known for my ability to explain complex topics, foster positive, collaborative environments that promote empathy and growth, and deliver impactful design solutions that exceed business goals."
+    >
+      <Button href="/contact">Get in touch</Button>
+      <Button href="/about" variant="secondary">About me</Button>
+    </Hero>
+    
+    <section class="work">
+      <div class="container">
+        <header class="work__header">
+          <span class="label">Selected Work</span>
+          <h2 class="work__title">Case Studies</h2>
+        </header>
+        
+        <div class="work__grid">
+          {sortedWork.map((work) => (
+            <WorkCard
+              title={work.data.title}
+              company={work.data.company}
+              description={work.data.description}
+              image={work.data.image}
+              href={`/work/${work.id}`}
+              tags={work.data.tags}
+            />
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <section class="cta">
+      <div class="container">
+        <div class="cta__content">
+          <span class="label">Let's work together</span>
+          <h2 class="cta__title">Have a project in mind?</h2>
+          <p class="cta__text">I'm always interested in hearing about new opportunities, whether that's a full-time role, consulting, or advisory work.</p>
+          <Button href="/contact" size="lg">Start a conversation</Button>
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  /* Work Section */
+  .work {
+    padding: var(--space-20) 0;
+    background: var(--color-bg-alt);
+  }
+  
+  .work__header {
+    margin-bottom: var(--space-12);
+  }
+  
+  .work__header .label {
+    margin-bottom: var(--space-3);
+    display: block;
+  }
+  
+  .work__title {
+    font-size: var(--text-4xl);
+    font-weight: 500;
+  }
+  
+  .work__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-6);
+  }
+  
+  @media (max-width: 768px) {
+    .work__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+  
+  /* CTA Section */
+  .cta {
+    padding: var(--space-24) 0;
+  }
+  
+  .cta__content {
+    max-width: 560px;
+  }
+  
+  .cta__content .label {
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  
+  .cta__title {
+    font-size: var(--text-4xl);
+    margin-bottom: var(--space-4);
+  }
+  
+  .cta__text {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-8);
+  }
+</style>

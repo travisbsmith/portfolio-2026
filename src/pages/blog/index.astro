@@ -1,0 +1,266 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+
+// Your Substack profile and publication URLs
+const SUBSTACK_PROFILE = "https://substack.com/@travisbsmith";
+// Once you create a publication, update this:
+const SUBSTACK_PUBLICATION = "https://travisbsmith.substack.com";
+
+// Placeholder posts - update these once you publish on Substack
+// Or remove this section entirely until you have posts
+const hasPosts = false; // Set to true once you have posts
+
+const featuredPosts = [
+  {
+    title: "Coming Soon: Scaling Design Teams",
+    description: "Lessons learned from growing design organizations from 5 to 50+ designers.",
+    date: "Coming soon",
+    url: SUBSTACK_PUBLICATION
+  }
+];
+---
+
+<BaseLayout title="Blog — Travis Smith" description="Thoughts on design leadership, product design, and building teams.">
+  <Navigation />
+  
+  <main class="blog">
+    <div class="container">
+      <header class="blog__header">
+        <span class="label">Newsletter</span>
+        <h1 class="blog__title">Writing</h1>
+        <p class="blog__description">
+          Thoughts on design leadership, product strategy, and building great teams. 
+          Subscribe to get new posts delivered to your inbox.
+        </p>
+        
+        <div class="subscribe-cta">
+          <Button href={SUBSTACK_PROFILE} size="lg">Subscribe on Substack</Button>
+          <p class="subscribe-note">Free newsletter, no spam</p>
+        </div>
+      </header>
+      
+      {hasPosts ? (
+        <section class="posts">
+          <span class="label">Recent Posts</span>
+          
+          <div class="posts__list">
+            {featuredPosts.map((post) => (
+              <article class="post-card">
+                <a href={post.url} target="_blank" rel="noopener noreferrer" class="post-card__link">
+                  <time class="post-card__date">{post.date}</time>
+                  <h2 class="post-card__title">{post.title}</h2>
+                  <p class="post-card__excerpt">{post.description}</p>
+                  <span class="post-card__read">Read on Substack →</span>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section class="coming-soon">
+          <div class="coming-soon__card">
+            <span class="label">Coming Soon</span>
+            <h2 class="coming-soon__title">First post dropping soon</h2>
+            <p class="coming-soon__text">
+              I'm working on my first newsletter about scaling design teams. 
+              Subscribe to be the first to know when it's live.
+            </p>
+          </div>
+        </section>
+      )}
+      
+      <section class="crosspost-info">
+        <span class="label">Also Find Me On</span>
+        <div class="platforms">
+          <a href="https://www.linkedin.com/in/travisbsmithux/" target="_blank" rel="noopener noreferrer" class="platform">
+            <span class="platform__name">LinkedIn</span>
+            <span class="platform__arrow">→</span>
+          </a>
+          <a href="https://medium.com/@travissmith" target="_blank" rel="noopener noreferrer" class="platform">
+            <span class="platform__name">Medium</span>
+            <span class="platform__arrow">→</span>
+          </a>
+        </div>
+      </section>
+    </div>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .blog {
+    padding-top: calc(64px + var(--space-16));
+    padding-bottom: var(--space-20);
+  }
+  
+  .blog__header {
+    margin-bottom: var(--space-16);
+    max-width: 560px;
+  }
+  
+  .blog__header .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+  
+  .blog__title {
+    font-size: var(--text-5xl);
+    font-weight: 500;
+    margin-bottom: var(--space-4);
+  }
+  
+  .blog__description {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-8);
+  }
+  
+  .subscribe-cta {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+  
+  .subscribe-note {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin: 0;
+  }
+  
+  /* Coming Soon */
+  .coming-soon {
+    margin-bottom: var(--space-16);
+  }
+  
+  .coming-soon__card {
+    max-width: 480px;
+    padding: var(--space-8);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+  }
+  
+  .coming-soon__card .label {
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  
+  .coming-soon__title {
+    font-size: var(--text-2xl);
+    margin-bottom: var(--space-3);
+  }
+  
+  .coming-soon__text {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  /* Posts */
+  .posts {
+    margin-bottom: var(--space-16);
+  }
+  
+  .posts .label {
+    display: block;
+    margin-bottom: var(--space-6);
+  }
+  
+  .posts__list {
+    display: flex;
+    flex-direction: column;
+    max-width: 640px;
+    margin-bottom: var(--space-8);
+  }
+  
+  .post-card {
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .post-card__link {
+    display: block;
+    padding: var(--space-8) 0;
+    transition: opacity var(--duration-fast) var(--ease);
+  }
+  
+  .post-card__link:hover {
+    opacity: 0.7;
+  }
+  
+  .post-card__link:hover .post-card__read {
+    color: var(--color-accent);
+  }
+  
+  .post-card__date {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-3);
+  }
+  
+  .post-card__title {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+  
+  .post-card__excerpt {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    line-height: 1.6;
+  }
+  
+  .post-card__read {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+    transition: color var(--duration-fast) var(--ease);
+  }
+  
+  /* Cross-post info */
+  .crosspost-info {
+    padding-top: var(--space-12);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .crosspost-info .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+  
+  .platforms {
+    display: flex;
+    gap: var(--space-6);
+  }
+  
+  .platform {
+    display: flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    transition: color var(--duration-fast) var(--ease);
+  }
+  
+  .platform:hover {
+    color: var(--color-text);
+  }
+  
+  .platform__arrow {
+    transition: transform var(--duration-fast) var(--ease);
+  }
+  
+  .platform:hover .platform__arrow {
+    transform: translateX(4px);
+  }
+</style>

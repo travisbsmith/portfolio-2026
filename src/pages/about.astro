@@ -1,0 +1,363 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+
+const experience = [
+  {
+    company: "Deel",
+    role: "Head of Design, People Experiences",
+    period: "2024–Present",
+    description: "Leading product design for global HR and payroll platform, building the future of work."
+  },
+  {
+    company: "Shopify",
+    role: "Head of Design",
+    period: "Jul 2020–2024",
+    description: "Led the Engage group, a cross-functional team of 25+. Delivered $3.2B+ in GMV. Catapulted 1P app adoption 50%."
+  },
+  {
+    company: "Grubhub",
+    role: "Head of Design",
+    period: "Aug 2018–Jun 2020",
+    description: "Led Chicago Design Studio with 45+ designers, researchers, and content strategists. Achieved 95% increase in forecasting accuracy."
+  },
+  {
+    company: "Grubhub",
+    role: "Manager of Product Design",
+    period: "Feb 2016–Jul 2018",
+    description: "Led team of 40+ focusing on Driver and Restaurant products. Increased restaurant onboarding speed 86%."
+  },
+  {
+    company: "The Tie Bar",
+    role: "Director of Product Design & Engineering",
+    period: "Mar 2015–Jan 2016",
+    description: "Managed product, design, and engineering for $20M+ e-commerce platform. Increased conversion 0.5% desktop, 10%+ mobile."
+  },
+  {
+    company: "VSA Partners",
+    role: "Director, UX",
+    period: "May 2013–Mar 2015",
+    description: "Led strategy and design for Kraft, Kimberly Clark, CME Group, Mack Trucks, and Chicago Dept of Aviation."
+  },
+  {
+    company: "Cramer Krasselt",
+    role: "Senior UX Strategist",
+    period: "Jul 2012–May 2013",
+    description: "Led cross-functional teams for Panera, Heinz, Johnsonville. Won Webby award for Panera website."
+  }
+];
+
+const principles = [
+  {
+    number: "01",
+    title: "Clarity over complexity",
+    description: "Complex problems deserve simple solutions. Clear thinking leads to clear design."
+  },
+  {
+    number: "02",
+    title: "Systems thinking",
+    description: "Good design scales. I build systems that empower teams to move faster."
+  },
+  {
+    number: "03",
+    title: "Ship and iterate",
+    description: "Perfection is the enemy of progress. Launch, learn, and improve."
+  },
+  {
+    number: "04",
+    title: "Grow the craft",
+    description: "The best work happens when designers are supported, challenged, and trusted."
+  }
+];
+---
+
+<BaseLayout 
+  title="About — Travis Smith" 
+  description="Design leader with 15+ years building products and teams."
+>
+  <Navigation />
+  
+  <main class="about">
+    <section class="about__hero">
+      <div class="container">
+        <div class="about__grid">
+          <div class="about__photo">
+            <img src="/images/about/travis-smith.jpg" alt="Travis Smith" />
+          </div>
+          
+          <div class="about__intro">
+            <span class="label">About</span>
+            <h1 class="about__title">Hey there. I'm Travis. I build teams and solve problems.</h1>
+            
+            <div class="about__bio">
+              <p>Hey there! I'm currently Head of Design, People Experiences at <strong>Deel</strong>, where I lead an amazing team of creative minds. We're all about helping companies really connect with their people through innovative HR and payroll experiences—figuring out what makes global teams tick and how to support them effectively.</p>
+              
+              <p>I've spent the last 17+ years diving into user research and product design, working with all sorts of companies—from big names like Heinz, Burger King, and Mack Trucks to tech companies like <strong>Shopify</strong>, <strong>Grubhub</strong>, and <strong>The Tie Bar</strong>. But what really gets me excited? Building great teams. For the past decade, I've been focused on bringing designers, researchers, and content folks together, helping them do their best work through mentoring and creating processes that actually make sense.</p>
+              
+              <p>I love collaborating with product and engineering leaders to drive real results that boost market share year after year. There's something incredibly satisfying about seeing a team come together to create something truly impactful!</p>
+            </div>
+            
+            <div class="about__actions">
+              <Button href="/contact">Get in touch</Button>
+              <Button href="https://www.linkedin.com/in/travisbsmithux/" variant="secondary">LinkedIn</Button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+    
+    <section class="principles">
+      <div class="container">
+        <header class="principles__header">
+          <span class="label">Principles</span>
+          <h2 class="principles__title">How I work</h2>
+        </header>
+        
+        <div class="principles__grid">
+          {principles.map((item) => (
+            <article class="principle">
+              <span class="principle__number">{item.number}</span>
+              <h3 class="principle__title">{item.title}</h3>
+              <p class="principle__description">{item.description}</p>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+    
+    <section class="experience">
+      <div class="container">
+        <header class="experience__header">
+          <span class="label">Experience</span>
+          <h2 class="experience__title">Career</h2>
+        </header>
+        
+        <div class="experience__list">
+          {experience.map((job) => (
+            <article class="job">
+              <div class="job__period">{job.period}</div>
+              <div class="job__details">
+                <h3 class="job__role">{job.role}</h3>
+                <span class="job__company">{job.company}</span>
+                <p class="job__description">{job.description}</p>
+              </div>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .about {
+    padding-top: 64px;
+  }
+  
+  /* Hero */
+  .about__hero {
+    padding: var(--space-16) 0 var(--space-20);
+  }
+  
+  .about__grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-16);
+    align-items: start;
+  }
+  
+  .about__photo {
+    position: sticky;
+    top: calc(64px + var(--space-8));
+  }
+  
+  .about__photo img {
+    width: 100%;
+    aspect-ratio: 1;
+    object-fit: cover;
+    filter: grayscale(100%);
+    transition: filter var(--duration-normal) var(--ease);
+  }
+  
+  .about__photo:hover img {
+    filter: grayscale(0%);
+  }
+  
+  .about__intro .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+  
+  .about__title {
+    font-size: var(--text-4xl);
+    font-weight: 500;
+    margin-bottom: var(--space-8);
+    max-width: 500px;
+  }
+  
+  .about__bio {
+    margin-bottom: var(--space-8);
+  }
+  
+  .about__bio p {
+    font-size: var(--text-base);
+    line-height: 1.7;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+  }
+  
+  .about__bio strong {
+    color: var(--color-text);
+  }
+  
+  .about__actions {
+    display: flex;
+    gap: var(--space-4);
+  }
+  
+  /* Principles */
+  .principles {
+    padding: var(--space-20) 0;
+    background: var(--color-bg-alt);
+  }
+  
+  .principles__header {
+    margin-bottom: var(--space-12);
+  }
+  
+  .principles__header .label {
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  
+  .principles__title {
+    font-size: var(--text-3xl);
+  }
+  
+  .principles__grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+  
+  .principle {
+    padding: var(--space-6);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+  }
+  
+  .principle__number {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+  
+  .principle__title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+  
+  .principle__description {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+    line-height: 1.6;
+  }
+  
+  /* Experience */
+  .experience {
+    padding: var(--space-20) 0;
+  }
+  
+  .experience__header {
+    margin-bottom: var(--space-12);
+  }
+  
+  .experience__header .label {
+    display: block;
+    margin-bottom: var(--space-3);
+  }
+  
+  .experience__title {
+    font-size: var(--text-3xl);
+  }
+  
+  .experience__list {
+    max-width: 640px;
+  }
+  
+  .job {
+    display: grid;
+    grid-template-columns: 120px 1fr;
+    gap: var(--space-8);
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+  
+  .job:first-child {
+    padding-top: 0;
+  }
+  
+  .job:last-child {
+    border-bottom: none;
+  }
+  
+  .job__period {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    padding-top: var(--space-1);
+  }
+  
+  .job__role {
+    font-size: var(--text-base);
+    font-weight: 500;
+    margin-bottom: var(--space-1);
+  }
+  
+  .job__company {
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+  
+  .job__description {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+      gap: var(--space-8);
+    }
+    
+    .about__photo {
+      position: static;
+      max-width: 200px;
+    }
+    
+    .principles__grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .job {
+      grid-template-columns: 1fr;
+      gap: var(--space-2);
+    }
+    
+    .job__period {
+      padding-top: 0;
+    }
+  }
+</style>

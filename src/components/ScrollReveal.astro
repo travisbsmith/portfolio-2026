@@ -1,0 +1,73 @@
+---
+interface Props {
+  delay?: number;
+  duration?: number;
+  class?: string;
+}
+
+const { delay = 0, duration = 600, class: className } = Astro.props;
+---
+
+<div 
+  class:list={['scroll-reveal', className]}
+  data-delay={delay}
+  data-duration={duration}
+>
+  <slot />
+</div>
+
+<style>
+  .scroll-reveal {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  
+  .scroll-reveal.is-visible {
+    animation: revealUp var(--duration, 600ms) var(--ease-out) forwards;
+    animation-delay: var(--delay, 0ms);
+  }
+  
+  @keyframes revealUp {
+    from {
+      opacity: 0;
+      transform: translateY(30px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .scroll-reveal {
+      opacity: 1;
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  const observer = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          const el = entry.target as HTMLElement;
+          const delay = el.dataset.delay || '0';
+          const duration = el.dataset.duration || '600';
+          el.style.setProperty('--delay', `${delay}ms`);
+          el.style.setProperty('--duration', `${duration}ms`);
+          el.classList.add('is-visible');
+          observer.unobserve(el);
+        }
+      });
+    },
+    {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    }
+  );
+
+  document.querySelectorAll('.scroll-reveal').forEach((el) => {
+    observer.observe(el);
+  });
+</script>

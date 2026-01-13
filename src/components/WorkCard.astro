@@ -1,0 +1,135 @@
+---
+interface Props {
+  title: string;
+  company: string;
+  description: string;
+  image: string;
+  href: string;
+  tags?: string[];
+}
+
+const { title, company, description, image, href, tags = [] } = Astro.props;
+---
+
+<a href={href} class="work-card">
+  <div class="work-card__image">
+    <img src={image} alt={`${title} - ${company}`} loading="lazy" />
+  </div>
+  
+  <div class="work-card__content">
+    <span class="work-card__company label">{company}</span>
+    <h3 class="work-card__title">{title}</h3>
+    <p class="work-card__description">{description}</p>
+    
+    {tags.length > 0 && (
+      <div class="work-card__tags">
+        {tags.slice(0, 3).map((tag) => (
+          <span class="work-card__tag">{tag}</span>
+        ))}
+      </div>
+    )}
+  </div>
+  
+  <span class="work-card__arrow">→</span>
+</a>
+
+<style>
+  .work-card {
+    display: grid;
+    grid-template-columns: 1fr;
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+    transition: border-color var(--duration-fast) var(--ease);
+  }
+  
+  .work-card:hover {
+    border-color: var(--color-text);
+  }
+  
+  .work-card:hover .work-card__arrow {
+    transform: translate(4px, -4px);
+    opacity: 1;
+  }
+  
+  .work-card:hover .work-card__image img {
+    transform: scale(1.02);
+  }
+  
+  .work-card__image {
+    aspect-ratio: 16 / 10;
+    overflow: hidden;
+    background: var(--color-surface);
+  }
+  
+  .work-card__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-normal) var(--ease);
+  }
+  
+  .work-card__content {
+    padding: var(--space-6);
+    position: relative;
+  }
+  
+  .work-card__company {
+    display: block;
+    margin-bottom: var(--space-2);
+  }
+  
+  .work-card__title {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+    color: var(--color-text);
+  }
+  
+  .work-card__description {
+    font-size: var(--text-sm);
+    line-height: 1.6;
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-4);
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .work-card__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+  }
+  
+  .work-card__tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+    padding: var(--space-1) var(--space-2);
+    background: var(--color-surface);
+  }
+  
+  .work-card__arrow {
+    position: absolute;
+    top: var(--space-6);
+    right: var(--space-6);
+    font-size: var(--text-lg);
+    color: var(--color-text);
+    opacity: 0;
+    transform: translate(0, 0);
+    transition: transform var(--duration-fast) var(--ease),
+                opacity var(--duration-fast) var(--ease);
+  }
+  
+  @media (prefers-reduced-motion: reduce) {
+    .work-card__image img,
+    .work-card__arrow {
+      transition: none;
+    }
+  }
+</style>
