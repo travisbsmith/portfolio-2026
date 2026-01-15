@@ -19,9 +19,30 @@ const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
       title="Hi, I'm Travis and I love to <em>solve problems</em> and <em>make things</em>."
       subtitle="For more than 17 years, I've been building products and leading cross-functional design teams. I thrive in environments where I can move quickly and grow products and teams that deliver measurable impact for our customers and our business. I'm known for my ability to explain complex topics, foster positive, collaborative environments that promote empathy and growth, and deliver impactful design solutions that exceed business goals."
     >
-      <Button href="/contact">Get in touch</Button>
-      <Button href="/about" variant="secondary">About me</Button>
+      <Button href="/contact/">Get in touch</Button>
+      <Button href="/about/" variant="secondary">About me</Button>
     </Hero>
+    
+    <section class="brands">
+      <div class="container">
+        <p class="brands__label">Trusted by teams at</p>
+        <div class="brands__grid">
+          <span class="brand">Shopify</span>
+          <span class="brand">Grubhub</span>
+          <span class="brand">Deel</span>
+          <span class="brand">Mack Trucks</span>
+          <span class="brand">The Tie Bar</span>
+          <span class="brand">Chanel</span>
+          <span class="brand">Burger King</span>
+          <span class="brand">HP</span>
+          <span class="brand">Motorola</span>
+          <span class="brand">Benihana</span>
+          <span class="brand">Panera Bread</span>
+          <span class="brand">Corona</span>
+          <span class="brand">Porsche</span>
+        </div>
+      </div>
+    </section>
     
     <section class="work">
       <div class="container">
@@ -37,7 +58,7 @@ const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
               company={work.data.company}
               description={work.data.description}
               image={work.data.image}
-              href={`/work/${work.id}`}
+              href={`/work/${work.id}/`}
               tags={work.data.tags}
             />
           ))}
@@ -51,7 +72,7 @@ const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
           <span class="label">Let's work together</span>
           <h2 class="cta__title">Have a project in mind?</h2>
           <p class="cta__text">I'm always interested in hearing about new opportunities, whether that's a full-time role, consulting, or advisory work.</p>
-          <Button href="/contact" size="lg">Start a conversation</Button>
+          <Button href="/contact/" size="lg">Start a conversation</Button>
         </div>
       </div>
     </section>
@@ -61,6 +82,54 @@ const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
 </BaseLayout>
 
 <style>
+  /* Brands Section */
+  .brands {
+    padding: var(--space-16) 0;
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .brands__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--color-text-tertiary);
+    text-align: center;
+    margin-bottom: var(--space-10);
+  }
+  
+  .brands__grid {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: var(--space-4) var(--space-8);
+  }
+  
+  .brand {
+    font-size: var(--text-sm);
+    font-weight: 500;
+    color: var(--color-text);
+    opacity: 0.4;
+    letter-spacing: 0.01em;
+    transition: opacity var(--duration-fast) var(--ease);
+    white-space: nowrap;
+  }
+  
+  .brand:hover {
+    opacity: 0.65;
+  }
+  
+  @media (max-width: 768px) {
+    .brands__grid {
+      gap: var(--space-3) var(--space-6);
+    }
+    
+    .brand {
+      font-size: var(--text-xs);
+    }
+  }
+  
   /* Work Section */
   .work {
     padding: var(--space-20) 0;

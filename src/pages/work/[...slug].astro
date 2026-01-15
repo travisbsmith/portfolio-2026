@@ -61,14 +61,14 @@ const nextWork = currentIndex < sortedWork.length - 1 ? sortedWork[currentIndex 
       <div class="container">
         <div class="work-nav__grid">
           {prevWork && (
-            <a href={`/work/${prevWork.id}`} class="work-nav__link">
+            <a href={`/work/${prevWork.id}/`} class="work-nav__link">
               <span class="work-nav__label">Previous</span>
               <span class="work-nav__title">← {prevWork.data.company}</span>
             </a>
           )}
           
           {nextWork && (
-            <a href={`/work/${nextWork.id}`} class="work-nav__link work-nav__link--next">
+            <a href={`/work/${nextWork.id}/`} class="work-nav__link work-nav__link--next">
               <span class="work-nav__label">Next</span>
               <span class="work-nav__title">{nextWork.data.company} →</span>
             </a>
