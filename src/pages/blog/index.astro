@@ -4,23 +4,9 @@ import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import Button from '../../components/Button.astro';
 
-// Your Substack profile and publication URLs
-const SUBSTACK_PROFILE = "https://substack.com/@travisbsmith";
-// Once you create a publication, update this:
-const SUBSTACK_PUBLICATION = "https://travisbsmith.substack.com";
+// Your Substack profile URL
+const SUBSTACK_URL = "https://substack.com/@travisbsmith";
 
-// Placeholder posts - update these once you publish on Substack
-// Or remove this section entirely until you have posts
-const hasPosts = false; // Set to true once you have posts
-
-const featuredPosts = [
-  {
-    title: "Coming Soon: Scaling Design Teams",
-    description: "Lessons learned from growing design organizations from 5 to 50+ designers.",
-    date: "Coming soon",
-    url: SUBSTACK_PUBLICATION
-  }
-];
 ---
 
 <BaseLayout title="Blog — Travis Smith" description="Thoughts on design leadership, product design, and building teams.">
@@ -37,40 +23,21 @@ const featuredPosts = [
         </p>
         
         <div class="subscribe-cta">
-          <Button href={SUBSTACK_PROFILE} size="lg">Subscribe on Substack</Button>
+          <Button href={SUBSTACK_URL} size="lg">Subscribe on Substack</Button>
           <p class="subscribe-note">Free newsletter, no spam</p>
         </div>
       </header>
       
-      {hasPosts ? (
-        <section class="posts">
-          <span class="label">Recent Posts</span>
-          
-          <div class="posts__list">
-            {featuredPosts.map((post) => (
-              <article class="post-card">
-                <a href={post.url} target="_blank" rel="noopener noreferrer" class="post-card__link">
-                  <time class="post-card__date">{post.date}</time>
-                  <h2 class="post-card__title">{post.title}</h2>
-                  <p class="post-card__excerpt">{post.description}</p>
-                  <span class="post-card__read">Read on Substack →</span>
-                </a>
-              </article>
-            ))}
-          </div>
-        </section>
-      ) : (
-        <section class="coming-soon">
-          <div class="coming-soon__card">
-            <span class="label">Coming Soon</span>
-            <h2 class="coming-soon__title">First post dropping soon</h2>
-            <p class="coming-soon__text">
-              I'm working on my first newsletter about scaling design teams. 
-              Subscribe to be the first to know when it's live.
-            </p>
-          </div>
-        </section>
-      )}
+      <section class="coming-soon">
+        <div class="coming-soon__card">
+          <span class="label">Coming Soon</span>
+          <h2 class="coming-soon__title">First post dropping soon</h2>
+          <p class="coming-soon__text">
+            I'm working on my first newsletter about scaling design teams. 
+            Subscribe to be the first to know when it's live.
+          </p>
+        </div>
+      </section>
       
       <section class="crosspost-info">
         <span class="label">Also Find Me On</span>
