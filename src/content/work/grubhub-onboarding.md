@@ -3,7 +3,7 @@ title: "Restaurant Onboarding"
 company: "Grubhub"
 description: "Redesigned the restaurant partner onboarding experience, reducing time-to-first-order from 21 days to less than 72 hours with zero internal effort."
 date: 2022-06-01
-image: "/images/work/grubhub-onboarding-hero.jpg"
+image: "/images/work/grubhub-onboarding-hero.webp"
 tags: ["Product Design", "Onboarding", "B2B"]
 featured: true
 order: 2

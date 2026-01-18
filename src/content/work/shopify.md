@@ -3,7 +3,7 @@ title: "Marketing Tools Suite"
 company: "Shopify"
 description: "Led the design of Shopify's marketing tools suite, enabling merchants to create, manage, and optimize their marketing campaigns directly within the platform."
 date: 2023-01-01
-image: "/images/work/shopify-hero.jpg"
+image: "/images/work/shopify-hero.webp"
 tags: ["Product Design", "E-commerce", "Marketing"]
 featured: true
 order: 1
