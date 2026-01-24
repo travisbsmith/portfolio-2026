@@ -3,10 +3,22 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import Button from '../../components/Button.astro';
+import { getSubstackPosts } from '../../utils/substack';
 
 // Your Substack profile URL
 const SUBSTACK_URL = "https://substack.com/@travisbsmith";
 
+// Fetch posts from Substack RSS feed
+const posts = await getSubstackPosts();
+
+// Format date for display
+function formatDate(date: Date): string {
+  return date.toLocaleDateString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+}
 ---
 
 <BaseLayout title="Blog — Travis Smith" description="Thoughts on design leadership, product design, and building teams.">
@@ -28,16 +40,36 @@ const SUBSTACK_URL = "https://substack.com/@travisbsmith";
         </div>
       </header>
       
-      <section class="coming-soon">
-        <div class="coming-soon__card">
-          <span class="label">Coming Soon</span>
-          <h2 class="coming-soon__title">First post dropping soon</h2>
-          <p class="coming-soon__text">
-            I'm working on my first newsletter about scaling design teams. 
-            Subscribe to be the first to know when it's live.
-          </p>
-        </div>
-      </section>
+      {posts.length > 0 ? (
+        <section class="posts">
+          <span class="label">Recent Posts</span>
+          <div class="posts__list">
+            {posts.map((post) => (
+              <article class="post-card">
+                <a href={`/blog/${post.slug}/`} class="post-card__link">
+                  <time class="post-card__date" datetime={post.date.toISOString()}>
+                    {formatDate(post.date)}
+                  </time>
+                  <h2 class="post-card__title">{post.title}</h2>
+                  <p class="post-card__excerpt">{post.excerpt}</p>
+                  <span class="post-card__read">Read article →</span>
+                </a>
+              </article>
+            ))}
+          </div>
+        </section>
+      ) : (
+        <section class="coming-soon">
+          <div class="coming-soon__card">
+            <span class="label">Coming Soon</span>
+            <h2 class="coming-soon__title">First post dropping soon</h2>
+            <p class="coming-soon__text">
+              I'm working on my first newsletter about scaling design teams. 
+              Subscribe to be the first to know when it's live.
+            </p>
+          </div>
+        </section>
+      )}
       
       <section class="crosspost-info">
         <span class="label">Also Find Me On</span>
@@ -143,11 +175,14 @@ const SUBSTACK_URL = "https://substack.com/@travisbsmith";
     display: flex;
     flex-direction: column;
     max-width: 640px;
-    margin-bottom: var(--space-8);
   }
   
   .post-card {
     border-bottom: 1px solid var(--color-border);
+  }
+  
+  .post-card:first-child {
+    border-top: 1px solid var(--color-border);
   }
   
   .post-card__link {

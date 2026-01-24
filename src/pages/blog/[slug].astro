@@ -1,0 +1,328 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+import { getSubstackPosts, type SubstackPost } from '../../utils/substack';
+
+export async function getStaticPaths() {
+  const posts = await getSubstackPosts();
+  
+  // If no posts are available, return an empty array
+  // This allows the build to succeed even if the Substack feed isn't set up yet
+  if (posts.length === 0) {
+    return [];
+  }
+  
+  return posts.map((post) => ({
+    params: { slug: post.slug },
+    props: { post },
+  }));
+}
+
+interface Props {
+  post: SubstackPost;
+}
+
+const { post } = Astro.props;
+
+// Format date for display
+const formattedDate = post.date.toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+
+// Create a short description for SEO
+const description = post.excerpt.slice(0, 160);
+---
+
+<BaseLayout title={`${post.title} — Travis Smith`} description={description}>
+  <Navigation />
+  
+  <main class="post">
+    <article class="container container--narrow">
+      <header class="post__header">
+        <a href="/blog/" class="post__back">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M19 12H5"/>
+            <path d="M12 19l-7-7 7-7"/>
+          </svg>
+          Back to all posts
+        </a>
+        
+        <time class="post__date" datetime={post.date.toISOString()}>
+          {formattedDate}
+        </time>
+        
+        <h1 class="post__title">{post.title}</h1>
+        
+        {post.author && (
+          <p class="post__author">By {post.author}</p>
+        )}
+      </header>
+      
+      <div class="post__content" set:html={post.content} />
+      
+      <footer class="post__footer">
+        <div class="post__actions">
+          <Button href={post.link} variant="secondary">
+            Read on Substack
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/>
+              <polyline points="15 3 21 3 21 9"/>
+              <line x1="10" y1="14" x2="21" y2="3"/>
+            </svg>
+          </Button>
+          <Button href="/blog/">View all posts</Button>
+        </div>
+        
+        <p class="post__subscribe">
+          Enjoy this post? <a href="https://substack.com/@travisbsmith">Subscribe to my newsletter</a> for more.
+        </p>
+      </footer>
+    </article>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .post {
+    padding-top: calc(64px + var(--space-12));
+    padding-bottom: var(--space-20);
+  }
+  
+  .post__header {
+    margin-bottom: var(--space-12);
+  }
+  
+  .post__back {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: var(--space-8);
+    transition: color var(--duration-fast) var(--ease);
+  }
+  
+  .post__back:hover {
+    color: var(--color-accent);
+  }
+  
+  .post__back svg {
+    transition: transform var(--duration-fast) var(--ease);
+  }
+  
+  .post__back:hover svg {
+    transform: translateX(-4px);
+  }
+  
+  .post__date {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-4);
+  }
+  
+  .post__title {
+    font-size: clamp(2rem, 5vw, var(--text-5xl));
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+  
+  .post__author {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  /* Post Content - Styles for Substack HTML */
+  .post__content {
+    font-size: var(--text-lg);
+    line-height: 1.8;
+    color: var(--color-text);
+  }
+  
+  .post__content :global(h1),
+  .post__content :global(h2),
+  .post__content :global(h3),
+  .post__content :global(h4) {
+    font-family: var(--font-display);
+    font-weight: 500;
+    line-height: 1.3;
+    margin-top: var(--space-12);
+    margin-bottom: var(--space-4);
+  }
+  
+  .post__content :global(h2) {
+    font-size: var(--text-3xl);
+  }
+  
+  .post__content :global(h3) {
+    font-size: var(--text-2xl);
+  }
+  
+  .post__content :global(h4) {
+    font-size: var(--text-xl);
+  }
+  
+  .post__content :global(p) {
+    margin-bottom: var(--space-6);
+  }
+  
+  .post__content :global(a) {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: opacity var(--duration-fast) var(--ease);
+  }
+  
+  .post__content :global(a:hover) {
+    opacity: 0.8;
+  }
+  
+  .post__content :global(strong) {
+    font-weight: 600;
+  }
+  
+  .post__content :global(em) {
+    font-style: italic;
+  }
+  
+  .post__content :global(ul),
+  .post__content :global(ol) {
+    margin-bottom: var(--space-6);
+    padding-left: var(--space-6);
+  }
+  
+  .post__content :global(li) {
+    margin-bottom: var(--space-2);
+  }
+  
+  .post__content :global(blockquote) {
+    border-left: 3px solid var(--color-accent);
+    padding-left: var(--space-6);
+    margin: var(--space-8) 0;
+    font-style: italic;
+    color: var(--color-text-secondary);
+  }
+  
+  .post__content :global(blockquote p) {
+    margin-bottom: 0;
+  }
+  
+  .post__content :global(img) {
+    max-width: 100%;
+    height: auto;
+    border-radius: var(--radius-md);
+    margin: var(--space-8) 0;
+  }
+  
+  .post__content :global(figure) {
+    margin: var(--space-8) 0;
+  }
+  
+  .post__content :global(figcaption) {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    text-align: center;
+    margin-top: var(--space-2);
+  }
+  
+  .post__content :global(pre) {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-6);
+    overflow-x: auto;
+    margin: var(--space-8) 0;
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    line-height: 1.6;
+  }
+  
+  .post__content :global(code) {
+    font-family: var(--font-mono);
+    font-size: 0.9em;
+    background: var(--color-bg-alt);
+    padding: 0.2em 0.4em;
+    border-radius: var(--radius-sm);
+  }
+  
+  .post__content :global(pre code) {
+    background: none;
+    padding: 0;
+  }
+  
+  .post__content :global(hr) {
+    border: none;
+    height: 1px;
+    background: var(--color-border);
+    margin: var(--space-12) 0;
+  }
+  
+  .post__content :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    margin: var(--space-8) 0;
+    font-size: var(--text-base);
+  }
+  
+  .post__content :global(th),
+  .post__content :global(td) {
+    border: 1px solid var(--color-border);
+    padding: var(--space-3) var(--space-4);
+    text-align: left;
+  }
+  
+  .post__content :global(th) {
+    background: var(--color-bg-alt);
+    font-weight: 600;
+  }
+  
+  /* Footer */
+  .post__footer {
+    margin-top: var(--space-16);
+    padding-top: var(--space-8);
+    border-top: 1px solid var(--color-border);
+  }
+  
+  .post__actions {
+    display: flex;
+    gap: var(--space-4);
+    flex-wrap: wrap;
+    margin-bottom: var(--space-6);
+  }
+  
+  .post__actions :global(a) {
+    display: inline-flex;
+    align-items: center;
+    gap: var(--space-2);
+  }
+  
+  .post__subscribe {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    margin: 0;
+  }
+  
+  .post__subscribe a {
+    color: var(--color-accent);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  
+  @media (max-width: 640px) {
+    .post__actions {
+      flex-direction: column;
+    }
+  }
+</style>
