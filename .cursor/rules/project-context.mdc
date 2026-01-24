@@ -1,0 +1,34 @@
+---
+description: Portfolio site project context and conventions
+alwaysApply: true
+---
+
+# Portfolio Site Context
+
+## Tech Stack
+- **Framework**: Astro 5.x (static site generation)
+- **Deployment**: GitHub Pages via GitHub Actions
+- **Domain**: fully-operational.com
+
+## Key Files
+- `src/pages/index.astro` - Homepage with work cards
+- `src/pages/work/[...slug].astro` - Case study detail pages
+- `src/pages/blog/index.astro` - Blog listing (fetches from Substack)
+- `src/pages/blog/[slug].astro` - Blog post detail pages
+- `src/content/work/*.md` - Case study content (frontmatter: title, company, image, tags, order)
+- `src/utils/substack.ts` - RSS fetcher for Substack posts
+
+## Substack Integration
+- Posts fetched at BUILD TIME from `https://travisbsmith.substack.com/feed`
+- New posts appear after site rebuild (daily at 6 AM UTC via cron)
+- Manual rebuild: GitHub Actions → "Run workflow"
+
+## Images
+- Static images go in `public/images/`
+- Work hero images: `public/images/work/[project]-hero.{jpg,webp}`
+- Reference in content: `/images/work/filename.jpg`
+
+## Deployment
+- Auto-deploys on push to main
+- Daily scheduled rebuild for Substack sync
+- Workflow: `.github/workflows/deploy.yml`
