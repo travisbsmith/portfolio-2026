@@ -4,6 +4,7 @@ import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import Button from '../../components/Button.astro';
 import { getSubstackPosts, type SubstackPost } from '../../utils/substack';
+import { cleanSubstackHtml } from '../../utils/clean-substack-html';
 
 export async function getStaticPaths() {
   const posts = await getSubstackPosts();
@@ -25,6 +26,9 @@ interface Props {
 }
 
 const { post } = Astro.props;
+
+// Clean Substack HTML (remove subscription widgets)
+const cleanedContent = cleanSubstackHtml(post.content);
 
 // Format date for display
 const formattedDate = post.date.toLocaleDateString('en-US', {
@@ -62,7 +66,7 @@ const description = post.excerpt.slice(0, 160);
         )}
       </header>
       
-      <div class="post__content" set:html={post.content} />
+      <div class="post__content" set:html={cleanedContent} />
       
       <footer class="post__footer">
         <div class="post__actions">
@@ -286,6 +290,25 @@ const description = post.excerpt.slice(0, 160);
   .post__content :global(th) {
     background: var(--color-bg-alt);
     font-weight: 600;
+  }
+  
+  /* Hide Substack subscription widgets - we have our own */
+  .post__content :global(.subscription-widget-wrap),
+  .post__content :global(.subscribe-widget),
+  .post__content :global(.captioned-button-wrap),
+  .post__content :global(.button-wrapper),
+  .post__content :global(form[action*="subscribe"]),
+  .post__content :global(.subscribe-btn),
+  .post__content :global([class*="subscription"]),
+  .post__content :global([class*="subscribe-"]),
+  .post__content :global(.email-input-wrapper) {
+    display: none !important;
+  }
+  
+  /* Hide "Thanks for reading" subscribe prompts */
+  .post__content :global(p):has(+ form),
+  .post__content :global(p):has(+ .subscription-widget-wrap) {
+    display: none !important;
   }
   
   /* Footer */
