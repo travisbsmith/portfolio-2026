@@ -14,6 +14,11 @@ const {
   image = "/images/og-image.jpg"
 } = Astro.props;
 
+// Umami Analytics Configuration
+// Set these in your environment or replace with your values after setup
+const UMAMI_WEBSITE_ID = import.meta.env.PUBLIC_UMAMI_WEBSITE_ID || '';
+const UMAMI_URL = import.meta.env.PUBLIC_UMAMI_URL || 'https://cloud.umami.is';
+
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
 ---
 
@@ -50,6 +55,16 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     
     <meta name="generator" content={Astro.generator} />
+    
+    <!-- Umami Analytics (Privacy-Friendly) -->
+    {UMAMI_WEBSITE_ID && (
+      <script
+        defer
+        src={`${UMAMI_URL}/script.js`}
+        data-website-id={UMAMI_WEBSITE_ID}
+        data-domains="fully-operational.com"
+      />
+    )}
   </head>
   <body>
     <slot />

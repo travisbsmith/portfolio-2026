@@ -1,0 +1,264 @@
+name: Weekly Analytics Summary
+
+on:
+  schedule:
+    - cron: '0 14 * * 1'  # Every Monday at 9 AM EST (14:00 UTC)
+  workflow_dispatch:  # Allow manual trigger
+
+jobs:
+  send-summary:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Fetch Analytics and Send Email
+        env:
+          UMAMI_API_URL: ${{ secrets.PUBLIC_UMAMI_URL || 'https://cloud.umami.is' }}
+          UMAMI_WEBSITE_ID: ${{ secrets.PUBLIC_UMAMI_WEBSITE_ID }}
+          UMAMI_API_TOKEN: ${{ secrets.UMAMI_API_TOKEN }}
+          RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
+          EMAIL_TO: hello@fully-operational.com
+        run: |
+          node << 'EOF'
+          const https = require('https');
+          
+          const UMAMI_API_URL = process.env.UMAMI_API_URL;
+          const UMAMI_WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
+          const UMAMI_API_TOKEN = process.env.UMAMI_API_TOKEN;
+          const RESEND_API_KEY = process.env.RESEND_API_KEY;
+          const EMAIL_TO = process.env.EMAIL_TO;
+          
+          async function fetchJson(url, token) {
+            return new Promise((resolve, reject) => {
+              const urlObj = new URL(url);
+              const options = {
+                hostname: urlObj.hostname,
+                path: urlObj.pathname + urlObj.search,
+                method: 'GET',
+                headers: {
+                  'Authorization': `Bearer ${token}`,
+                  'Content-Type': 'application/json',
+                },
+              };
+              
+              const req = https.request(options, (res) => {
+                let data = '';
+                res.on('data', chunk => data += chunk);
+                res.on('end', () => {
+                  try {
+                    resolve(JSON.parse(data));
+                  } catch {
+                    resolve(null);
+                  }
+                });
+              });
+              
+              req.on('error', reject);
+              req.end();
+            });
+          }
+          
+          async function sendEmail(to, subject, html) {
+            return new Promise((resolve, reject) => {
+              const data = JSON.stringify({
+                from: 'Analytics <analytics@fully-operational.com>',
+                to: [to],
+                subject: subject,
+                html: html,
+              });
+              
+              const options = {
+                hostname: 'api.resend.com',
+                path: '/emails',
+                method: 'POST',
+                headers: {
+                  'Authorization': `Bearer ${RESEND_API_KEY}`,
+                  'Content-Type': 'application/json',
+                  'Content-Length': data.length,
+                },
+              };
+              
+              const req = https.request(options, (res) => {
+                let responseData = '';
+                res.on('data', chunk => responseData += chunk);
+                res.on('end', () => resolve(responseData));
+              });
+              
+              req.on('error', reject);
+              req.write(data);
+              req.end();
+            });
+          }
+          
+          async function main() {
+            if (!UMAMI_WEBSITE_ID || !UMAMI_API_TOKEN) {
+              console.log('Umami not configured, skipping analytics fetch');
+              return;
+            }
+            
+            const now = Date.now();
+            const weekAgo = now - 7 * 24 * 60 * 60 * 1000;
+            const twoWeeksAgo = now - 14 * 24 * 60 * 60 * 1000;
+            
+            console.log('Fetching analytics data...');
+            
+            // This week's stats
+            const thisWeekStats = await fetchJson(
+              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${weekAgo}&endAt=${now}`,
+              UMAMI_API_TOKEN
+            );
+            
+            // Last week's stats (for comparison)
+            const lastWeekStats = await fetchJson(
+              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${twoWeeksAgo}&endAt=${weekAgo}`,
+              UMAMI_API_TOKEN
+            );
+            
+            // Top pages
+            const pages = await fetchJson(
+              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${weekAgo}&endAt=${now}&type=url`,
+              UMAMI_API_TOKEN
+            );
+            
+            // Referrers
+            const referrers = await fetchJson(
+              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${weekAgo}&endAt=${now}&type=referrer`,
+              UMAMI_API_TOKEN
+            );
+            
+            if (!thisWeekStats) {
+              console.log('Failed to fetch stats');
+              return;
+            }
+            
+            // Calculate changes
+            const viewsChange = lastWeekStats?.pageviews?.value 
+              ? Math.round((thisWeekStats.pageviews?.value - lastWeekStats.pageviews.value) / lastWeekStats.pageviews.value * 100)
+              : 0;
+            const visitorsChange = lastWeekStats?.visitors?.value
+              ? Math.round((thisWeekStats.visitors?.value - lastWeekStats.visitors.value) / lastWeekStats.visitors.value * 100)
+              : 0;
+            
+            // LLM traffic
+            const llmPages = (pages || []).filter(p => 
+              p.x.includes('llms') || p.x.endsWith('.md')
+            );
+            const llmViews = llmPages.reduce((sum, p) => sum + p.y, 0);
+            
+            // Format date
+            const weekStart = new Date(weekAgo).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            const weekEnd = new Date(now).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' });
+            
+            // Build email HTML
+            const html = `
+            <!DOCTYPE html>
+            <html>
+            <head>
+              <style>
+                body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; line-height: 1.6; color: #1a1a1a; max-width: 600px; margin: 0 auto; padding: 20px; }
+                h1 { font-size: 24px; margin-bottom: 8px; }
+                h2 { font-size: 18px; margin-top: 32px; margin-bottom: 16px; color: #666; }
+                .date { color: #999; font-size: 14px; margin-bottom: 32px; }
+                .metrics { display: flex; gap: 24px; margin-bottom: 32px; }
+                .metric { flex: 1; }
+                .metric-value { font-size: 32px; font-weight: 600; }
+                .metric-label { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; }
+                .metric-change { font-size: 14px; }
+                .positive { color: #38a169; }
+                .negative { color: #e53e3e; }
+                table { width: 100%; border-collapse: collapse; margin-bottom: 24px; }
+                th, td { padding: 12px; text-align: left; border-bottom: 1px solid #eee; }
+                th { font-size: 12px; color: #666; text-transform: uppercase; letter-spacing: 0.5px; font-weight: 500; }
+                td:last-child { text-align: right; font-family: monospace; }
+                th:last-child { text-align: right; }
+                .highlight { background: #fff5f0; border-left: 3px solid #ff5722; padding: 16px; margin: 24px 0; }
+                .footer { margin-top: 48px; padding-top: 24px; border-top: 1px solid #eee; font-size: 14px; color: #999; }
+                a { color: #ff5722; }
+              </style>
+            </head>
+            <body>
+              <h1>📊 Weekly Analytics Summary</h1>
+              <p class="date">${weekStart} – ${weekEnd}</p>
+              
+              <div class="metrics">
+                <div class="metric">
+                  <div class="metric-value">${thisWeekStats.pageviews?.value?.toLocaleString() || 0}</div>
+                  <div class="metric-label">Page Views</div>
+                  <div class="metric-change ${viewsChange >= 0 ? 'positive' : 'negative'}">
+                    ${viewsChange >= 0 ? '↑' : '↓'} ${Math.abs(viewsChange)}% vs last week
+                  </div>
+                </div>
+                <div class="metric">
+                  <div class="metric-value">${thisWeekStats.visitors?.value?.toLocaleString() || 0}</div>
+                  <div class="metric-label">Visitors</div>
+                  <div class="metric-change ${visitorsChange >= 0 ? 'positive' : 'negative'}">
+                    ${visitorsChange >= 0 ? '↑' : '↓'} ${Math.abs(visitorsChange)}% vs last week
+                  </div>
+                </div>
+              </div>
+              
+              ${llmViews > 0 ? `
+              <div class="highlight">
+                <strong>🤖 AI/LLM Traffic:</strong> ${llmViews} views to machine-readable endpoints this week
+              </div>
+              ` : ''}
+              
+              <h2>Top Pages</h2>
+              <table>
+                <thead>
+                  <tr><th>Page</th><th>Views</th></tr>
+                </thead>
+                <tbody>
+                  ${(pages || []).slice(0, 5).map(p => `
+                    <tr><td>${p.x}</td><td>${p.y}</td></tr>
+                  `).join('')}
+                </tbody>
+              </table>
+              
+              <h2>Top Referrers</h2>
+              <table>
+                <thead>
+                  <tr><th>Source</th><th>Visitors</th></tr>
+                </thead>
+                <tbody>
+                  ${(referrers || []).slice(0, 5).map(r => `
+                    <tr><td>${r.x || '(direct)'}</td><td>${r.y}</td></tr>
+                  `).join('')}
+                </tbody>
+              </table>
+              
+              <div class="footer">
+                <p>View full dashboard: <a href="https://fully-operational.com/dashboard">fully-operational.com/dashboard</a></p>
+                <p>This email is sent automatically every Monday.</p>
+              </div>
+            </body>
+            </html>
+            `;
+            
+            console.log('Analytics summary generated');
+            console.log(`- Page views: ${thisWeekStats.pageviews?.value || 0} (${viewsChange >= 0 ? '+' : ''}${viewsChange}%)`);
+            console.log(`- Visitors: ${thisWeekStats.visitors?.value || 0} (${visitorsChange >= 0 ? '+' : ''}${visitorsChange}%)`);
+            console.log(`- LLM views: ${llmViews}`);
+            
+            if (RESEND_API_KEY) {
+              console.log(`Sending email to ${EMAIL_TO}...`);
+              const result = await sendEmail(
+                EMAIL_TO,
+                `📊 Portfolio Analytics: ${weekStart} – ${weekEnd}`,
+                html
+              );
+              console.log('Email sent:', result);
+            } else {
+              console.log('RESEND_API_KEY not configured, skipping email');
+              console.log('Email would be sent to:', EMAIL_TO);
+            }
+          }
+          
+          main().catch(console.error);
+          EOF
