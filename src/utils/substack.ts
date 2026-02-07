@@ -1,7 +1,8 @@
-import Parser from 'rss-parser';
+import * as fs from 'fs';
+import * as path from 'path';
 
-// Your Substack publication URL
-const SUBSTACK_FEED_URL = 'https://travisbsmith.substack.com/feed';
+// Path to the cache file (relative to project root)
+const CACHE_FILE = path.join(process.cwd(), 'src/data/posts-cache.json');
 
 export interface SubstackPost {
   title: string;
@@ -13,71 +14,50 @@ export interface SubstackPost {
   author?: string;
 }
 
-/**
- * Extract a slug from the Substack post URL
- * e.g., https://travisbsmith.substack.com/p/my-post-title -> my-post-title
- */
-function extractSlug(url: string): string {
-  const match = url.match(/\/p\/([^/?]+)/);
-  return match ? match[1] : url.split('/').pop() || 'post';
+interface CachedPost {
+  title: string;
+  slug: string;
+  date: string;
+  excerpt: string;
+  content: string;
+  link: string;
+  author: string;
+}
+
+interface PostsCache {
+  lastSynced: string;
+  posts: CachedPost[];
 }
 
 /**
- * Strip HTML tags and truncate to create an excerpt
- */
-function createExcerpt(html: string, maxLength: number = 200): string {
-  const text = html
-    .replace(/<[^>]*>/g, '') // Remove HTML tags
-    .replace(/&nbsp;/g, ' ') // Replace &nbsp;
-    .replace(/&amp;/g, '&')  // Replace &amp;
-    .replace(/&lt;/g, '<')   // Replace &lt;
-    .replace(/&gt;/g, '>')   // Replace &gt;
-    .replace(/&quot;/g, '"') // Replace &quot;
-    .replace(/\s+/g, ' ')    // Normalize whitespace
-    .trim();
-  
-  if (text.length <= maxLength) return text;
-  
-  // Truncate at word boundary
-  const truncated = text.slice(0, maxLength);
-  const lastSpace = truncated.lastIndexOf(' ');
-  return (lastSpace > 0 ? truncated.slice(0, lastSpace) : truncated) + '...';
-}
-
-/**
- * Fetch all posts from the Substack RSS feed
+ * Get all posts from the local cache
+ * 
+ * Posts are synced from Substack before build via scripts/sync-substack.ts
+ * This ensures builds never fail due to network issues.
  */
 export async function getSubstackPosts(): Promise<SubstackPost[]> {
-  const parser = new Parser({
-    customFields: {
-      item: ['content:encoded', 'dc:creator'],
-    },
-  });
-
   try {
-    const feed = await parser.parseURL(SUBSTACK_FEED_URL);
-    
-    const posts: SubstackPost[] = feed.items.map((item) => {
-      const content = (item as any)['content:encoded'] || item.content || '';
-      const author = (item as any)['dc:creator'] || item.creator || 'Travis Smith';
-      
-      return {
-        title: item.title || 'Untitled',
-        slug: extractSlug(item.link || ''),
-        date: new Date(item.pubDate || item.isoDate || Date.now()),
-        excerpt: createExcerpt(content),
-        content: content,
-        link: item.link || '',
-        author: author,
-      };
-    });
+    if (!fs.existsSync(CACHE_FILE)) {
+      console.warn('Posts cache not found. Run `npm run sync` to fetch posts.');
+      return [];
+    }
 
-    // Sort by date, newest first
-    posts.sort((a, b) => b.date.getTime() - a.date.getTime());
+    const cacheContent = fs.readFileSync(CACHE_FILE, 'utf-8');
+    const cache: PostsCache = JSON.parse(cacheContent);
+
+    const posts: SubstackPost[] = cache.posts.map((post) => ({
+      title: post.title,
+      slug: post.slug,
+      date: new Date(post.date),
+      excerpt: post.excerpt,
+      content: post.content,
+      link: post.link,
+      author: post.author,
+    }));
 
     return posts;
   } catch (error) {
-    console.error('Failed to fetch Substack feed:', error);
+    console.error('Failed to read posts cache:', error);
     return [];
   }
 }
