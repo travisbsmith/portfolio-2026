@@ -190,7 +190,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
               <li>Add these secrets to your GitHub repo settings:
                 <code>PUBLIC_UMAMI_WEBSITE_ID</code> and <code>PUBLIC_UMAMI_URL</code>
               </li>
-              <li>Also add <code>UMAMI_API_TOKEN</code> for dashboard API access</li>
+              <li>Also add <code>UMAMI_API_KEY</code> for dashboard API access</li>
               <li>Redeploy your site</li>
             </ol>
             <p>See <code>ANALYTICS-SETUP.md</code> for detailed instructions.</p>
@@ -568,9 +568,9 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 <script>
   // Configuration
   const DASHBOARD_PASSWORD = 'travis2026'; // Change this!
-  const UMAMI_API_URL = 'https://cloud.umami.is';
+  const UMAMI_API_URL = 'https://api.umami.is/v1';
   const UMAMI_WEBSITE_ID = 'c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6';
-  const UMAMI_API_TOKEN = import.meta.env.PUBLIC_UMAMI_API_TOKEN || '';
+  const UMAMI_API_KEY = 'api_4u21H1bmxzBX1D5uo0y3K3HstHNO1O9r';
   
   // Cache key
   const CACHE_KEY = 'portfolio_analytics_cache';
@@ -728,21 +728,14 @@ import BaseLayout from '../layouts/BaseLayout.astro';
       // For a static site, you'd need to proxy through a serverless function
       // or use the share URL embed feature
       
-      // For now, show setup instructions if token not configured
-      if (!UMAMI_API_TOKEN) {
-        setupSection.style.display = 'block';
-        loadDemoData();
-        return;
-      }
-
       const headers = {
-        'Authorization': `Bearer ${UMAMI_API_TOKEN}`,
+        'x-umami-api-key': UMAMI_API_KEY,
         'Content-Type': 'application/json',
       };
 
       // Fetch stats
       const statsRes = await fetch(
-        `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
+        `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`,
         { headers }
       );
       
@@ -757,7 +750,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // Fetch pages
       const pagesRes = await fetch(
-        `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
+        `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=url`,
         { headers }
       );
       
@@ -780,7 +773,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // Fetch referrers
       const refRes = await fetch(
-        `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=referrer`,
+        `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=referrer`,
         { headers }
       );
       
@@ -794,7 +787,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // Fetch countries
       const countryRes = await fetch(
-        `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=country`,
+        `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=country`,
         { headers }
       );
       
@@ -808,7 +801,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
       // Fetch devices
       const deviceRes = await fetch(
-        `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
+        `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${startAt}&endAt=${endAt}&type=device`,
         { headers }
       );
       
@@ -871,13 +864,13 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 
   // Event listeners
   dateRange.addEventListener('change', () => {
-    if (UMAMI_WEBSITE_ID && UMAMI_API_TOKEN) {
+    if (UMAMI_WEBSITE_ID && UMAMI_API_KEY) {
       loadAnalytics();
     }
   });
 
   refreshBtn.addEventListener('click', () => {
-    if (UMAMI_WEBSITE_ID && UMAMI_API_TOKEN) {
+    if (UMAMI_WEBSITE_ID && UMAMI_API_KEY) {
       loadAnalytics();
     } else {
       loadDemoData();
@@ -888,7 +881,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
   // Auto-refresh every 5 minutes
   setInterval(() => {
     if (checkAuth()) {
-      if (UMAMI_WEBSITE_ID && UMAMI_API_TOKEN) {
+      if (UMAMI_WEBSITE_ID && UMAMI_API_KEY) {
         loadAnalytics();
       }
       loadSubstackData();

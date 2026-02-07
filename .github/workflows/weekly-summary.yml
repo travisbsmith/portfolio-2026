@@ -19,9 +19,9 @@ jobs:
 
       - name: Fetch Analytics and Send Email
         env:
-          UMAMI_API_URL: ${{ secrets.PUBLIC_UMAMI_URL || 'https://cloud.umami.is' }}
-          UMAMI_WEBSITE_ID: ${{ secrets.PUBLIC_UMAMI_WEBSITE_ID }}
-          UMAMI_API_TOKEN: ${{ secrets.UMAMI_API_TOKEN }}
+          UMAMI_API_URL: https://api.umami.is/v1
+          UMAMI_WEBSITE_ID: c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6
+          UMAMI_API_KEY: ${{ secrets.UMAMI_API_KEY }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           EMAIL_TO: hello@fully-operational.com
         run: |
@@ -30,7 +30,7 @@ jobs:
           
           const UMAMI_API_URL = process.env.UMAMI_API_URL;
           const UMAMI_WEBSITE_ID = process.env.UMAMI_WEBSITE_ID;
-          const UMAMI_API_TOKEN = process.env.UMAMI_API_TOKEN;
+          const UMAMI_API_KEY = process.env.UMAMI_API_KEY;
           const RESEND_API_KEY = process.env.RESEND_API_KEY;
           const EMAIL_TO = process.env.EMAIL_TO;
           
@@ -42,7 +42,7 @@ jobs:
                 path: urlObj.pathname + urlObj.search,
                 method: 'GET',
                 headers: {
-                  'Authorization': `Bearer ${token}`,
+                  'x-umami-api-key': token,
                   'Content-Type': 'application/json',
                 },
               };
@@ -97,7 +97,7 @@ jobs:
           }
           
           async function main() {
-            if (!UMAMI_WEBSITE_ID || !UMAMI_API_TOKEN) {
+            if (!UMAMI_WEBSITE_ID || !UMAMI_API_KEY) {
               console.log('Umami not configured, skipping analytics fetch');
               return;
             }
@@ -110,26 +110,26 @@ jobs:
             
             // This week's stats
             const thisWeekStats = await fetchJson(
-              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${weekAgo}&endAt=${now}`,
-              UMAMI_API_TOKEN
+              `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${weekAgo}&endAt=${now}`,
+              UMAMI_API_KEY
             );
             
             // Last week's stats (for comparison)
             const lastWeekStats = await fetchJson(
-              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${twoWeeksAgo}&endAt=${weekAgo}`,
-              UMAMI_API_TOKEN
+              `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${twoWeeksAgo}&endAt=${weekAgo}`,
+              UMAMI_API_KEY
             );
             
             // Top pages
             const pages = await fetchJson(
-              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${weekAgo}&endAt=${now}&type=url`,
-              UMAMI_API_TOKEN
+              `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${weekAgo}&endAt=${now}&type=url`,
+              UMAMI_API_KEY
             );
             
             // Referrers
             const referrers = await fetchJson(
-              `${UMAMI_API_URL}/api/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${weekAgo}&endAt=${now}&type=referrer`,
-              UMAMI_API_TOKEN
+              `${UMAMI_API_URL}/websites/${UMAMI_WEBSITE_ID}/metrics?startAt=${weekAgo}&endAt=${now}&type=referrer`,
+              UMAMI_API_KEY
             );
             
             if (!thisWeekStats) {
