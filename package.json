@@ -8,7 +8,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "sync": "tsx scripts/sync-substack.ts",
-    "sync:build": "npm run sync && npm run build"
+    "sync:analytics": "tsx scripts/sync-analytics.ts",
+    "sync:all": "npm run sync && npm run sync:analytics",
+    "sync:build": "npm run sync:all && npm run build"
   },
   "dependencies": {
     "@types/turndown": "^5.0.6",
