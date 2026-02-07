@@ -44,10 +44,16 @@ export const GET: APIRoute = async () => {
   }
 
   lines.push('');
+  lines.push('## Work With Travis');
+  lines.push('');
+  lines.push('Travis is available for **consulting engagements** and **fractional design leadership** roles. He can help with scaling design teams, establishing design systems, strategic product design, and executive coaching for design leaders.');
+  lines.push('');
+  lines.push('- **Email:** hello@fully-operational.com');
+  lines.push('- **LinkedIn:** https://www.linkedin.com/in/travisbsmithux/');
+  lines.push('');
   lines.push('## Optional');
   lines.push('');
   lines.push('- [Full Context File](/llms-full.txt): Complete content from all pages for maximum context');
-  lines.push('- [Contact](/contact): Get in touch for consulting, advisory, or full-time opportunities');
   lines.push('');
 
   const content = lines.join('\n');

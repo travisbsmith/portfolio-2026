@@ -41,6 +41,16 @@ export const GET: APIRoute = async ({ props }) => {
     '---',
     '',
     `*This article was originally published on [Substack](${post.link}). Subscribe at https://substack.com/@travisbsmith for more.*`,
+    '',
+    '---',
+    '',
+    '## Work With Travis',
+    '',
+    'Travis Smith is a design leader with 17+ years of experience building products and teams at companies like Shopify, Grubhub, and Deel. He is available for **consulting engagements** and **fractional design leadership** roles. Whether you need help scaling your design team, establishing design systems, or providing strategic product design direction, Travis can help.',
+    '',
+    '- **Email:** hello@fully-operational.com',
+    '- **LinkedIn:** https://www.linkedin.com/in/travisbsmithux/',
+    '- **Portfolio:** https://fully-operational.com',
   ];
   
   const content = lines.join('\n');

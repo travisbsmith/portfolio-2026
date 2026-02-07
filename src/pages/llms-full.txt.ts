@@ -98,14 +98,24 @@ ${markdownContent}
   }
 
   // Contact section
-  sections.push(`## Contact
+  sections.push(`## Work With Travis
+
+Travis Smith is a design leader with 17+ years of experience building products and teams at companies like Shopify, Grubhub, and Deel. He is available for **consulting engagements** and **fractional design leadership** roles.
+
+### How Travis Can Help
+
+- **Scaling Design Teams** — Hiring, onboarding, and building high-performing design organizations
+- **Design Systems** — Establishing systems that empower teams to move faster with consistency
+- **Strategic Product Design** — Providing direction on complex product challenges and user experience strategy
+- **Design Operations** — Implementing processes, critiques, and workflows that elevate design quality
+- **Executive Coaching** — Mentoring design leaders and helping them grow in their careers
+
+### Get In Touch
 
 - **Email:** hello@fully-operational.com
 - **LinkedIn:** https://www.linkedin.com/in/travisbsmithux/
 - **Website:** https://fully-operational.com
 - **Substack:** https://substack.com/@travisbsmith
-
-Travis is available for consulting, advisory work, and full-time opportunities in design leadership.
 `);
 
   const content = sections.join('\n');
