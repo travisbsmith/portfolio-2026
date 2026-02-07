@@ -9,26 +9,69 @@ alwaysApply: true
 - **Framework**: Astro 5.x (static site generation)
 - **Deployment**: GitHub Pages via GitHub Actions
 - **Domain**: fully-operational.com
+- **Analytics**: Umami Cloud (privacy-friendly)
 
 ## Key Files
 - `src/pages/index.astro` - Homepage with work cards
 - `src/pages/work/[...slug].astro` - Case study detail pages
-- `src/pages/blog/index.astro` - Blog listing (fetches from Substack)
+- `src/pages/blog/index.astro` - Blog listing (fetches from Substack cache)
 - `src/pages/blog/[slug].astro` - Blog post detail pages
+- `src/pages/dashboard.astro` - Analytics dashboard (password protected)
 - `src/content/work/*.md` - Case study content (frontmatter: title, company, image, tags, order)
-- `src/utils/substack.ts` - RSS fetcher for Substack posts
+- `src/utils/substack.ts` - Reads blog posts from local cache
+- `src/utils/html-to-markdown.ts` - Converts Substack HTML to Markdown (for LLM endpoints)
+- `src/utils/clean-substack-html.ts` - Strips Substack subscription widgets from posts
 
 ## Substack Integration
-- Posts fetched at BUILD TIME from `https://travisbsmith.substack.com/feed`
+- Posts synced via `scripts/sync-substack.ts` → saved to `src/data/posts-cache.json`
+- `src/utils/substack.ts` reads from cache (no network calls during build)
+- Cache is committed to repo so builds never fail if Substack is unreachable
 - New posts appear after site rebuild (daily at 6 AM UTC via cron)
-- Manual rebuild: GitHub Actions → "Run workflow"
+- Manual sync: `npm run sync`
+
+## LLM/AI Readable Content (llms.txt)
+- `src/pages/llms.txt.ts` - Site overview for AI agents (links to all content)
+- `src/pages/llms-full.txt.ts` - Complete site content in one file
+- `src/pages/about.md.ts` - About page in Markdown
+- `src/pages/work/[slug].md.ts` - Case studies in Markdown
+- `src/pages/blog/[slug].md.ts` - Blog posts in Markdown
+- Each blog post includes a "Work With Travis" promo section for consulting/fractional work
+- Uses `turndown` library to convert Substack HTML → Markdown
+
+## Analytics Dashboard
+- **Page**: `/dashboard` (password: `travis2026`)
+- **Tracking**: Umami Cloud script in `BaseLayout.astro`
+- **Website ID**: `c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6`
+- **Data sync**: `scripts/sync-analytics.ts` → `src/data/analytics-cache.json`
+- Dashboard renders data at build time (server-side, avoids CORS)
+- Tracks: page views, visitors, bounce rate, duration, top pages, referrers, countries, devices
+- Tracks LLM traffic: `/llms.txt`, `/llms-full.txt`, `/blog/*.md`, `/work/*.md`
+- Weekly email summary: `.github/workflows/weekly-summary.yml` (Monday 9 AM EST)
+- **GitHub Secret required**: `UMAMI_API_KEY` for CI analytics sync and weekly emails
 
 ## Images
 - Static images go in `public/images/`
 - Work hero images: `public/images/work/[project]-hero.{jpg,webp}`
 - Reference in content: `/images/work/filename.jpg`
 
+## NPM Scripts
+- `npm run dev` - Start dev server
+- `npm run build` - Build site
+- `npm run sync` - Sync Substack posts to cache
+- `npm run sync:analytics` - Sync Umami analytics to cache
+- `npm run sync:all` - Sync both Substack and analytics
+- `npm run sync:build` - Sync everything then build
+
 ## Deployment
 - Auto-deploys on push to main
-- Daily scheduled rebuild for Substack sync
+- Daily scheduled rebuild at 6 AM UTC (syncs Substack + analytics)
 - Workflow: `.github/workflows/deploy.yml`
+- Weekly analytics email: `.github/workflows/weekly-summary.yml`
+- GitHub Secrets needed: `UMAMI_API_KEY`, `RESEND_API_KEY` (optional, for weekly emails)
+
+## Documentation
+- `README.md` - Quick start and project structure
+- `ANALYTICS-SETUP.md` - Umami setup instructions
+- `SUBSTACK-SETUP.md` - Substack integration docs
+- `CONTENT-GUIDE.md` - Content authoring guide
+- `DEPLOYMENT.md` - Deployment instructions
