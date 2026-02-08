@@ -1,5 +1,5 @@
 {
-  "lastSynced": "2026-02-07T23:20:30.197Z",
+  "lastSynced": "2026-02-08T06:59:24.249Z",
   "periods": {
     "24h": {
       "pageviews": 0,
@@ -30,8 +30,39 @@
       "totaltime": 0
     }
   },
-  "pages": [],
+  "pages": [
+    {
+      "x": "/",
+      "y": 1
+    },
+    {
+      "x": "/work/shopify/",
+      "y": 1
+    },
+    {
+      "x": "/work/team-management/",
+      "y": 1
+    },
+    {
+      "x": "/work/grubhub-driver/",
+      "y": 1
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
+      "y": 1
+    }
+  ],
   "referrers": [],
-  "countries": [],
-  "devices": []
+  "countries": [
+    {
+      "x": "IL",
+      "y": 1
+    }
+  ],
+  "devices": [
+    {
+      "x": "mobile",
+      "y": 1
+    }
+  ]
 }
