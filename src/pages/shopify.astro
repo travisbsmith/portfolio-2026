@@ -45,18 +45,9 @@ const serviceJsonLd = {
           Whether you're just starting out or your store has been running for years — I make Shopify simple. No jargon, no overwhelm. Just practical guidance from someone who spent four years building the platform.
         </p>
         
-        <form 
-          class="shopify__form" 
-          action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} 
-          method="POST"
-        >
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="Your email" 
-            required 
-            class="shopify__input"
-          />
+        <form class="shopify__form shopify__form--hero" action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} method="POST">
+          <input type="hidden" name="_subject" value="Shopify expert signup" />
+          <input type="email" name="email" placeholder="Your email" required class="shopify__input" />
           <select name="interest" class="shopify__select">
             <option value="">I'm a...</option>
             <option value="new">New to Shopify — need help setting up</option>
@@ -64,6 +55,8 @@ const serviceJsonLd = {
             <option value="exploring">Just exploring</option>
           </select>
           <Button type="submit">Get notified</Button>
+          <p class="shopify__form-message shopify__form-message--success" style="display: none;">Thanks! I'll be in touch.</p>
+          <p class="shopify__form-message shopify__form-message--error" style="display: none;">Something went wrong. Please email hello@fully-operational.com directly.</p>
         </form>
       </div>
     </section>
@@ -138,18 +131,9 @@ const serviceJsonLd = {
           I'm building a small cohort of Shopify merchants to work with. Drop your email and I'll reach out when I have availability.
         </p>
         
-        <form 
-          class="shopify__form" 
-          action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} 
-          method="POST"
-        >
-          <input 
-            type="email" 
-            name="email" 
-            placeholder="Your email" 
-            required 
-            class="shopify__input"
-          />
+        <form class="shopify__form shopify__form--cta" action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} method="POST">
+          <input type="hidden" name="_subject" value="Shopify expert signup" />
+          <input type="email" name="email" placeholder="Your email" required class="shopify__input" />
           <select name="interest" class="shopify__select">
             <option value="">I'm a...</option>
             <option value="new">New to Shopify — need help setting up</option>
@@ -157,6 +141,8 @@ const serviceJsonLd = {
             <option value="exploring">Just exploring</option>
           </select>
           <Button type="submit">Join the waitlist</Button>
+          <p class="shopify__form-message shopify__form-message--success" style="display: none;">Thanks! I'll be in touch.</p>
+          <p class="shopify__form-message shopify__form-message--error" style="display: none;">Something went wrong. Please email hello@fully-operational.com directly.</p>
         </form>
       </div>
     </section>
@@ -343,6 +329,20 @@ const serviceJsonLd = {
     margin-bottom: var(--space-8);
   }
 
+  .shopify__form-message {
+    width: 100%;
+    margin: var(--space-3) 0 0;
+    font-size: var(--text-sm);
+  }
+
+  .shopify__form-message--success {
+    color: #22c55e;
+  }
+
+  .shopify__form-message--error {
+    color: #e53e3e;
+  }
+
   @media (max-width: 768px) {
     .shopify__form {
       flex-direction: column;
@@ -367,3 +367,45 @@ const serviceJsonLd = {
     }
   }
 </style>
+
+<script>
+  document.querySelectorAll('.shopify__form').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const submitBtn = form.querySelector('button[type="submit"]');
+      const successMsg = form.querySelector('.shopify__form-message--success');
+      const errorMsg = form.querySelector('.shopify__form-message--error');
+      const originalText = submitBtn?.textContent;
+
+      if (submitBtn) {
+        submitBtn.disabled = true;
+        submitBtn.textContent = 'Sending...';
+      }
+      successMsg?.style.setProperty('display', 'none');
+      errorMsg?.style.setProperty('display', 'none');
+
+      try {
+        const formData = new FormData(form);
+        const res = await fetch(form.action, {
+          method: 'POST',
+          body: formData,
+          headers: { Accept: 'application/json' },
+        });
+
+        if (res.ok) {
+          successMsg?.style.setProperty('display', 'block');
+          form.reset();
+        } else {
+          errorMsg?.style.setProperty('display', 'block');
+        }
+      } catch {
+        errorMsg?.style.setProperty('display', 'block');
+      } finally {
+        if (submitBtn) {
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+        }
+      }
+    });
+  });
+</script>
