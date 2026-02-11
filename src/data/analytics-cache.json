@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-02-11T21:29:03.633Z",
+  "lastSynced": "2026-02-11T21:41:12.457Z",
   "periods": {
     "24h": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
-      "bounces": 0,
-      "totaltime": 0
+      "pageviews": 137,
+      "visitors": 48,
+      "visits": 55,
+      "bounces": 25,
+      "totaltime": 2152
     },
     "7d": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
-      "bounces": 0,
-      "totaltime": 0
+      "pageviews": 213,
+      "visitors": 71,
+      "visits": 78,
+      "bounces": 33,
+      "totaltime": 2900
     },
     "30d": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
-      "bounces": 0,
-      "totaltime": 0
+      "pageviews": 213,
+      "visitors": 71,
+      "visits": 78,
+      "bounces": 33,
+      "totaltime": 2900
     },
     "90d": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
-      "bounces": 0,
-      "totaltime": 0
+      "pageviews": 213,
+      "visitors": 71,
+      "visits": 78,
+      "bounces": 33,
+      "totaltime": 2900
     }
   },
   "pages": [
