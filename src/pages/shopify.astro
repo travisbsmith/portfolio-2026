@@ -11,7 +11,7 @@ const serviceJsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
   "name": "Shopify Store Setup and Consulting",
-  "description": "Shopify expert consulting for new store setup and existing store optimization. Former Head of Design at Shopify (2020-2024) who led Shopify Email, Inbox, Forms, and Admin Customer/Marketing/Analytics.",
+  "description": "Shopify expert consulting for new store setup and existing store optimization. Former Head of Design at Shopify (2020-2025) who led Shopify Email, Inbox, Forms, and Admin Customer/Marketing/Analytics. Also led Product, Design & Engineering at The Tie Bar; COO of ShopCasaVerde.com (11 years); and co-founder/CEO of middlemanager.store.",
   "provider": {
     "@type": "Person",
     "name": "Travis Smith",
@@ -27,8 +27,8 @@ const serviceJsonLd = {
 
 <BaseLayout 
   title="Shopify Expert — Store Setup & Consulting | Travis Smith" 
-  description="Former Head of Design at Shopify. Get your store set up right or make your existing Shopify store work harder. Expert help with Shopify Email, Inbox, Forms, and marketing tools. Non-technical, practical guidance."
-  image="/images/work/shopify-hero.webp"
+  description="Former Head of Design at Shopify. Led Product, Design & Engineering at The Tie Bar; COO of ShopCasaVerde.com; CEO of middlemanager.store. Get your store set up right or make your existing Shopify store work harder. Non-technical, practical guidance."
+  image="/images/work/shopify-og.png"
   jsonLd={serviceJsonLd}
 >
   <Navigation />
@@ -47,6 +47,7 @@ const serviceJsonLd = {
         
         <form class="shopify__form shopify__form--hero" action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} method="POST">
           <input type="hidden" name="_subject" value="Shopify expert signup" />
+          <input type="hidden" name="_next" value="https://fully-operational.com/shopify/?thanks=1" />
           <input type="email" name="email" placeholder="Your email" required class="shopify__input" />
           <select name="interest" class="shopify__select">
             <option value="">I'm a...</option>
@@ -55,9 +56,10 @@ const serviceJsonLd = {
             <option value="exploring">Just exploring</option>
           </select>
           <Button type="submit">Get notified</Button>
-          <p class="shopify__form-message shopify__form-message--success" style="display: none;">Thanks! I'll be in touch.</p>
-          <p class="shopify__form-message shopify__form-message--error" style="display: none;">Something went wrong. Please email hello@fully-operational.com directly.</p>
         </form>
+        {Astro.url.searchParams.get('thanks') === '1' && (
+          <p class="shopify__form-message shopify__form-message--success">Thanks! I'll be in touch.</p>
+        )}
       </div>
     </section>
 
@@ -82,6 +84,27 @@ const serviceJsonLd = {
             <p class="shopify__proof-label">GMV delivered by merchant tools</p>
           </div>
         </div>
+      </div>
+    </section>
+
+    <!-- Ecommerce roots -->
+    <section class="shopify__section">
+      <div class="container">
+        <h2 class="shopify__section-title">Ecommerce roots</h2>
+        <p class="shopify__roots-intro">
+          I've built and run online stores myself — so I know what it's like on both sides of the platform.
+        </p>
+        <ul class="shopify__roots-list">
+          <li>
+            <strong>Lead Product, Design & Engineering at <a href="https://www.thetiebar.com/" target="_blank" rel="noopener">The Tie Bar</a></strong> — an ecommerce site offering accessories and style essentials.
+          </li>
+          <li>
+            <strong>Started and was COO of <a href="https://www.shopcasaverde.com" target="_blank" rel="noopener">ShopCasaVerde.com</a></strong> — ethically sourced homegoods from around the world for 11 years.
+          </li>
+          <li>
+            <strong>Co-founder and CEO of <a href="https://middlemanager.store/" target="_blank" rel="noopener">middlemanager.store</a></strong> — a Shopify store.
+          </li>
+        </ul>
       </div>
     </section>
 
@@ -133,6 +156,7 @@ const serviceJsonLd = {
         
         <form class="shopify__form shopify__form--cta" action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} method="POST">
           <input type="hidden" name="_subject" value="Shopify expert signup" />
+          <input type="hidden" name="_next" value="https://fully-operational.com/shopify/?thanks=1" />
           <input type="email" name="email" placeholder="Your email" required class="shopify__input" />
           <select name="interest" class="shopify__select">
             <option value="">I'm a...</option>
@@ -141,9 +165,10 @@ const serviceJsonLd = {
             <option value="exploring">Just exploring</option>
           </select>
           <Button type="submit">Join the waitlist</Button>
-          <p class="shopify__form-message shopify__form-message--success" style="display: none;">Thanks! I'll be in touch.</p>
-          <p class="shopify__form-message shopify__form-message--error" style="display: none;">Something went wrong. Please email hello@fully-operational.com directly.</p>
         </form>
+        {Astro.url.searchParams.get('thanks') === '1' && (
+          <p class="shopify__form-message shopify__form-message--success">Thanks! I'll be in touch.</p>
+        )}
       </div>
     </section>
   </main>
@@ -272,6 +297,49 @@ const serviceJsonLd = {
     margin-bottom: 0;
   }
 
+  .shopify__roots-intro {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-8);
+    max-width: 640px;
+  }
+
+  .shopify__roots-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: 640px;
+  }
+
+  .shopify__roots-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    padding-left: var(--space-8);
+    position: relative;
+  }
+
+  .shopify__roots-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+
+  .shopify__roots-list a {
+    color: var(--color-text);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .shopify__roots-list a:hover {
+    color: var(--color-accent);
+  }
+
   .shopify__audience {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -368,44 +436,3 @@ const serviceJsonLd = {
   }
 </style>
 
-<script>
-  document.querySelectorAll('.shopify__form').forEach((form) => {
-    form.addEventListener('submit', async (e) => {
-      e.preventDefault();
-      const submitBtn = form.querySelector('button[type="submit"]');
-      const successMsg = form.querySelector('.shopify__form-message--success');
-      const errorMsg = form.querySelector('.shopify__form-message--error');
-      const originalText = submitBtn?.textContent;
-
-      if (submitBtn) {
-        submitBtn.disabled = true;
-        submitBtn.textContent = 'Sending...';
-      }
-      successMsg?.style.setProperty('display', 'none');
-      errorMsg?.style.setProperty('display', 'none');
-
-      try {
-        const formData = new FormData(form);
-        const res = await fetch(form.action, {
-          method: 'POST',
-          body: formData,
-          headers: { Accept: 'application/json' },
-        });
-
-        if (res.ok) {
-          successMsg?.style.setProperty('display', 'block');
-          form.reset();
-        } else {
-          errorMsg?.style.setProperty('display', 'block');
-        }
-      } catch {
-        errorMsg?.style.setProperty('display', 'block');
-      } finally {
-        if (submitBtn) {
-          submitBtn.disabled = false;
-          submitBtn.textContent = originalText;
-        }
-      }
-    });
-  });
-</script>
