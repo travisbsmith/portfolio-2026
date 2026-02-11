@@ -61,7 +61,11 @@ async function syncSubstack(): Promise<void> {
     customFields: {
       item: ['content:encoded', 'dc:creator'],
     },
-    timeout: 30000, // 30 second timeout
+    timeout: 30000,
+    headers: {
+      'User-Agent': 'Mozilla/5.0 (compatible; PortfolioSiteBuilder/1.0)',
+      'Accept': 'application/rss+xml, application/xml, text/xml',
+    },
   });
 
   try {
