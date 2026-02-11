@@ -1,31 +1,31 @@
 {
-  "lastSynced": "2026-02-11T22:14:38.213Z",
+  "lastSynced": "2026-02-11T22:19:21.580Z",
   "periods": {
     "24h": {
-      "pageviews": 116,
-      "visitors": 45,
-      "visits": 52,
+      "pageviews": 118,
+      "visitors": 46,
+      "visits": 53,
       "bounces": 25,
       "totaltime": 1163
     },
     "7d": {
-      "pageviews": 217,
-      "visitors": 73,
-      "visits": 80,
+      "pageviews": 219,
+      "visitors": 74,
+      "visits": 81,
       "bounces": 34,
       "totaltime": 2970
     },
     "30d": {
-      "pageviews": 217,
-      "visitors": 73,
-      "visits": 80,
+      "pageviews": 219,
+      "visitors": 74,
+      "visits": 81,
       "bounces": 34,
       "totaltime": 2970
     },
     "90d": {
-      "pageviews": 217,
-      "visitors": 73,
-      "visits": 80,
+      "pageviews": 219,
+      "visitors": 74,
+      "visits": 81,
       "bounces": 34,
       "totaltime": 2970
     }
@@ -92,6 +92,10 @@
       "y": 1
     },
     {
+      "x": "/shopify/",
+      "y": 1
+    },
+    {
       "x": "/blog/new-year-same-me/",
       "y": 1
     }
@@ -121,7 +125,7 @@
   "countries": [
     {
       "x": "US",
-      "y": 29
+      "y": 30
     },
     {
       "x": "GB",
@@ -167,7 +171,7 @@
     },
     {
       "x": "laptop",
-      "y": 22
+      "y": 23
     },
     {
       "x": "desktop",
