@@ -53,6 +53,9 @@ jobs:
       - name: Build Astro
         run: npm run build
       
+      - name: Ping IndexNow (notify Bing/ChatGPT)
+        run: npx tsx scripts/ping-indexnow.ts
+      
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:

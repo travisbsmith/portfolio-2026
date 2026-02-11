@@ -10,9 +10,11 @@
     "sync": "tsx scripts/sync-substack.ts",
     "sync:analytics": "tsx scripts/sync-analytics.ts",
     "sync:all": "npm run sync && npm run sync:analytics",
-    "sync:build": "npm run sync:all && npm run build"
+    "sync:build": "npm run sync:all && npm run build",
+    "ping": "tsx scripts/ping-indexnow.ts"
   },
   "dependencies": {
+    "@astrojs/sitemap": "^3.7.0",
     "@types/turndown": "^5.0.6",
     "astro": "^5.16.9",
     "rss-parser": "^3.13.0",

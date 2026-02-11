@@ -6,19 +6,34 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
+  jsonLd?: Record<string, any>;
 }
 
 const { 
   title, 
   description = "Travis Smith - Design Leader with 17+ years of experience building products and leading cross-functional design teams.",
-  image = "/images/og-image.jpg"
+  image = "/images/og-image.jpg",
+  jsonLd,
 } = Astro.props;
 
-// Umami Analytics
-const UMAMI_WEBSITE_ID = 'c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6';
-const UMAMI_URL = 'https://cloud.umami.is';
-
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+
+// Default Person structured data (used on every page)
+const personSchema = {
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Travis Smith",
+  "url": "https://fully-operational.com",
+  "jobTitle": "Head of Design, People Experiences",
+  "worksFor": { "@type": "Organization", "name": "Deel" },
+  "description": "Design leader with 17+ years building products and leading teams at Shopify, Grubhub, and Deel. Available for consulting and fractional design leadership.",
+  "sameAs": [
+    "https://www.linkedin.com/in/travisbsmithux/",
+    "https://substack.com/@travisbsmith"
+  ],
+  "knowsAbout": ["Product Design", "Design Leadership", "Design Systems", "UX Strategy", "Team Building"],
+  "email": "hello@fully-operational.com",
+};
 ---
 
 <!doctype html>
@@ -54,6 +69,15 @@ const canonicalURL = new URL(Astro.url.pathname, Astro.site);
     <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet" />
     
     <meta name="generator" content={Astro.generator} />
+    
+    <!-- AI/LLM Content Discovery -->
+    <link rel="alternate" type="text/plain" href="/llms.txt" title="LLM-readable site overview" />
+    
+    <!-- Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
+    {jsonLd && (
+      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    )}
     
     <!-- Umami Analytics (Privacy-Friendly) -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6" data-domains="fully-operational.com"></script>

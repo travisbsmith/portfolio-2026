@@ -39,9 +39,30 @@ const formattedDate = post.date.toLocaleDateString('en-US', {
 
 // Create a short description for SEO
 const description = post.excerpt.slice(0, 160);
+
+// Article structured data for search engines and AI
+const articleJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Article",
+  "headline": post.title,
+  "description": description,
+  "datePublished": post.date.toISOString(),
+  "author": {
+    "@type": "Person",
+    "name": post.author || "Travis Smith",
+    "url": "https://fully-operational.com/about",
+  },
+  "publisher": {
+    "@type": "Person",
+    "name": "Travis Smith",
+    "url": "https://fully-operational.com",
+  },
+  "url": `https://fully-operational.com/blog/${post.slug}/`,
+  "mainEntityOfPage": `https://fully-operational.com/blog/${post.slug}/`,
+};
 ---
 
-<BaseLayout title={`${post.title} — Travis Smith`} description={description}>
+<BaseLayout title={`${post.title} — Travis Smith`} description={description} jsonLd={articleJsonLd}>
   <Navigation />
   
   <main class="post">
