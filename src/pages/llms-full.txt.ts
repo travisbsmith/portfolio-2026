@@ -97,6 +97,30 @@ ${markdownContent}
 `);
   }
 
+  // Shopify Consulting section
+  sections.push(`## Shopify Expert — Store Setup & Consulting
+
+Travis Smith is a Shopify expert who helped design the tools merchants use every day: Shopify Email, Shopify Inbox, Shopify Forms, and the Customer, Marketing, and Analytics sections of Shopify Admin.
+
+**Background:** Head of Design at Shopify (Jul 2020–2024). Led the Engage group, team of 25+. Delivered $3.2B+ in GMV. Catapulted 1P app adoption 50%.
+
+### Who Travis Helps
+
+- **New to Shopify** — Store setup, first sales, avoiding overwhelm. No tech background required.
+- **Existing stores** — Better use of Shopify Email, customer segmentation, marketing tools.
+
+### Services
+
+- **Store setup** — Products, payments, shipping, and the basics that matter
+- **Marketing & customer data** — Shopify Email, Inbox, Forms, segmentation
+- **Strategic guidance** — Plain-language advice without tech jargon
+
+**Signup:** https://fully-operational.com/shopify
+**Markdown:** https://fully-operational.com/shopify.md
+
+---
+`);
+
   // Contact section
   sections.push(`## Work With Travis
 
@@ -104,6 +128,7 @@ Travis Smith is a design leader with 17+ years of experience building products a
 
 ### How Travis Can Help
 
+- **Shopify Consulting** — Store setup, marketing tools, customer data (see /shopify)
 - **Scaling Design Teams** — Hiring, onboarding, and building high-performing design organizations
 - **Design Systems** — Establishing systems that empower teams to move faster with consistency
 - **Strategic Product Design** — Providing direction on complex product challenges and user experience strategy

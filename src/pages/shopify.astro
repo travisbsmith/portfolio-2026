@@ -1,0 +1,369 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+
+// Formspree: Create a free form at https://formspree.io, then replace with your form ID
+const FORMSPREE_FORM_ID = 'YOUR_FORM_ID';
+
+const serviceJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Service",
+  "name": "Shopify Store Setup and Consulting",
+  "description": "Shopify expert consulting for new store setup and existing store optimization. Former Head of Design at Shopify (2020-2024) who led Shopify Email, Inbox, Forms, and Admin Customer/Marketing/Analytics.",
+  "provider": {
+    "@type": "Person",
+    "name": "Travis Smith",
+    "url": "https://fully-operational.com",
+    "jobTitle": "Shopify Expert Consultant",
+    "email": "hello@fully-operational.com",
+  },
+  "areaServed": "Worldwide",
+  "serviceType": ["Shopify store setup", "Shopify consulting", "Shopify marketing tools", "E-commerce strategy"],
+  "url": "https://fully-operational.com/shopify",
+};
+---
+
+<BaseLayout 
+  title="Shopify Expert — Store Setup & Consulting | Travis Smith" 
+  description="Former Head of Design at Shopify. Get your store set up right or make your existing Shopify store work harder. Expert help with Shopify Email, Inbox, Forms, and marketing tools. Non-technical, practical guidance."
+  image="/images/work/shopify-hero.webp"
+  jsonLd={serviceJsonLd}
+>
+  <Navigation />
+  
+  <main class="shopify">
+    <!-- Hero -->
+    <section class="shopify__hero">
+      <div class="container container--narrow">
+        <span class="label">Shopify Expert</span>
+        <h1 class="shopify__title">
+          I helped design the Shopify tools you use. Now I help you use them.
+        </h1>
+        <p class="shopify__subtitle">
+          Whether you're just starting out or your store has been running for years — I make Shopify simple. No jargon, no overwhelm. Just practical guidance from someone who spent four years building the platform.
+        </p>
+        
+        <form 
+          class="shopify__form" 
+          action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} 
+          method="POST"
+        >
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Your email" 
+            required 
+            class="shopify__input"
+          />
+          <select name="interest" class="shopify__select">
+            <option value="">I'm a...</option>
+            <option value="new">New to Shopify — need help setting up</option>
+            <option value="existing">Existing store — want to use it better</option>
+            <option value="exploring">Just exploring</option>
+          </select>
+          <Button type="submit">Get notified</Button>
+        </form>
+      </div>
+    </section>
+
+    <!-- Social Proof -->
+    <section class="shopify__section shopify__section--alt">
+      <div class="container">
+        <div class="shopify__grid">
+          <div class="shopify__proof">
+            <h2 class="shopify__section-title">Built at Shopify</h2>
+            <p class="shopify__proof-text">
+              I was Head of Design at Shopify from 2020 to 2024. My team built the tools you use every day: <strong>Shopify Email</strong>, <strong>Shopify Inbox</strong>, <strong>Shopify Forms</strong>, and the Customer, Marketing, and Analytics sections of Shopify Admin.
+            </p>
+            <p class="shopify__proof-text">
+              We helped merchants deliver $3.2B+ in sales and grew adoption of Shopify's built-in tools by 50%. I know how the platform works from the inside — and I know what gets in the way when you're trying to run your business.
+            </p>
+          </div>
+          <div class="shopify__proof-card">
+            <span class="label">Experience</span>
+            <p class="shopify__proof-stat">4 years</p>
+            <p class="shopify__proof-label">Head of Design at Shopify</p>
+            <p class="shopify__proof-stat">$3.2B+</p>
+            <p class="shopify__proof-label">GMV delivered by merchant tools</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Who You Help -->
+    <section class="shopify__section">
+      <div class="container">
+        <h2 class="shopify__section-title">Who I Help</h2>
+        <div class="shopify__audience">
+          <article class="shopify__audience-card">
+            <h3 class="shopify__audience-title">New to Shopify</h3>
+            <p>Just signed up and feeling overwhelmed? I help you get your store set up right from the start — products, payments, shipping, and your first sales. No tech background required.</p>
+          </article>
+          <article class="shopify__audience-card">
+            <h3 class="shopify__audience-title">Existing stores</h3>
+            <p>Your store is running but you know you're not getting the most out of it. I help you use Shopify Email, customer segmentation, and marketing tools to grow without adding complexity.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <!-- What You Offer -->
+    <section class="shopify__section shopify__section--alt">
+      <div class="container">
+        <h2 class="shopify__section-title">What I Offer</h2>
+        <div class="shopify__offer-grid">
+          <div class="shopify__offer">
+            <h3 class="shopify__offer-title">Store setup</h3>
+            <p>Get your first store configured correctly. Products, payments, shipping, and the basics that actually matter.</p>
+          </div>
+          <div class="shopify__offer">
+            <h3 class="shopify__offer-title">Marketing & customer data</h3>
+            <p>Use Shopify Email, Inbox, and Forms to reach customers. Segment your audience and send the right message at the right time.</p>
+          </div>
+          <div class="shopify__offer">
+            <h3 class="shopify__offer-title">Strategic guidance</h3>
+            <p>Hands-on advice without the tech speak. I explain what to do and why, in plain language.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA + Form -->
+    <section class="shopify__section">
+      <div class="container container--narrow">
+        <h2 class="shopify__section-title">Get notified when spots open</h2>
+        <p class="shopify__cta-text">
+          I'm building a small cohort of Shopify merchants to work with. Drop your email and I'll reach out when I have availability.
+        </p>
+        
+        <form 
+          class="shopify__form" 
+          action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} 
+          method="POST"
+        >
+          <input 
+            type="email" 
+            name="email" 
+            placeholder="Your email" 
+            required 
+            class="shopify__input"
+          />
+          <select name="interest" class="shopify__select">
+            <option value="">I'm a...</option>
+            <option value="new">New to Shopify — need help setting up</option>
+            <option value="existing">Existing store — want to use it better</option>
+            <option value="exploring">Just exploring</option>
+          </select>
+          <Button type="submit">Join the waitlist</Button>
+        </form>
+      </div>
+    </section>
+  </main>
+  
+  <Footer />
+</BaseLayout>
+
+<style>
+  .shopify {
+    padding-top: calc(64px + var(--space-12));
+    padding-bottom: var(--space-20);
+  }
+
+  .shopify__hero {
+    margin-bottom: var(--space-20);
+  }
+
+  .shopify__hero .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .shopify__title {
+    font-size: clamp(2rem, 5vw, var(--text-5xl));
+    font-weight: 500;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-6);
+    max-width: 640px;
+  }
+
+  .shopify__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-12);
+    max-width: 560px;
+  }
+
+  .shopify__form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    align-items: center;
+  }
+
+  .shopify__input,
+  .shopify__select {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-family: var(--font-body);
+    font-size: var(--text-base);
+    background: var(--color-bg);
+    min-width: 220px;
+  }
+
+  .shopify__input:focus,
+  .shopify__select:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .shopify__select {
+    cursor: pointer;
+    color: var(--color-text-secondary);
+  }
+
+  .shopify__section {
+    padding: var(--space-16) 0;
+  }
+
+  .shopify__section--alt {
+    background: var(--color-bg-alt);
+  }
+
+  .shopify__section-title {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin-bottom: var(--space-8);
+  }
+
+  .shopify__grid {
+    display: grid;
+    grid-template-columns: 1fr 280px;
+    gap: var(--space-16);
+    align-items: start;
+  }
+
+  .shopify__proof-text {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-bottom: var(--space-6);
+  }
+
+  .shopify__proof-text:last-child {
+    margin-bottom: 0;
+  }
+
+  .shopify__proof-card {
+    padding: var(--space-8);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .shopify__proof-card .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .shopify__proof-stat {
+    font-size: var(--text-3xl);
+    font-weight: 600;
+    margin-bottom: var(--space-1);
+  }
+
+  .shopify__proof-label {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-6);
+  }
+
+  .shopify__proof-label:last-of-type {
+    margin-bottom: 0;
+  }
+
+  .shopify__audience {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: var(--space-8);
+  }
+
+  .shopify__audience-card {
+    padding: var(--space-8);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .shopify__audience-title {
+    font-size: var(--text-xl);
+    font-weight: 500;
+    margin-bottom: var(--space-4);
+  }
+
+  .shopify__audience-card p {
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .shopify__offer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-8);
+  }
+
+  .shopify__offer {
+    padding: var(--space-6);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+
+  .shopify__offer-title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+
+  .shopify__offer p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+    margin: 0;
+  }
+
+  .shopify__cta-text {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-8);
+  }
+
+  @media (max-width: 768px) {
+    .shopify__form {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .shopify__input,
+    .shopify__select {
+      min-width: 100%;
+    }
+
+    .shopify__grid {
+      grid-template-columns: 1fr;
+    }
+
+    .shopify__audience {
+      grid-template-columns: 1fr;
+    }
+
+    .shopify__offer-grid {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

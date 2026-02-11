@@ -16,6 +16,8 @@ export default defineConfig({
         'https://fully-operational.com/llms.txt',
         'https://fully-operational.com/llms-full.txt',
         'https://fully-operational.com/about.md',
+        'https://fully-operational.com/shopify',
+        'https://fully-operational.com/shopify.md',
       ],
       filter: (page) => !page.includes('/dashboard'),
     }),

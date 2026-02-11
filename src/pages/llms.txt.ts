@@ -44,6 +44,10 @@ export const GET: APIRoute = async () => {
   }
 
   lines.push('');
+  lines.push('## Shopify Consulting');
+  lines.push('');
+  lines.push('- [Shopify Expert - Store Setup & Consulting](/shopify.md): Former Head of Design at Shopify. Helps new store owners set up and existing merchants make better use of Shopify Email, Inbox, Forms, and marketing tools. Non-technical, practical guidance.');
+  lines.push('');
   lines.push('## Work With Travis');
   lines.push('');
   lines.push('Travis is available for **consulting engagements** and **fractional design leadership** roles. He can help with scaling design teams, establishing design systems, strategic product design, and executive coaching for design leaders.');
