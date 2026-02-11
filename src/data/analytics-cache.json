@@ -1,39 +1,39 @@
 {
-  "lastSynced": "2026-02-11T21:41:12.457Z",
+  "lastSynced": "2026-02-11T22:14:38.213Z",
   "periods": {
     "24h": {
-      "pageviews": 137,
-      "visitors": 48,
-      "visits": 55,
+      "pageviews": 116,
+      "visitors": 45,
+      "visits": 52,
       "bounces": 25,
-      "totaltime": 2152
+      "totaltime": 1163
     },
     "7d": {
-      "pageviews": 213,
-      "visitors": 71,
-      "visits": 78,
-      "bounces": 33,
-      "totaltime": 2900
+      "pageviews": 217,
+      "visitors": 73,
+      "visits": 80,
+      "bounces": 34,
+      "totaltime": 2970
     },
     "30d": {
-      "pageviews": 213,
-      "visitors": 71,
-      "visits": 78,
-      "bounces": 33,
-      "totaltime": 2900
+      "pageviews": 217,
+      "visitors": 73,
+      "visits": 80,
+      "bounces": 34,
+      "totaltime": 2970
     },
     "90d": {
-      "pageviews": 213,
-      "visitors": 71,
-      "visits": 78,
-      "bounces": 33,
-      "totaltime": 2900
+      "pageviews": 217,
+      "visitors": 73,
+      "visits": 80,
+      "bounces": 34,
+      "totaltime": 2970
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 65
+      "y": 66
     },
     {
       "x": "/about/",
@@ -53,14 +53,14 @@
     },
     {
       "x": "/work/grubhub-driver/",
+      "y": 8
+    },
+    {
+      "x": "/work/team-management/",
       "y": 7
     },
     {
       "x": "/contact/",
-      "y": 5
-    },
-    {
-      "x": "/work/team-management/",
       "y": 5
     },
     {
@@ -99,7 +99,7 @@
   "referrers": [
     {
       "x": "substack.com",
-      "y": 49
+      "y": 50
     },
     {
       "x": "linkedin.com",
@@ -124,12 +124,12 @@
       "y": 29
     },
     {
-      "x": "CA",
+      "x": "GB",
       "y": 11
     },
     {
-      "x": "GB",
-      "y": 9
+      "x": "CA",
+      "y": 11
     },
     {
       "x": "IN",
@@ -163,7 +163,7 @@
   "devices": [
     {
       "x": "mobile",
-      "y": 38
+      "y": 40
     },
     {
       "x": "laptop",
