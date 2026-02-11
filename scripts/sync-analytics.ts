@@ -62,12 +62,14 @@ async function fetchStats(startAt: number, endAt: number): Promise<PeriodData> {
   const data = await fetchJson(
     `/websites/${UMAMI_WEBSITE_ID}/stats?startAt=${startAt}&endAt=${endAt}`
   );
+  // Umami returns flat numbers: { pageviews: 213, visitors: 71, ... }
+  const num = (v: any) => (typeof v === 'number' ? v : v?.value ?? 0);
   return {
-    pageviews: data.pageviews?.value || 0,
-    visitors: data.visitors?.value || 0,
-    visits: data.visits?.value || 0,
-    bounces: data.bounces?.value || 0,
-    totaltime: data.totaltime?.value || 0,
+    pageviews: num(data.pageviews),
+    visitors: num(data.visitors),
+    visits: num(data.visits),
+    bounces: num(data.bounces),
+    totaltime: num(data.totaltime),
   };
 }
 

@@ -138,11 +138,13 @@ jobs:
             }
             
             // Calculate changes
-            const viewsChange = lastWeekStats?.pageviews?.value 
-              ? Math.round((thisWeekStats.pageviews?.value - lastWeekStats.pageviews.value) / lastWeekStats.pageviews.value * 100)
+            const pv = (s) => typeof s?.pageviews === 'number' ? s.pageviews : s?.pageviews?.value ?? 0;
+            const vv = (s) => typeof s?.visitors === 'number' ? s.visitors : s?.visitors?.value ?? 0;
+            const viewsChange = pv(lastWeekStats)
+              ? Math.round((pv(thisWeekStats) - pv(lastWeekStats)) / pv(lastWeekStats) * 100)
               : 0;
-            const visitorsChange = lastWeekStats?.visitors?.value
-              ? Math.round((thisWeekStats.visitors?.value - lastWeekStats.visitors.value) / lastWeekStats.visitors.value * 100)
+            const visitorsChange = vv(lastWeekStats)
+              ? Math.round((vv(thisWeekStats) - vv(lastWeekStats)) / vv(lastWeekStats) * 100)
               : 0;
             
             // LLM traffic
@@ -188,14 +190,14 @@ jobs:
               
               <div class="metrics">
                 <div class="metric">
-                  <div class="metric-value">${thisWeekStats.pageviews?.value?.toLocaleString() || 0}</div>
+                  <div class="metric-value">${(typeof thisWeekStats?.pageviews === 'number' ? thisWeekStats.pageviews : thisWeekStats?.pageviews?.value ?? 0).toLocaleString()}</div>
                   <div class="metric-label">Page Views</div>
                   <div class="metric-change ${viewsChange >= 0 ? 'positive' : 'negative'}">
                     ${viewsChange >= 0 ? '↑' : '↓'} ${Math.abs(viewsChange)}% vs last week
                   </div>
                 </div>
                 <div class="metric">
-                  <div class="metric-value">${thisWeekStats.visitors?.value?.toLocaleString() || 0}</div>
+                  <div class="metric-value">${(typeof thisWeekStats?.visitors === 'number' ? thisWeekStats.visitors : thisWeekStats?.visitors?.value ?? 0).toLocaleString()}</div>
                   <div class="metric-label">Visitors</div>
                   <div class="metric-change ${visitorsChange >= 0 ? 'positive' : 'negative'}">
                     ${visitorsChange >= 0 ? '↑' : '↓'} ${Math.abs(visitorsChange)}% vs last week
@@ -242,8 +244,8 @@ jobs:
             `;
             
             console.log('Analytics summary generated');
-            console.log(`- Page views: ${thisWeekStats.pageviews?.value || 0} (${viewsChange >= 0 ? '+' : ''}${viewsChange}%)`);
-            console.log(`- Visitors: ${thisWeekStats.visitors?.value || 0} (${visitorsChange >= 0 ? '+' : ''}${visitorsChange}%)`);
+            console.log(`- Page views: ${pv(thisWeekStats)} (${viewsChange >= 0 ? '+' : ''}${viewsChange}%)`);
+            console.log(`- Visitors: ${vv(thisWeekStats)} (${visitorsChange >= 0 ? '+' : ''}${visitorsChange}%)`);
             console.log(`- LLM views: ${llmViews}`);
             
             if (RESEND_API_KEY) {
