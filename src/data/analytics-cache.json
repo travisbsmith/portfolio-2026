@@ -1,5 +1,5 @@
 {
-  "lastSynced": "2026-02-11T07:11:01.565Z",
+  "lastSynced": "2026-02-11T21:23:13.778Z",
   "periods": {
     "24h": {
       "pageviews": 0,
@@ -33,54 +33,58 @@
   "pages": [
     {
       "x": "/",
-      "y": 44
+      "y": 65
     },
     {
       "x": "/about/",
-      "y": 16
+      "y": 23
     },
     {
       "x": "/work/shopify/",
-      "y": 12
+      "y": 15
     },
     {
       "x": "/work/grubhub-onboarding/",
-      "y": 10
+      "y": 13
     },
     {
       "x": "/blog/",
-      "y": 7
+      "y": 10
     },
     {
       "x": "/work/grubhub-driver/",
-      "y": 6
-    },
-    {
-      "x": "/work/team-management/",
-      "y": 4
+      "y": 7
     },
     {
       "x": "/contact/",
-      "y": 3
+      "y": 5
+    },
+    {
+      "x": "/work/team-management/",
+      "y": 5
     },
     {
       "x": "/work/tie-bar/",
+      "y": 4
+    },
+    {
+      "x": "/work/plainsmart/",
+      "y": 3
+    },
+    {
+      "x": "/work/mack-trucks/",
       "y": 3
     },
     {
       "x": "/work/chicago-aviation/",
-      "y": 2
-    },
-    {
-      "x": "/blog/my-current-design-stack/",
-      "y": 2
-    },
-    {
-      "x": "/work/mack-trucks/",
-      "y": 2
+      "y": 3
     },
     {
       "x": "/blog/the-double-diamond-is-dead/",
+      "y": 3
+    },
+    {
+      "x": "/blog/my-current-design-stack/",
       "y": 2
     },
     {
@@ -90,27 +94,23 @@
     {
       "x": "/blog/new-year-same-me/",
       "y": 1
-    },
-    {
-      "x": "/work/plainsmart/",
-      "y": 1
     }
   ],
   "referrers": [
     {
       "x": "substack.com",
-      "y": 33
+      "y": 49
     },
     {
       "x": "linkedin.com",
-      "y": 3
-    },
-    {
-      "x": "link.sbstck.com",
-      "y": 1
+      "y": 4
     },
     {
       "x": "google.com",
+      "y": 1
+    },
+    {
+      "x": "link.sbstck.com",
       "y": 1
     },
     {
@@ -121,19 +121,23 @@
   "countries": [
     {
       "x": "US",
-      "y": 23
+      "y": 29
     },
     {
       "x": "CA",
-      "y": 8
+      "y": 11
     },
     {
       "x": "GB",
-      "y": 7
+      "y": 9
     },
     {
       "x": "IN",
-      "y": 3
+      "y": 4
+    },
+    {
+      "x": "DE",
+      "y": 2
     },
     {
       "x": "ES",
@@ -144,34 +148,30 @@
       "y": 1
     },
     {
-      "x": "BG",
-      "y": 1
-    },
-    {
-      "x": "BY",
-      "y": 1
-    },
-    {
       "x": "NO",
       "y": 1
     },
     {
-      "x": "CN",
+      "x": "EG",
+      "y": 1
+    },
+    {
+      "x": "NL",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "mobile",
-      "y": 27
+      "y": 38
     },
     {
       "x": "laptop",
-      "y": 14
+      "y": 22
     },
     {
       "x": "desktop",
-      "y": 9
+      "y": 11
     }
   ]
 }
