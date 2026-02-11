@@ -1,5 +1,5 @@
 {
-  "lastSynced": "2026-02-10T07:14:15.220Z",
+  "lastSynced": "2026-02-11T07:11:01.565Z",
   "periods": {
     "24h": {
       "pageviews": 0,
@@ -33,14 +33,54 @@
   "pages": [
     {
       "x": "/",
-      "y": 3
+      "y": 44
     },
     {
       "x": "/about/",
-      "y": 2
+      "y": 16
+    },
+    {
+      "x": "/work/shopify/",
+      "y": 12
     },
     {
       "x": "/work/grubhub-onboarding/",
+      "y": 10
+    },
+    {
+      "x": "/blog/",
+      "y": 7
+    },
+    {
+      "x": "/work/grubhub-driver/",
+      "y": 6
+    },
+    {
+      "x": "/work/team-management/",
+      "y": 4
+    },
+    {
+      "x": "/contact/",
+      "y": 3
+    },
+    {
+      "x": "/work/tie-bar/",
+      "y": 3
+    },
+    {
+      "x": "/work/chicago-aviation/",
+      "y": 2
+    },
+    {
+      "x": "/blog/my-current-design-stack/",
+      "y": 2
+    },
+    {
+      "x": "/work/mack-trucks/",
+      "y": 2
+    },
+    {
+      "x": "/blog/the-double-diamond-is-dead/",
       "y": 2
     },
     {
@@ -48,19 +88,31 @@
       "y": 1
     },
     {
-      "x": "/work/shopify/",
+      "x": "/blog/new-year-same-me/",
       "y": 1
     },
     {
-      "x": "/work/team-management/",
-      "y": 1
-    },
-    {
-      "x": "/work/grubhub-driver/",
+      "x": "/work/plainsmart/",
       "y": 1
     }
   ],
   "referrers": [
+    {
+      "x": "substack.com",
+      "y": 33
+    },
+    {
+      "x": "linkedin.com",
+      "y": 3
+    },
+    {
+      "x": "link.sbstck.com",
+      "y": 1
+    },
+    {
+      "x": "google.com",
+      "y": 1
+    },
     {
       "x": "travisbsmith.substack.com",
       "y": 1
@@ -69,10 +121,38 @@
   "countries": [
     {
       "x": "US",
+      "y": 23
+    },
+    {
+      "x": "CA",
+      "y": 8
+    },
+    {
+      "x": "GB",
+      "y": 7
+    },
+    {
+      "x": "IN",
+      "y": 3
+    },
+    {
+      "x": "ES",
       "y": 2
     },
     {
-      "x": "IL",
+      "x": "RO",
+      "y": 1
+    },
+    {
+      "x": "BG",
+      "y": 1
+    },
+    {
+      "x": "BY",
+      "y": 1
+    },
+    {
+      "x": "NO",
       "y": 1
     },
     {
@@ -82,16 +162,16 @@
   ],
   "devices": [
     {
-      "x": "laptop",
-      "y": 2
+      "x": "mobile",
+      "y": 27
     },
     {
-      "x": "mobile",
-      "y": 1
+      "x": "laptop",
+      "y": 14
     },
     {
       "x": "desktop",
-      "y": 1
+      "y": 9
     }
   ]
 }
