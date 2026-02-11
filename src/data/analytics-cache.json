@@ -1,43 +1,43 @@
 {
-  "lastSynced": "2026-02-11T22:25:06.409Z",
+  "lastSynced": "2026-02-11T22:36:11.197Z",
   "periods": {
     "24h": {
-      "pageviews": 118,
-      "visitors": 46,
-      "visits": 53,
+      "pageviews": 120,
+      "visitors": 47,
+      "visits": 54,
       "bounces": 25,
-      "totaltime": 1163
+      "totaltime": 1171
     },
     "7d": {
-      "pageviews": 219,
-      "visitors": 74,
-      "visits": 81,
+      "pageviews": 221,
+      "visitors": 75,
+      "visits": 82,
       "bounces": 34,
-      "totaltime": 2970
+      "totaltime": 2978
     },
     "30d": {
-      "pageviews": 219,
-      "visitors": 74,
-      "visits": 81,
+      "pageviews": 221,
+      "visitors": 75,
+      "visits": 82,
       "bounces": 34,
-      "totaltime": 2970
+      "totaltime": 2978
     },
     "90d": {
-      "pageviews": 219,
-      "visitors": 74,
-      "visits": 81,
+      "pageviews": 221,
+      "visitors": 75,
+      "visits": 82,
       "bounces": 34,
-      "totaltime": 2970
+      "totaltime": 2978
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 66
+      "y": 67
     },
     {
       "x": "/about/",
-      "y": 23
+      "y": 24
     },
     {
       "x": "/work/shopify/",
@@ -103,7 +103,7 @@
   "referrers": [
     {
       "x": "substack.com",
-      "y": 50
+      "y": 51
     },
     {
       "x": "linkedin.com",
@@ -114,18 +114,18 @@
       "y": 1
     },
     {
-      "x": "link.sbstck.com",
+      "x": "travisbsmith.substack.com",
       "y": 1
     },
     {
-      "x": "travisbsmith.substack.com",
+      "x": "link.sbstck.com",
       "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 30
+      "y": 31
     },
     {
       "x": "GB",
@@ -167,7 +167,7 @@
   "devices": [
     {
       "x": "mobile",
-      "y": 40
+      "y": 41
     },
     {
       "x": "laptop",
