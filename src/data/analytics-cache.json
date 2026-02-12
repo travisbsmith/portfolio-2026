@@ -1,47 +1,47 @@
 {
-  "lastSynced": "2026-02-11T22:36:11.197Z",
+  "lastSynced": "2026-02-12T07:10:27.645Z",
   "periods": {
     "24h": {
-      "pageviews": 120,
-      "visitors": 47,
-      "visits": 54,
-      "bounces": 25,
-      "totaltime": 1171
+      "pageviews": 84,
+      "visitors": 28,
+      "visits": 35,
+      "bounces": 15,
+      "totaltime": 694
     },
     "7d": {
-      "pageviews": 221,
-      "visitors": 75,
-      "visits": 82,
+      "pageviews": 227,
+      "visitors": 78,
+      "visits": 85,
       "bounces": 34,
-      "totaltime": 2978
+      "totaltime": 3045
     },
     "30d": {
-      "pageviews": 221,
-      "visitors": 75,
-      "visits": 82,
+      "pageviews": 227,
+      "visitors": 78,
+      "visits": 85,
       "bounces": 34,
-      "totaltime": 2978
+      "totaltime": 3045
     },
     "90d": {
-      "pageviews": 221,
-      "visitors": 75,
-      "visits": 82,
+      "pageviews": 227,
+      "visitors": 78,
+      "visits": 85,
       "bounces": 34,
-      "totaltime": 2978
+      "totaltime": 3045
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 67
+      "y": 70
     },
     {
       "x": "/about/",
-      "y": 24
+      "y": 25
     },
     {
       "x": "/work/shopify/",
-      "y": 15
+      "y": 16
     },
     {
       "x": "/work/grubhub-onboarding/",
@@ -68,11 +68,11 @@
       "y": 4
     },
     {
-      "x": "/work/plainsmart/",
-      "y": 3
+      "x": "/work/mack-trucks/",
+      "y": 4
     },
     {
-      "x": "/work/mack-trucks/",
+      "x": "/work/plainsmart/",
       "y": 3
     },
     {
@@ -103,7 +103,7 @@
   "referrers": [
     {
       "x": "substack.com",
-      "y": 51
+      "y": 52
     },
     {
       "x": "linkedin.com",
@@ -114,18 +114,18 @@
       "y": 1
     },
     {
-      "x": "travisbsmith.substack.com",
+      "x": "link.sbstck.com",
       "y": 1
     },
     {
-      "x": "link.sbstck.com",
+      "x": "travisbsmith.substack.com",
       "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 31
+      "y": 34
     },
     {
       "x": "GB",
@@ -167,7 +167,7 @@
   "devices": [
     {
       "x": "mobile",
-      "y": 41
+      "y": 44
     },
     {
       "x": "laptop",
