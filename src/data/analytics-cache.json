@@ -1,78 +1,78 @@
 {
-  "lastSynced": "2026-02-13T07:06:44.407Z",
+  "lastSynced": "2026-02-14T06:55:29.104Z",
   "periods": {
     "24h": {
       "pageviews": 22,
-      "visitors": 10,
-      "visits": 11,
-      "bounces": 7,
-      "totaltime": 500
+      "visitors": 8,
+      "visits": 9,
+      "bounces": 4,
+      "totaltime": 618
     },
     "7d": {
-      "pageviews": 252,
-      "visitors": 89,
-      "visits": 97,
-      "bounces": 41,
-      "totaltime": 3582
+      "pageviews": 274,
+      "visitors": 96,
+      "visits": 106,
+      "bounces": 45,
+      "totaltime": 4200
     },
     "30d": {
-      "pageviews": 252,
-      "visitors": 89,
-      "visits": 97,
-      "bounces": 41,
-      "totaltime": 3582
+      "pageviews": 274,
+      "visitors": 96,
+      "visits": 106,
+      "bounces": 45,
+      "totaltime": 4200
     },
     "90d": {
-      "pageviews": 252,
-      "visitors": 89,
-      "visits": 97,
-      "bounces": 41,
-      "totaltime": 3582
+      "pageviews": 274,
+      "visitors": 96,
+      "visits": 106,
+      "bounces": 45,
+      "totaltime": 4200
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 81
+      "y": 88
     },
     {
       "x": "/about/",
-      "y": 29
+      "y": 30
     },
     {
       "x": "/work/shopify/",
-      "y": 17
+      "y": 20
     },
     {
       "x": "/work/grubhub-onboarding/",
-      "y": 13
+      "y": 15
     },
     {
       "x": "/blog/",
-      "y": 12
+      "y": 14
     },
     {
       "x": "/work/grubhub-driver/",
       "y": 8
     },
     {
+      "x": "/contact/",
+      "y": 7
+    },
+    {
       "x": "/work/team-management/",
       "y": 7
     },
     {
-      "x": "/contact/",
-      "y": 6
-    },
-    {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 4
+      "x": "/work/tie-bar/",
+      "y": 5
     },
     {
       "x": "/work/mack-trucks/",
       "y": 4
     },
     {
-      "x": "/work/tie-bar/",
+      "x": "/blog/the-double-diamond-is-dead/",
       "y": 4
     },
     {
@@ -85,25 +85,25 @@
     },
     {
       "x": "/blog/my-current-design-stack/",
-      "y": 2
+      "y": 3
     },
     {
       "x": "/index",
       "y": 1
     },
     {
-      "x": "/blog/new-year-same-me/",
+      "x": "/shopify/",
       "y": 1
     },
     {
-      "x": "/shopify/",
+      "x": "/blog/new-year-same-me/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "substack.com",
-      "y": 54
+      "y": 57
     },
     {
       "x": "linkedin.com",
@@ -111,7 +111,7 @@
     },
     {
       "x": "google.com",
-      "y": 3
+      "y": 4
     },
     {
       "x": "link.sbstck.com",
@@ -125,7 +125,7 @@
   "countries": [
     {
       "x": "US",
-      "y": 42
+      "y": 48
     },
     {
       "x": "CA",
@@ -140,11 +140,11 @@
       "y": 4
     },
     {
-      "x": "DE",
+      "x": "CN",
       "y": 2
     },
     {
-      "x": "CN",
+      "x": "DE",
       "y": 2
     },
     {
@@ -152,30 +152,30 @@
       "y": 2
     },
     {
-      "x": "NO",
-      "y": 1
-    },
-    {
       "x": "RO",
       "y": 1
     },
     {
-      "x": "AR",
+      "x": "NO",
+      "y": 1
+    },
+    {
+      "x": "EG",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "mobile",
-      "y": 48
+      "y": 52
     },
     {
       "x": "laptop",
-      "y": 29
+      "y": 30
     },
     {
       "x": "desktop",
-      "y": 12
+      "y": 14
     }
   ]
 }
