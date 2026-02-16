@@ -1,32 +1,32 @@
 {
-  "lastSynced": "2026-02-15T06:58:44.379Z",
+  "lastSynced": "2026-02-16T07:12:40.359Z",
   "periods": {
     "24h": {
-      "pageviews": 6,
-      "visitors": 2,
-      "visits": 2,
-      "bounces": 0,
-      "totaltime": 1400
+      "pageviews": 1,
+      "visitors": 1,
+      "visits": 1,
+      "bounces": 1,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 275,
-      "visitors": 97,
-      "visits": 107,
-      "bounces": 45,
+      "pageviews": 276,
+      "visitors": 98,
+      "visits": 108,
+      "bounces": 46,
       "totaltime": 5546
     },
     "30d": {
-      "pageviews": 280,
-      "visitors": 98,
-      "visits": 108,
-      "bounces": 45,
+      "pageviews": 281,
+      "visitors": 99,
+      "visits": 109,
+      "bounces": 46,
       "totaltime": 5600
     },
     "90d": {
-      "pageviews": 280,
-      "visitors": 98,
-      "visits": 108,
-      "bounces": 45,
+      "pageviews": 281,
+      "visitors": 99,
+      "visits": 109,
+      "bounces": 46,
       "totaltime": 5600
     }
   },
@@ -37,7 +37,7 @@
     },
     {
       "x": "/about/",
-      "y": 30
+      "y": 31
     },
     {
       "x": "/work/shopify/",
@@ -137,7 +137,7 @@
     },
     {
       "x": "IN",
-      "y": 4
+      "y": 5
     },
     {
       "x": "CN",
@@ -171,7 +171,7 @@
     },
     {
       "x": "laptop",
-      "y": 31
+      "y": 32
     },
     {
       "x": "desktop",
