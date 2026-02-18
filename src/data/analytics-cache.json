@@ -1,151 +1,131 @@
 {
-  "lastSynced": "2026-02-17T07:07:22.266Z",
+  "lastSynced": "2026-02-18T07:09:34.518Z",
   "periods": {
     "24h": {
-      "pageviews": 15,
-      "visitors": 5,
-      "visits": 5,
-      "bounces": 3,
-      "totaltime": 85
+      "pageviews": 14,
+      "visitors": 3,
+      "visits": 3,
+      "bounces": 1,
+      "totaltime": 407
     },
     "7d": {
-      "pageviews": 284,
-      "visitors": 99,
-      "visits": 110,
-      "bounces": 48,
-      "totaltime": 5587
+      "pageviews": 167,
+      "visitors": 56,
+      "visits": 67,
+      "bounces": 31,
+      "totaltime": 3741
     },
     "30d": {
-      "pageviews": 296,
-      "visitors": 103,
-      "visits": 114,
-      "bounces": 49,
-      "totaltime": 5685
+      "pageviews": 310,
+      "visitors": 106,
+      "visits": 117,
+      "bounces": 50,
+      "totaltime": 6092
     },
     "90d": {
-      "pageviews": 296,
-      "visitors": 103,
-      "visits": 114,
-      "bounces": 49,
-      "totaltime": 5685
+      "pageviews": 310,
+      "visitors": 106,
+      "visits": 117,
+      "bounces": 50,
+      "totaltime": 6092
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 91
+      "y": 53
     },
     {
       "x": "/about/",
-      "y": 31
+      "y": 18
     },
     {
       "x": "/work/shopify/",
-      "y": 21
-    },
-    {
-      "x": "/work/grubhub-onboarding/",
-      "y": 15
+      "y": 11
     },
     {
       "x": "/blog/",
-      "y": 15
+      "y": 9
     },
     {
-      "x": "/contact/",
+      "x": "/work/grubhub-onboarding/",
       "y": 8
     },
     {
-      "x": "/work/grubhub-driver/",
-      "y": 7
-    },
-    {
-      "x": "/work/team-management/",
+      "x": "/contact/",
       "y": 6
     },
     {
+      "x": "/work/team-management/",
+      "y": 3
+    },
+    {
+      "x": "/work/grubhub-driver/",
+      "y": 3
+    },
+    {
       "x": "/work/tie-bar/",
-      "y": 5
-    },
-    {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 4
-    },
-    {
-      "x": "/work/mack-trucks/",
-      "y": 4
-    },
-    {
-      "x": "/work/chicago-aviation/",
-      "y": 3
-    },
-    {
-      "x": "/blog/my-current-design-stack/",
-      "y": 3
+      "y": 2
     },
     {
       "x": "/work/plainsmart/",
-      "y": 3
+      "y": 2
+    },
+    {
+      "x": "/work/mack-trucks/",
+      "y": 2
+    },
+    {
+      "x": "/blog/the-double-diamond-is-dead/",
+      "y": 2
+    },
+    {
+      "x": "/blog/my-current-design-stack/",
+      "y": 2
     },
     {
       "x": "/shopify/",
       "y": 1
     },
     {
-      "x": "/blog/new-year-same-me/",
+      "x": "/work/chicago-aviation/",
+      "y": 1
+    },
+    {
+      "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "substack.com",
-      "y": 60
-    },
-    {
-      "x": "linkedin.com",
-      "y": 5
+      "y": 27
     },
     {
       "x": "google.com",
       "y": 4
     },
     {
-      "x": "link.sbstck.com",
-      "y": 1
+      "x": "linkedin.com",
+      "y": 2
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 52
-    },
-    {
-      "x": "CA",
-      "y": 12
+      "y": 33
     },
     {
       "x": "GB",
-      "y": 11
+      "y": 4
+    },
+    {
+      "x": "CA",
+      "y": 4
     },
     {
       "x": "IN",
-      "y": 5
-    },
-    {
-      "x": "DE",
       "y": 2
-    },
-    {
-      "x": "ES",
-      "y": 2
-    },
-    {
-      "x": "RO",
-      "y": 1
-    },
-    {
-      "x": "NO",
-      "y": 1
     },
     {
       "x": "EG",
@@ -154,20 +134,36 @@
     {
       "x": "NL",
       "y": 1
+    },
+    {
+      "x": "AU",
+      "y": 1
+    },
+    {
+      "x": "CN",
+      "y": 1
+    },
+    {
+      "x": "VN",
+      "y": 1
+    },
+    {
+      "x": "BR",
+      "y": 1
     }
   ],
   "devices": [
     {
       "x": "mobile",
-      "y": 53
+      "y": 27
     },
     {
       "x": "laptop",
-      "y": 32
+      "y": 23
     },
     {
       "x": "desktop",
-      "y": 14
+      "y": 6
     }
   ]
 }
