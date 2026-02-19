@@ -1,78 +1,66 @@
 {
-  "lastSynced": "2026-02-18T07:09:34.518Z",
+  "lastSynced": "2026-02-19T07:08:35.538Z",
   "periods": {
     "24h": {
-      "pageviews": 14,
-      "visitors": 3,
-      "visits": 3,
-      "bounces": 1,
-      "totaltime": 407
+      "pageviews": 11,
+      "visitors": 8,
+      "visits": 8,
+      "bounces": 6,
+      "totaltime": 73
     },
     "7d": {
-      "pageviews": 167,
-      "visitors": 56,
-      "visits": 67,
-      "bounces": 31,
-      "totaltime": 3741
+      "pageviews": 91,
+      "visitors": 35,
+      "visits": 39,
+      "bounces": 22,
+      "totaltime": 3083
     },
     "30d": {
-      "pageviews": 310,
-      "visitors": 106,
-      "visits": 117,
-      "bounces": 50,
-      "totaltime": 6092
+      "pageviews": 321,
+      "visitors": 114,
+      "visits": 125,
+      "bounces": 56,
+      "totaltime": 6165
     },
     "90d": {
-      "pageviews": 310,
-      "visitors": 106,
-      "visits": 117,
-      "bounces": 50,
-      "totaltime": 6092
+      "pageviews": 321,
+      "visitors": 114,
+      "visits": 125,
+      "bounces": 56,
+      "totaltime": 6165
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 53
+      "y": 29
     },
     {
       "x": "/about/",
-      "y": 18
-    },
-    {
-      "x": "/work/shopify/",
-      "y": 11
-    },
-    {
-      "x": "/blog/",
       "y": 9
     },
     {
-      "x": "/work/grubhub-onboarding/",
+      "x": "/work/shopify/",
       "y": 8
     },
     {
-      "x": "/contact/",
+      "x": "/blog/",
       "y": 6
     },
     {
-      "x": "/work/team-management/",
+      "x": "/contact/",
+      "y": 5
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
+      "y": 5
+    },
+    {
+      "x": "/blog/my-current-design-stack/",
       "y": 3
     },
     {
-      "x": "/work/grubhub-driver/",
-      "y": 3
-    },
-    {
-      "x": "/work/tie-bar/",
-      "y": 2
-    },
-    {
-      "x": "/work/plainsmart/",
-      "y": 2
-    },
-    {
-      "x": "/work/mack-trucks/",
+      "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 2
     },
     {
@@ -80,26 +68,22 @@
       "y": 2
     },
     {
-      "x": "/blog/my-current-design-stack/",
-      "y": 2
-    },
-    {
-      "x": "/shopify/",
+      "x": "/work/tie-bar/",
       "y": 1
     },
     {
-      "x": "/work/chicago-aviation/",
+      "x": "/work/grubhub-driver/",
       "y": 1
     },
     {
-      "x": "/blog/a-new-age-of-design-portfolio-sites/",
+      "x": "/blog/new-year-same-me/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "substack.com",
-      "y": 27
+      "y": 8
     },
     {
       "x": "google.com",
@@ -107,36 +91,24 @@
     },
     {
       "x": "linkedin.com",
-      "y": 2
+      "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 33
-    },
-    {
-      "x": "GB",
-      "y": 4
+      "y": 27
     },
     {
       "x": "CA",
-      "y": 4
-    },
-    {
-      "x": "IN",
       "y": 2
     },
     {
-      "x": "EG",
+      "x": "IN",
       "y": 1
     },
     {
-      "x": "NL",
-      "y": 1
-    },
-    {
-      "x": "AU",
+      "x": "GB",
       "y": 1
     },
     {
@@ -150,20 +122,24 @@
     {
       "x": "BR",
       "y": 1
+    },
+    {
+      "x": "MD",
+      "y": 1
     }
   ],
   "devices": [
     {
-      "x": "mobile",
-      "y": 27
+      "x": "laptop",
+      "y": 21
     },
     {
-      "x": "laptop",
-      "y": 23
+      "x": "mobile",
+      "y": 9
     },
     {
       "x": "desktop",
-      "y": 6
+      "y": 5
     }
   ]
 }
