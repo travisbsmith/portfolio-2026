@@ -1,58 +1,58 @@
 {
-  "lastSynced": "2026-02-19T07:08:35.538Z",
+  "lastSynced": "2026-02-20T07:04:48.045Z",
   "periods": {
     "24h": {
-      "pageviews": 11,
-      "visitors": 8,
-      "visits": 8,
-      "bounces": 6,
-      "totaltime": 73
+      "pageviews": 4,
+      "visitors": 2,
+      "visits": 2,
+      "bounces": 0,
+      "totaltime": 58
     },
     "7d": {
-      "pageviews": 91,
-      "visitors": 35,
-      "visits": 39,
-      "bounces": 22,
-      "totaltime": 3083
+      "pageviews": 73,
+      "visitors": 29,
+      "visits": 30,
+      "bounces": 15,
+      "totaltime": 2641
     },
     "30d": {
-      "pageviews": 321,
-      "visitors": 114,
-      "visits": 125,
+      "pageviews": 325,
+      "visitors": 116,
+      "visits": 127,
       "bounces": 56,
-      "totaltime": 6165
+      "totaltime": 6223
     },
     "90d": {
-      "pageviews": 321,
-      "visitors": 114,
-      "visits": 125,
+      "pageviews": 325,
+      "visitors": 116,
+      "visits": 127,
       "bounces": 56,
-      "totaltime": 6165
+      "totaltime": 6223
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 29
+      "y": 23
     },
     {
       "x": "/about/",
-      "y": 9
+      "y": 7
     },
     {
       "x": "/work/shopify/",
-      "y": 8
+      "y": 7
     },
     {
-      "x": "/blog/",
-      "y": 6
+      "x": "/work/grubhub-onboarding/",
+      "y": 5
     },
     {
       "x": "/contact/",
       "y": 5
     },
     {
-      "x": "/work/grubhub-onboarding/",
+      "x": "/blog/",
       "y": 5
     },
     {
@@ -64,11 +64,7 @@
       "y": 2
     },
     {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 2
-    },
-    {
-      "x": "/work/tie-bar/",
+      "x": "/blog/new-year-same-me/",
       "y": 1
     },
     {
@@ -76,7 +72,11 @@
       "y": 1
     },
     {
-      "x": "/blog/new-year-same-me/",
+      "x": "/work/tie-bar/",
+      "y": 1
+    },
+    {
+      "x": "/blog/the-double-diamond-is-dead/",
       "y": 1
     }
   ],
@@ -87,21 +87,13 @@
     },
     {
       "x": "google.com",
-      "y": 4
-    },
-    {
-      "x": "linkedin.com",
-      "y": 1
+      "y": 2
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 27
-    },
-    {
-      "x": "CA",
-      "y": 2
+      "y": 23
     },
     {
       "x": "IN",
@@ -112,11 +104,11 @@
       "y": 1
     },
     {
-      "x": "CN",
+      "x": "PK",
       "y": 1
     },
     {
-      "x": "VN",
+      "x": "CA",
       "y": 1
     },
     {
@@ -131,15 +123,15 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 21
+      "y": 17
     },
     {
       "x": "mobile",
-      "y": 9
+      "y": 8
     },
     {
       "x": "desktop",
-      "y": 5
+      "y": 4
     }
   ]
 }
