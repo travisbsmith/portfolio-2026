@@ -1,19 +1,19 @@
 {
-  "lastSynced": "2026-02-21T06:52:30.859Z",
+  "lastSynced": "2026-02-22T06:57:01.163Z",
   "periods": {
     "24h": {
-      "pageviews": 2,
-      "visitors": 1,
-      "visits": 1,
+      "pageviews": 0,
+      "visitors": 0,
+      "visits": 0,
       "bounces": 0,
-      "totaltime": 6
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 53,
-      "visitors": 22,
-      "visits": 22,
+      "pageviews": 47,
+      "visitors": 20,
+      "visits": 20,
       "bounces": 11,
-      "totaltime": 2029
+      "totaltime": 629
     },
     "30d": {
       "pageviews": 327,
@@ -33,7 +33,7 @@
   "pages": [
     {
       "x": "/",
-      "y": 16
+      "y": 14
     },
     {
       "x": "/about/",
@@ -41,10 +41,6 @@
     },
     {
       "x": "/contact/",
-      "y": 5
-    },
-    {
-      "x": "/work/shopify/",
       "y": 4
     },
     {
@@ -52,8 +48,12 @@
       "y": 3
     },
     {
-      "x": "/work/grubhub-onboarding/",
+      "x": "/work/shopify/",
       "y": 3
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
+      "y": 2
     },
     {
       "x": "/blog/a-new-age-of-design-portfolio-sites/",
@@ -79,7 +79,7 @@
   "referrers": [
     {
       "x": "substack.com",
-      "y": 5
+      "y": 4
     },
     {
       "x": "google.com",
@@ -89,14 +89,10 @@
   "countries": [
     {
       "x": "US",
-      "y": 17
+      "y": 15
     },
     {
       "x": "IN",
-      "y": 1
-    },
-    {
-      "x": "GB",
       "y": 1
     },
     {
@@ -104,22 +100,26 @@
       "y": 1
     },
     {
+      "x": "MD",
+      "y": 1
+    },
+    {
       "x": "CA",
       "y": 1
     },
     {
-      "x": "MD",
+      "x": "GB",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 17
+      "y": 16
     },
     {
       "x": "mobile",
-      "y": 3
+      "y": 2
     },
     {
       "x": "desktop",
