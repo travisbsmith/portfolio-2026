@@ -1,47 +1,47 @@
 {
-  "lastSynced": "2026-02-23T07:13:54.510Z",
+  "lastSynced": "2026-02-24T07:08:41.722Z",
   "periods": {
     "24h": {
-      "pageviews": 5,
-      "visitors": 2,
-      "visits": 2,
+      "pageviews": 0,
+      "visitors": 0,
+      "visits": 0,
       "bounces": 0,
-      "totaltime": 51
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 51,
-      "visitors": 21,
-      "visits": 21,
-      "bounces": 10,
-      "totaltime": 680
+      "pageviews": 38,
+      "visitors": 17,
+      "visits": 17,
+      "bounces": 7,
+      "totaltime": 624
     },
     "30d": {
-      "pageviews": 332,
-      "visitors": 119,
-      "visits": 130,
+      "pageviews": 334,
+      "visitors": 120,
+      "visits": 131,
       "bounces": 56,
-      "totaltime": 6280
+      "totaltime": 6309
     },
     "90d": {
-      "pageviews": 332,
-      "visitors": 119,
-      "visits": 130,
+      "pageviews": 334,
+      "visitors": 120,
+      "visits": 131,
       "bounces": 56,
-      "totaltime": 6280
+      "totaltime": 6309
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 16
-    },
-    {
-      "x": "/about/",
-      "y": 6
+      "y": 12
     },
     {
       "x": "/contact/",
       "y": 5
+    },
+    {
+      "x": "/about/",
+      "y": 4
     },
     {
       "x": "/blog/",
@@ -49,10 +49,6 @@
     },
     {
       "x": "/work/shopify/",
-      "y": 3
-    },
-    {
-      "x": "/work/grubhub-onboarding/",
       "y": 2
     },
     {
@@ -72,24 +68,32 @@
       "y": 1
     },
     {
+      "x": "/work/grubhub-onboarding/",
+      "y": 1
+    },
+    {
       "x": "/blog/the-double-diamond-is-dead/",
       "y": 1
     }
   ],
   "referrers": [
     {
-      "x": "substack.com",
-      "y": 4
-    },
-    {
       "x": "google.com",
       "y": 2
+    },
+    {
+      "x": "substack.com",
+      "y": 2
+    },
+    {
+      "x": "linkedin.com",
+      "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 17
+      "y": 13
     },
     {
       "x": "GB",
@@ -111,15 +115,11 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 17
-    },
-    {
-      "x": "mobile",
-      "y": 2
+      "y": 16
     },
     {
       "x": "desktop",
-      "y": 2
+      "y": 1
     }
   ]
 }
