@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-02-24T07:08:41.722Z",
+  "lastSynced": "2026-02-25T07:09:52.339Z",
   "periods": {
     "24h": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
+      "pageviews": 10,
+      "visitors": 3,
+      "visits": 3,
       "bounces": 0,
-      "totaltime": 0
+      "totaltime": 124
     },
     "7d": {
-      "pageviews": 38,
+      "pageviews": 34,
       "visitors": 17,
       "visits": 17,
-      "bounces": 7,
-      "totaltime": 624
+      "bounces": 6,
+      "totaltime": 341
     },
     "30d": {
-      "pageviews": 334,
-      "visitors": 120,
-      "visits": 131,
+      "pageviews": 344,
+      "visitors": 123,
+      "visits": 134,
       "bounces": 56,
-      "totaltime": 6309
+      "totaltime": 6433
     },
     "90d": {
-      "pageviews": 334,
-      "visitors": 120,
-      "visits": 131,
+      "pageviews": 344,
+      "visitors": 123,
+      "visits": 134,
       "bounces": 56,
-      "totaltime": 6309
+      "totaltime": 6433
     }
   },
   "pages": [
@@ -36,32 +36,20 @@
       "y": 12
     },
     {
+      "x": "/about/",
+      "y": 5
+    },
+    {
       "x": "/contact/",
       "y": 5
     },
     {
-      "x": "/about/",
-      "y": 4
-    },
-    {
       "x": "/blog/",
-      "y": 4
+      "y": 3
     },
     {
       "x": "/work/shopify/",
       "y": 2
-    },
-    {
-      "x": "/blog/a-new-age-of-design-portfolio-sites/",
-      "y": 2
-    },
-    {
-      "x": "/blog/my-current-design-stack/",
-      "y": 2
-    },
-    {
-      "x": "/work/grubhub-driver/",
-      "y": 1
     },
     {
       "x": "/blog/new-year-same-me/",
@@ -72,18 +60,26 @@
       "y": 1
     },
     {
+      "x": "/blog/a-new-age-of-design-portfolio-sites/",
+      "y": 1
+    },
+    {
       "x": "/blog/the-double-diamond-is-dead/",
+      "y": 1
+    },
+    {
+      "x": "/blog/my-current-design-stack/",
       "y": 1
     }
   ],
   "referrers": [
     {
-      "x": "google.com",
-      "y": 2
+      "x": "substack.com",
+      "y": 3
     },
     {
-      "x": "substack.com",
-      "y": 2
+      "x": "google.com",
+      "y": 1
     },
     {
       "x": "linkedin.com",
@@ -108,18 +104,18 @@
       "y": 1
     },
     {
-      "x": "MD",
+      "x": "TR",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 16
+      "y": 15
     },
     {
       "x": "desktop",
-      "y": 1
+      "y": 2
     }
   ]
 }
