@@ -1,74 +1,58 @@
 {
-  "lastSynced": "2026-02-25T07:09:52.339Z",
+  "lastSynced": "2026-02-26T07:08:12.392Z",
   "periods": {
     "24h": {
-      "pageviews": 10,
-      "visitors": 3,
-      "visits": 3,
-      "bounces": 0,
-      "totaltime": 124
+      "pageviews": 2,
+      "visitors": 2,
+      "visits": 2,
+      "bounces": 2,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 34,
-      "visitors": 17,
-      "visits": 17,
-      "bounces": 6,
-      "totaltime": 341
+      "pageviews": 25,
+      "visitors": 11,
+      "visits": 11,
+      "bounces": 2,
+      "totaltime": 268
     },
     "30d": {
-      "pageviews": 344,
-      "visitors": 123,
-      "visits": 134,
-      "bounces": 56,
+      "pageviews": 346,
+      "visitors": 125,
+      "visits": 136,
+      "bounces": 58,
       "totaltime": 6433
     },
     "90d": {
-      "pageviews": 344,
-      "visitors": 123,
-      "visits": 134,
-      "bounces": 56,
+      "pageviews": 346,
+      "visitors": 125,
+      "visits": 136,
+      "bounces": 58,
       "totaltime": 6433
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 12
+      "y": 11
     },
     {
       "x": "/about/",
-      "y": 5
+      "y": 4
     },
     {
       "x": "/contact/",
-      "y": 5
+      "y": 4
     },
     {
       "x": "/blog/",
-      "y": 3
-    },
-    {
-      "x": "/work/shopify/",
       "y": 2
     },
     {
-      "x": "/blog/new-year-same-me/",
+      "x": "/work/shopify/",
       "y": 1
     },
     {
       "x": "/work/grubhub-onboarding/",
-      "y": 1
-    },
-    {
-      "x": "/blog/a-new-age-of-design-portfolio-sites/",
-      "y": 1
-    },
-    {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 1
-    },
-    {
-      "x": "/blog/my-current-design-stack/",
       "y": 1
     }
   ],
@@ -89,11 +73,7 @@
   "countries": [
     {
       "x": "US",
-      "y": 13
-    },
-    {
-      "x": "GB",
-      "y": 1
+      "y": 7
     },
     {
       "x": "PK",
@@ -104,6 +84,10 @@
       "y": 1
     },
     {
+      "x": "CN",
+      "y": 1
+    },
+    {
       "x": "TR",
       "y": 1
     }
@@ -111,7 +95,7 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 15
+      "y": 9
     },
     {
       "x": "desktop",
