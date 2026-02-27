@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-02-26T07:08:12.392Z",
+  "lastSynced": "2026-02-27T07:02:47.095Z",
   "periods": {
     "24h": {
-      "pageviews": 2,
-      "visitors": 2,
-      "visits": 2,
+      "pageviews": 6,
+      "visitors": 3,
+      "visits": 3,
       "bounces": 2,
-      "totaltime": 0
+      "totaltime": 22
     },
     "7d": {
-      "pageviews": 25,
-      "visitors": 11,
-      "visits": 11,
-      "bounces": 2,
-      "totaltime": 268
+      "pageviews": 27,
+      "visitors": 12,
+      "visits": 12,
+      "bounces": 4,
+      "totaltime": 232
     },
     "30d": {
-      "pageviews": 346,
-      "visitors": 125,
-      "visits": 136,
-      "bounces": 58,
-      "totaltime": 6433
+      "pageviews": 352,
+      "visitors": 128,
+      "visits": 139,
+      "bounces": 60,
+      "totaltime": 6455
     },
     "90d": {
-      "pageviews": 346,
-      "visitors": 125,
-      "visits": 136,
-      "bounces": 58,
-      "totaltime": 6433
+      "pageviews": 352,
+      "visitors": 128,
+      "visits": 139,
+      "bounces": 60,
+      "totaltime": 6455
     }
   },
   "pages": [
@@ -37,11 +37,15 @@
     },
     {
       "x": "/about/",
-      "y": 4
+      "y": 3
     },
     {
       "x": "/contact/",
-      "y": 4
+      "y": 3
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
+      "y": 3
     },
     {
       "x": "/blog/",
@@ -49,24 +53,24 @@
     },
     {
       "x": "/work/shopify/",
-      "y": 1
+      "y": 2
     },
     {
-      "x": "/work/grubhub-onboarding/",
+      "x": "/work/grubhub-driver/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "substack.com",
-      "y": 3
-    },
-    {
-      "x": "google.com",
-      "y": 1
+      "y": 2
     },
     {
       "x": "linkedin.com",
+      "y": 2
+    },
+    {
+      "x": "google.com",
       "y": 1
     }
   ],
@@ -76,15 +80,15 @@
       "y": 7
     },
     {
-      "x": "PK",
-      "y": 1
+      "x": "CN",
+      "y": 2
     },
     {
       "x": "CA",
       "y": 1
     },
     {
-      "x": "CN",
+      "x": "ES",
       "y": 1
     },
     {
@@ -99,7 +103,7 @@
     },
     {
       "x": "desktop",
-      "y": 2
+      "y": 3
     }
   ]
 }
