@@ -1,32 +1,32 @@
 {
-  "lastSynced": "2026-02-28T06:49:11.131Z",
+  "lastSynced": "2026-03-01T06:55:09.858Z",
   "periods": {
     "24h": {
-      "pageviews": 13,
-      "visitors": 6,
-      "visits": 6,
-      "bounces": 2,
-      "totaltime": 169
+      "pageviews": 1,
+      "visitors": 1,
+      "visits": 1,
+      "bounces": 1,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 38,
-      "visitors": 17,
-      "visits": 17,
-      "bounces": 6,
+      "pageviews": 39,
+      "visitors": 18,
+      "visits": 18,
+      "bounces": 7,
       "totaltime": 395
     },
     "30d": {
-      "pageviews": 365,
-      "visitors": 134,
-      "visits": 145,
-      "bounces": 62,
+      "pageviews": 366,
+      "visitors": 135,
+      "visits": 146,
+      "bounces": 63,
       "totaltime": 6624
     },
     "90d": {
-      "pageviews": 365,
-      "visitors": 134,
-      "visits": 145,
-      "bounces": 62,
+      "pageviews": 366,
+      "visitors": 135,
+      "visits": 146,
+      "bounces": 63,
       "totaltime": 6624
     }
   },
@@ -40,12 +40,12 @@
       "y": 6
     },
     {
-      "x": "/contact/",
+      "x": "/blog/",
       "y": 4
     },
     {
-      "x": "/blog/",
-      "y": 3
+      "x": "/contact/",
+      "y": 4
     },
     {
       "x": "/work/grubhub-onboarding/",
@@ -62,11 +62,11 @@
   ],
   "referrers": [
     {
-      "x": "substack.com",
+      "x": "google.com",
       "y": 2
     },
     {
-      "x": "google.com",
+      "x": "substack.com",
       "y": 2
     },
     {
@@ -80,16 +80,16 @@
       "y": 10
     },
     {
+      "x": "SG",
+      "y": 2
+    },
+    {
       "x": "CA",
       "y": 2
     },
     {
       "x": "CN",
       "y": 2
-    },
-    {
-      "x": "SG",
-      "y": 1
     },
     {
       "x": "ES",
@@ -103,7 +103,7 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 13
+      "y": 14
     },
     {
       "x": "desktop",
