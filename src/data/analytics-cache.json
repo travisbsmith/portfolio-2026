@@ -1,59 +1,59 @@
 {
-  "lastSynced": "2026-03-01T06:55:09.858Z",
+  "lastSynced": "2026-03-02T07:06:41.728Z",
   "periods": {
     "24h": {
-      "pageviews": 1,
-      "visitors": 1,
-      "visits": 1,
+      "pageviews": 3,
+      "visitors": 2,
+      "visits": 2,
       "bounces": 1,
-      "totaltime": 0
+      "totaltime": 13
     },
     "7d": {
-      "pageviews": 39,
-      "visitors": 18,
-      "visits": 18,
-      "bounces": 7,
-      "totaltime": 395
+      "pageviews": 35,
+      "visitors": 17,
+      "visits": 17,
+      "bounces": 8,
+      "totaltime": 328
     },
     "30d": {
-      "pageviews": 366,
-      "visitors": 135,
-      "visits": 146,
-      "bounces": 63,
-      "totaltime": 6624
+      "pageviews": 369,
+      "visitors": 137,
+      "visits": 148,
+      "bounces": 64,
+      "totaltime": 6637
     },
     "90d": {
-      "pageviews": 366,
-      "visitors": 135,
-      "visits": 146,
-      "bounces": 63,
-      "totaltime": 6624
+      "pageviews": 369,
+      "visitors": 137,
+      "visits": 148,
+      "bounces": 64,
+      "totaltime": 6637
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 16
+      "y": 14
     },
     {
       "x": "/about/",
-      "y": 6
+      "y": 5
     },
     {
       "x": "/blog/",
-      "y": 4
-    },
-    {
-      "x": "/contact/",
-      "y": 4
-    },
-    {
-      "x": "/work/grubhub-onboarding/",
       "y": 3
     },
     {
       "x": "/work/shopify/",
-      "y": 2
+      "y": 3
+    },
+    {
+      "x": "/contact/",
+      "y": 3
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
+      "y": 3
     },
     {
       "x": "/work/grubhub-driver/",
@@ -62,26 +62,26 @@
   ],
   "referrers": [
     {
-      "x": "google.com",
-      "y": 2
-    },
-    {
       "x": "substack.com",
       "y": 2
     },
     {
       "x": "linkedin.com",
       "y": 2
+    },
+    {
+      "x": "google.com",
+      "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 10
+      "y": 8
     },
     {
       "x": "SG",
-      "y": 2
+      "y": 3
     },
     {
       "x": "CA",
@@ -103,11 +103,15 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 14
+      "y": 12
     },
     {
       "x": "desktop",
       "y": 4
+    },
+    {
+      "x": "mobile",
+      "y": 1
     }
   ]
 }
