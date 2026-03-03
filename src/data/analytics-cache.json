@@ -1,58 +1,58 @@
 {
-  "lastSynced": "2026-03-02T07:06:41.728Z",
+  "lastSynced": "2026-03-03T07:01:20.019Z",
   "periods": {
     "24h": {
-      "pageviews": 3,
+      "pageviews": 5,
       "visitors": 2,
       "visits": 2,
       "bounces": 1,
-      "totaltime": 13
+      "totaltime": 10
     },
     "7d": {
-      "pageviews": 35,
-      "visitors": 17,
-      "visits": 17,
-      "bounces": 8,
-      "totaltime": 328
+      "pageviews": 41,
+      "visitors": 20,
+      "visits": 20,
+      "bounces": 10,
+      "totaltime": 338
     },
     "30d": {
-      "pageviews": 369,
-      "visitors": 137,
-      "visits": 148,
-      "bounces": 64,
-      "totaltime": 6637
+      "pageviews": 375,
+      "visitors": 140,
+      "visits": 151,
+      "bounces": 66,
+      "totaltime": 6647
     },
     "90d": {
-      "pageviews": 369,
-      "visitors": 137,
-      "visits": 148,
-      "bounces": 64,
-      "totaltime": 6637
+      "pageviews": 375,
+      "visitors": 140,
+      "visits": 151,
+      "bounces": 66,
+      "totaltime": 6647
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 14
+      "y": 16
     },
     {
       "x": "/about/",
-      "y": 5
+      "y": 6
     },
     {
       "x": "/blog/",
+      "y": 5
+    },
+    {
+      "x": "/contact/",
+      "y": 4
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
       "y": 3
     },
     {
       "x": "/work/shopify/",
-      "y": 3
-    },
-    {
-      "x": "/contact/",
-      "y": 3
-    },
-    {
-      "x": "/work/grubhub-onboarding/",
       "y": 3
     },
     {
@@ -77,33 +77,33 @@
   "countries": [
     {
       "x": "US",
-      "y": 8
+      "y": 9
     },
     {
       "x": "SG",
-      "y": 3
-    },
-    {
-      "x": "CA",
-      "y": 2
+      "y": 5
     },
     {
       "x": "CN",
       "y": 2
     },
     {
-      "x": "ES",
-      "y": 1
+      "x": "CA",
+      "y": 2
     },
     {
       "x": "TR",
+      "y": 1
+    },
+    {
+      "x": "ES",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 12
+      "y": 15
     },
     {
       "x": "desktop",
