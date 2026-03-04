@@ -1,39 +1,39 @@
 {
-  "lastSynced": "2026-03-03T07:01:20.019Z",
+  "lastSynced": "2026-03-04T06:57:36.903Z",
   "periods": {
     "24h": {
-      "pageviews": 5,
-      "visitors": 2,
-      "visits": 2,
-      "bounces": 1,
-      "totaltime": 10
+      "pageviews": 17,
+      "visitors": 7,
+      "visits": 7,
+      "bounces": 3,
+      "totaltime": 411
     },
     "7d": {
-      "pageviews": 41,
-      "visitors": 20,
-      "visits": 20,
-      "bounces": 10,
-      "totaltime": 338
+      "pageviews": 48,
+      "visitors": 24,
+      "visits": 24,
+      "bounces": 13,
+      "totaltime": 625
     },
     "30d": {
-      "pageviews": 375,
-      "visitors": 140,
-      "visits": 151,
-      "bounces": 66,
-      "totaltime": 6647
+      "pageviews": 392,
+      "visitors": 147,
+      "visits": 158,
+      "bounces": 69,
+      "totaltime": 7058
     },
     "90d": {
-      "pageviews": 375,
-      "visitors": 140,
-      "visits": 151,
-      "bounces": 66,
-      "totaltime": 6647
+      "pageviews": 392,
+      "visitors": 147,
+      "visits": 158,
+      "bounces": 69,
+      "totaltime": 7058
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 16
+      "y": 17
     },
     {
       "x": "/about/",
@@ -41,58 +41,82 @@
     },
     {
       "x": "/blog/",
-      "y": 5
-    },
-    {
-      "x": "/contact/",
-      "y": 4
-    },
-    {
-      "x": "/work/grubhub-onboarding/",
-      "y": 3
+      "y": 6
     },
     {
       "x": "/work/shopify/",
       "y": 3
     },
     {
+      "x": "/contact/",
+      "y": 3
+    },
+    {
       "x": "/work/grubhub-driver/",
+      "y": 2
+    },
+    {
+      "x": "/work/grubhub-onboarding/",
+      "y": 2
+    },
+    {
+      "x": "/blog/the-double-diamond-is-dead/",
+      "y": 2
+    },
+    {
+      "x": "/work/tie-bar/",
+      "y": 1
+    },
+    {
+      "x": "/work/team-management/",
+      "y": 1
+    },
+    {
+      "x": "/work/mack-trucks/",
       "y": 1
     }
   ],
   "referrers": [
     {
+      "x": "linkedin.com",
+      "y": 3
+    },
+    {
       "x": "substack.com",
       "y": 2
     },
     {
-      "x": "linkedin.com",
+      "x": "google.com",
       "y": 2
     },
     {
-      "x": "google.com",
+      "x": "link.sbstck.com",
+      "y": 1
+    },
+    {
+      "x": "travisbsmith.substack.com",
       "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 9
+      "y": 11
     },
     {
       "x": "SG",
-      "y": 5
+      "y": 6
+    },
+    {
+      "x": "CA",
+      "y": 3
     },
     {
       "x": "CN",
       "y": 2
     },
     {
-      "x": "CA",
-      "y": 2
-    },
-    {
-      "x": "TR",
+      "x": "GB",
       "y": 1
     },
     {
@@ -107,11 +131,11 @@
     },
     {
       "x": "desktop",
-      "y": 4
+      "y": 5
     },
     {
       "x": "mobile",
-      "y": 1
+      "y": 4
     }
   ]
 }
