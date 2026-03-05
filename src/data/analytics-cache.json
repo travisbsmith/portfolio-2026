@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-03-04T06:57:36.903Z",
+  "lastSynced": "2026-03-05T07:01:04.642Z",
   "periods": {
     "24h": {
-      "pageviews": 17,
-      "visitors": 7,
-      "visits": 7,
-      "bounces": 3,
-      "totaltime": 411
+      "pageviews": 13,
+      "visitors": 10,
+      "visits": 10,
+      "bounces": 8,
+      "totaltime": 27
     },
     "7d": {
-      "pageviews": 48,
-      "visitors": 24,
-      "visits": 24,
-      "bounces": 13,
-      "totaltime": 625
+      "pageviews": 59,
+      "visitors": 32,
+      "visits": 32,
+      "bounces": 19,
+      "totaltime": 652
     },
     "30d": {
-      "pageviews": 392,
-      "visitors": 147,
-      "visits": 158,
-      "bounces": 69,
-      "totaltime": 7058
+      "pageviews": 405,
+      "visitors": 157,
+      "visits": 168,
+      "bounces": 77,
+      "totaltime": 7085
     },
     "90d": {
-      "pageviews": 392,
-      "visitors": 147,
-      "visits": 158,
-      "bounces": 69,
-      "totaltime": 7058
+      "pageviews": 405,
+      "visitors": 157,
+      "visits": 168,
+      "bounces": 77,
+      "totaltime": 7085
     }
   },
   "pages": [
@@ -37,11 +37,11 @@
     },
     {
       "x": "/about/",
-      "y": 6
+      "y": 8
     },
     {
       "x": "/blog/",
-      "y": 6
+      "y": 8
     },
     {
       "x": "/work/shopify/",
@@ -52,7 +52,15 @@
       "y": 3
     },
     {
+      "x": "/blog/the-double-diamond-is-dead/",
+      "y": 3
+    },
+    {
       "x": "/work/grubhub-driver/",
+      "y": 2
+    },
+    {
+      "x": "/blog/new-year-same-me/",
       "y": 2
     },
     {
@@ -60,7 +68,7 @@
       "y": 2
     },
     {
-      "x": "/blog/the-double-diamond-is-dead/",
+      "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 2
     },
     {
@@ -74,16 +82,16 @@
     {
       "x": "/work/mack-trucks/",
       "y": 1
+    },
+    {
+      "x": "/blog/my-current-design-stack/",
+      "y": 1
     }
   ],
   "referrers": [
     {
       "x": "linkedin.com",
       "y": 3
-    },
-    {
-      "x": "substack.com",
-      "y": 2
     },
     {
       "x": "google.com",
@@ -94,29 +102,33 @@
       "y": 1
     },
     {
+      "x": "substack.com",
+      "y": 1
+    },
+    {
       "x": "travisbsmith.substack.com",
       "y": 1
     }
   ],
   "countries": [
     {
-      "x": "US",
-      "y": 11
-    },
-    {
       "x": "SG",
-      "y": 6
+      "y": 13
     },
     {
-      "x": "CA",
-      "y": 3
-    },
-    {
-      "x": "CN",
-      "y": 2
+      "x": "US",
+      "y": 13
     },
     {
       "x": "GB",
+      "y": 2
+    },
+    {
+      "x": "CA",
+      "y": 2
+    },
+    {
+      "x": "CN",
       "y": 1
     },
     {
@@ -127,7 +139,7 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 15
+      "y": 23
     },
     {
       "x": "desktop",
