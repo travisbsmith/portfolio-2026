@@ -1,43 +1,43 @@
 {
-  "lastSynced": "2026-03-05T07:01:04.642Z",
+  "lastSynced": "2026-03-06T06:59:22.608Z",
   "periods": {
     "24h": {
-      "pageviews": 13,
-      "visitors": 10,
-      "visits": 10,
-      "bounces": 8,
-      "totaltime": 27
+      "pageviews": 10,
+      "visitors": 6,
+      "visits": 7,
+      "bounces": 5,
+      "totaltime": 40
     },
     "7d": {
-      "pageviews": 59,
-      "visitors": 32,
-      "visits": 32,
-      "bounces": 19,
-      "totaltime": 652
+      "pageviews": 63,
+      "visitors": 35,
+      "visits": 36,
+      "bounces": 22,
+      "totaltime": 670
     },
     "30d": {
-      "pageviews": 405,
-      "visitors": 157,
-      "visits": 168,
-      "bounces": 77,
-      "totaltime": 7085
+      "pageviews": 415,
+      "visitors": 163,
+      "visits": 175,
+      "bounces": 82,
+      "totaltime": 7125
     },
     "90d": {
-      "pageviews": 405,
-      "visitors": 157,
-      "visits": 168,
-      "bounces": 77,
-      "totaltime": 7085
+      "pageviews": 415,
+      "visitors": 163,
+      "visits": 175,
+      "bounces": 82,
+      "totaltime": 7125
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 17
+      "y": 18
     },
     {
       "x": "/about/",
-      "y": 8
+      "y": 9
     },
     {
       "x": "/blog/",
@@ -45,18 +45,18 @@
     },
     {
       "x": "/work/shopify/",
-      "y": 3
+      "y": 4
+    },
+    {
+      "x": "/blog/the-double-diamond-is-dead/",
+      "y": 4
     },
     {
       "x": "/contact/",
       "y": 3
     },
     {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 3
-    },
-    {
-      "x": "/work/grubhub-driver/",
+      "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 2
     },
     {
@@ -64,19 +64,15 @@
       "y": 2
     },
     {
-      "x": "/work/grubhub-onboarding/",
+      "x": "/blog/my-current-design-stack/",
       "y": 2
-    },
-    {
-      "x": "/blog/a-new-age-of-design-portfolio-sites/",
-      "y": 2
-    },
-    {
-      "x": "/work/tie-bar/",
-      "y": 1
     },
     {
       "x": "/work/team-management/",
+      "y": 1
+    },
+    {
+      "x": "/work/tie-bar/",
       "y": 1
     },
     {
@@ -84,25 +80,25 @@
       "y": 1
     },
     {
-      "x": "/blog/my-current-design-stack/",
+      "x": "/work/grubhub-driver/",
       "y": 1
     }
   ],
   "referrers": [
     {
+      "x": "google.com",
+      "y": 3
+    },
+    {
       "x": "linkedin.com",
       "y": 3
     },
     {
-      "x": "google.com",
-      "y": 2
-    },
-    {
-      "x": "link.sbstck.com",
+      "x": "substack.com",
       "y": 1
     },
     {
-      "x": "substack.com",
+      "x": "link.sbstck.com",
       "y": 1
     },
     {
@@ -113,37 +109,29 @@
   "countries": [
     {
       "x": "SG",
-      "y": 13
+      "y": 16
     },
     {
       "x": "US",
-      "y": 13
-    },
-    {
-      "x": "GB",
-      "y": 2
+      "y": 15
     },
     {
       "x": "CA",
       "y": 2
     },
     {
-      "x": "CN",
-      "y": 1
-    },
-    {
-      "x": "ES",
-      "y": 1
+      "x": "GB",
+      "y": 2
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 23
+      "y": 25
     },
     {
       "x": "desktop",
-      "y": 5
+      "y": 6
     },
     {
       "x": "mobile",
