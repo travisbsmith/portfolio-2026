@@ -1,47 +1,47 @@
 {
-  "lastSynced": "2026-03-06T06:59:22.608Z",
+  "lastSynced": "2026-03-07T06:51:36.695Z",
   "periods": {
     "24h": {
-      "pageviews": 10,
-      "visitors": 6,
-      "visits": 7,
-      "bounces": 5,
-      "totaltime": 40
+      "pageviews": 2,
+      "visitors": 2,
+      "visits": 2,
+      "bounces": 2,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 63,
-      "visitors": 35,
-      "visits": 36,
+      "pageviews": 52,
+      "visitors": 31,
+      "visits": 32,
       "bounces": 22,
-      "totaltime": 670
+      "totaltime": 501
     },
     "30d": {
-      "pageviews": 415,
-      "visitors": 163,
-      "visits": 175,
-      "bounces": 82,
+      "pageviews": 417,
+      "visitors": 165,
+      "visits": 177,
+      "bounces": 84,
       "totaltime": 7125
     },
     "90d": {
-      "pageviews": 415,
-      "visitors": 163,
-      "visits": 175,
-      "bounces": 82,
+      "pageviews": 417,
+      "visitors": 165,
+      "visits": 177,
+      "bounces": 84,
       "totaltime": 7125
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 18
-    },
-    {
-      "x": "/about/",
-      "y": 9
+      "y": 14
     },
     {
       "x": "/blog/",
-      "y": 8
+      "y": 7
+    },
+    {
+      "x": "/about/",
+      "y": 6
     },
     {
       "x": "/work/shopify/",
@@ -52,15 +52,11 @@
       "y": 4
     },
     {
-      "x": "/contact/",
-      "y": 3
-    },
-    {
-      "x": "/blog/a-new-age-of-design-portfolio-sites/",
+      "x": "/blog/new-year-same-me/",
       "y": 2
     },
     {
-      "x": "/blog/new-year-same-me/",
+      "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 2
     },
     {
@@ -68,37 +64,41 @@
       "y": 2
     },
     {
-      "x": "/work/team-management/",
-      "y": 1
-    },
-    {
       "x": "/work/tie-bar/",
       "y": 1
     },
     {
-      "x": "/work/mack-trucks/",
+      "x": "/contact/",
+      "y": 1
+    },
+    {
+      "x": "/work/team-management/",
       "y": 1
     },
     {
       "x": "/work/grubhub-driver/",
       "y": 1
+    },
+    {
+      "x": "/work/mack-trucks/",
+      "y": 1
     }
   ],
   "referrers": [
-    {
-      "x": "google.com",
-      "y": 3
-    },
     {
       "x": "linkedin.com",
       "y": 3
     },
     {
-      "x": "substack.com",
-      "y": 1
+      "x": "google.com",
+      "y": 2
     },
     {
       "x": "link.sbstck.com",
+      "y": 1
+    },
+    {
+      "x": "substack.com",
       "y": 1
     },
     {
@@ -109,29 +109,29 @@
   "countries": [
     {
       "x": "SG",
-      "y": 16
+      "y": 17
     },
     {
       "x": "US",
-      "y": 15
-    },
-    {
-      "x": "CA",
-      "y": 2
+      "y": 11
     },
     {
       "x": "GB",
       "y": 2
+    },
+    {
+      "x": "CA",
+      "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 25
+      "y": 22
     },
     {
       "x": "desktop",
-      "y": 6
+      "y": 5
     },
     {
       "x": "mobile",
