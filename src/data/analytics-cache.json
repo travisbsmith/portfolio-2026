@@ -1,47 +1,47 @@
 {
-  "lastSynced": "2026-03-07T06:51:36.695Z",
+  "lastSynced": "2026-03-08T06:52:58.558Z",
   "periods": {
     "24h": {
-      "pageviews": 2,
-      "visitors": 2,
-      "visits": 2,
+      "pageviews": 12,
+      "visitors": 5,
+      "visits": 5,
       "bounces": 2,
-      "totaltime": 0
+      "totaltime": 54
     },
     "7d": {
-      "pageviews": 52,
-      "visitors": 31,
-      "visits": 32,
-      "bounces": 22,
-      "totaltime": 501
+      "pageviews": 63,
+      "visitors": 34,
+      "visits": 36,
+      "bounces": 23,
+      "totaltime": 555
     },
     "30d": {
-      "pageviews": 417,
-      "visitors": 165,
-      "visits": 177,
-      "bounces": 84,
-      "totaltime": 7125
+      "pageviews": 429,
+      "visitors": 169,
+      "visits": 182,
+      "bounces": 86,
+      "totaltime": 7179
     },
     "90d": {
-      "pageviews": 417,
-      "visitors": 165,
-      "visits": 177,
-      "bounces": 84,
-      "totaltime": 7125
+      "pageviews": 429,
+      "visitors": 169,
+      "visits": 182,
+      "bounces": 86,
+      "totaltime": 7179
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 14
+      "y": 18
+    },
+    {
+      "x": "/about/",
+      "y": 7
     },
     {
       "x": "/blog/",
       "y": 7
-    },
-    {
-      "x": "/about/",
-      "y": 6
     },
     {
       "x": "/work/shopify/",
@@ -50,6 +50,10 @@
     {
       "x": "/blog/the-double-diamond-is-dead/",
       "y": 4
+    },
+    {
+      "x": "/contact/",
+      "y": 2
     },
     {
       "x": "/blog/new-year-same-me/",
@@ -68,10 +72,6 @@
       "y": 1
     },
     {
-      "x": "/contact/",
-      "y": 1
-    },
-    {
       "x": "/work/team-management/",
       "y": 1
     },
@@ -86,12 +86,12 @@
   ],
   "referrers": [
     {
-      "x": "linkedin.com",
+      "x": "google.com",
       "y": 3
     },
     {
-      "x": "google.com",
-      "y": 2
+      "x": "linkedin.com",
+      "y": 3
     },
     {
       "x": "link.sbstck.com",
@@ -113,7 +113,7 @@
     },
     {
       "x": "US",
-      "y": 11
+      "y": 14
     },
     {
       "x": "GB",
@@ -127,15 +127,19 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 22
+      "y": 23
+    },
+    {
+      "x": "mobile",
+      "y": 5
     },
     {
       "x": "desktop",
       "y": 5
     },
     {
-      "x": "mobile",
-      "y": 4
+      "x": "tablet",
+      "y": 1
     }
   ]
 }
