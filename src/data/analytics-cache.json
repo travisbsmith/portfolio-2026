@@ -1,32 +1,32 @@
 {
-  "lastSynced": "2026-03-08T06:52:58.558Z",
+  "lastSynced": "2026-03-09T07:10:57.780Z",
   "periods": {
     "24h": {
-      "pageviews": 12,
-      "visitors": 5,
-      "visits": 5,
-      "bounces": 2,
-      "totaltime": 54
+      "pageviews": 1,
+      "visitors": 1,
+      "visits": 1,
+      "bounces": 1,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 63,
-      "visitors": 34,
-      "visits": 36,
+      "pageviews": 61,
+      "visitors": 32,
+      "visits": 35,
       "bounces": 23,
-      "totaltime": 555
+      "totaltime": 542
     },
     "30d": {
-      "pageviews": 429,
-      "visitors": 169,
-      "visits": 182,
-      "bounces": 86,
+      "pageviews": 431,
+      "visitors": 170,
+      "visits": 184,
+      "bounces": 88,
       "totaltime": 7179
     },
     "90d": {
-      "pageviews": 429,
-      "visitors": 169,
-      "visits": 182,
-      "bounces": 86,
+      "pageviews": 431,
+      "visitors": 170,
+      "visits": 184,
+      "bounces": 88,
       "totaltime": 7179
     }
   },
@@ -41,15 +41,15 @@
     },
     {
       "x": "/blog/",
-      "y": 7
-    },
-    {
-      "x": "/work/shopify/",
-      "y": 4
+      "y": 5
     },
     {
       "x": "/blog/the-double-diamond-is-dead/",
       "y": 4
+    },
+    {
+      "x": "/work/shopify/",
+      "y": 3
     },
     {
       "x": "/contact/",
@@ -91,7 +91,7 @@
     },
     {
       "x": "linkedin.com",
-      "y": 3
+      "y": 2
     },
     {
       "x": "link.sbstck.com",
@@ -109,11 +109,11 @@
   "countries": [
     {
       "x": "SG",
-      "y": 17
+      "y": 16
     },
     {
       "x": "US",
-      "y": 14
+      "y": 13
     },
     {
       "x": "GB",
@@ -127,15 +127,15 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 23
-    },
-    {
-      "x": "mobile",
-      "y": 5
+      "y": 22
     },
     {
       "x": "desktop",
       "y": 5
+    },
+    {
+      "x": "mobile",
+      "y": 4
     },
     {
       "x": "tablet",
