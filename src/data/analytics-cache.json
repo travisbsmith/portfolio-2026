@@ -1,39 +1,39 @@
 {
-  "lastSynced": "2026-03-09T07:10:57.780Z",
+  "lastSynced": "2026-03-10T06:59:27.966Z",
   "periods": {
     "24h": {
-      "pageviews": 1,
-      "visitors": 1,
-      "visits": 1,
-      "bounces": 1,
-      "totaltime": 0
+      "pageviews": 7,
+      "visitors": 5,
+      "visits": 5,
+      "bounces": 3,
+      "totaltime": 27
     },
     "7d": {
-      "pageviews": 61,
-      "visitors": 32,
-      "visits": 35,
-      "bounces": 23,
-      "totaltime": 542
+      "pageviews": 63,
+      "visitors": 35,
+      "visits": 38,
+      "bounces": 25,
+      "totaltime": 559
     },
     "30d": {
-      "pageviews": 431,
-      "visitors": 170,
-      "visits": 184,
-      "bounces": 88,
-      "totaltime": 7179
+      "pageviews": 433,
+      "visitors": 174,
+      "visits": 188,
+      "bounces": 91,
+      "totaltime": 7152
     },
     "90d": {
-      "pageviews": 431,
-      "visitors": 170,
-      "visits": 184,
-      "bounces": 88,
-      "totaltime": 7179
+      "pageviews": 438,
+      "visitors": 175,
+      "visits": 189,
+      "bounces": 91,
+      "totaltime": 7206
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 18
+      "y": 21
     },
     {
       "x": "/about/",
@@ -41,7 +41,7 @@
     },
     {
       "x": "/blog/",
-      "y": 5
+      "y": 4
     },
     {
       "x": "/blog/the-double-diamond-is-dead/",
@@ -87,7 +87,7 @@
   "referrers": [
     {
       "x": "google.com",
-      "y": 3
+      "y": 5
     },
     {
       "x": "linkedin.com",
@@ -113,7 +113,7 @@
     },
     {
       "x": "US",
-      "y": 13
+      "y": 15
     },
     {
       "x": "GB",
@@ -121,21 +121,21 @@
     },
     {
       "x": "CA",
-      "y": 1
+      "y": 2
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 22
+      "y": 23
     },
     {
       "x": "desktop",
-      "y": 5
+      "y": 6
     },
     {
       "x": "mobile",
-      "y": 4
+      "y": 5
     },
     {
       "x": "tablet",
