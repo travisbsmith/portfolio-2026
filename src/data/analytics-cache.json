@@ -1,58 +1,58 @@
 {
-  "lastSynced": "2026-03-10T06:59:27.966Z",
+  "lastSynced": "2026-03-11T07:02:53.836Z",
   "periods": {
     "24h": {
-      "pageviews": 7,
-      "visitors": 5,
-      "visits": 5,
+      "pageviews": 5,
+      "visitors": 4,
+      "visits": 4,
       "bounces": 3,
-      "totaltime": 27
+      "totaltime": 7
     },
     "7d": {
-      "pageviews": 63,
-      "visitors": 35,
-      "visits": 38,
+      "pageviews": 51,
+      "visitors": 32,
+      "visits": 35,
       "bounces": 25,
-      "totaltime": 559
+      "totaltime": 155
     },
     "30d": {
-      "pageviews": 433,
-      "visitors": 174,
-      "visits": 188,
-      "bounces": 91,
-      "totaltime": 7152
+      "pageviews": 438,
+      "visitors": 178,
+      "visits": 192,
+      "bounces": 94,
+      "totaltime": 7159
     },
     "90d": {
-      "pageviews": 438,
-      "visitors": 175,
-      "visits": 189,
-      "bounces": 91,
-      "totaltime": 7206
+      "pageviews": 443,
+      "visitors": 179,
+      "visits": 193,
+      "bounces": 94,
+      "totaltime": 7213
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 21
+      "y": 20
     },
     {
       "x": "/about/",
-      "y": 7
+      "y": 5
     },
     {
       "x": "/blog/",
-      "y": 4
-    },
-    {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 4
-    },
-    {
-      "x": "/work/shopify/",
       "y": 3
     },
     {
       "x": "/contact/",
+      "y": 3
+    },
+    {
+      "x": "/blog/the-double-diamond-is-dead/",
+      "y": 3
+    },
+    {
+      "x": "/work/shopify/",
       "y": 2
     },
     {
@@ -66,39 +66,15 @@
     {
       "x": "/blog/my-current-design-stack/",
       "y": 2
-    },
-    {
-      "x": "/work/tie-bar/",
-      "y": 1
-    },
-    {
-      "x": "/work/team-management/",
-      "y": 1
-    },
-    {
-      "x": "/work/grubhub-driver/",
-      "y": 1
-    },
-    {
-      "x": "/work/mack-trucks/",
-      "y": 1
     }
   ],
   "referrers": [
     {
       "x": "google.com",
-      "y": 5
+      "y": 4
     },
     {
       "x": "linkedin.com",
-      "y": 2
-    },
-    {
-      "x": "link.sbstck.com",
-      "y": 1
-    },
-    {
-      "x": "substack.com",
       "y": 1
     },
     {
@@ -113,7 +89,7 @@
     },
     {
       "x": "US",
-      "y": 15
+      "y": 12
     },
     {
       "x": "GB",
@@ -121,21 +97,25 @@
     },
     {
       "x": "CA",
-      "y": 2
+      "y": 1
+    },
+    {
+      "x": "CN",
+      "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 23
+      "y": 24
     },
     {
       "x": "desktop",
-      "y": 6
+      "y": 5
     },
     {
       "x": "mobile",
-      "y": 5
+      "y": 2
     },
     {
       "x": "tablet",
