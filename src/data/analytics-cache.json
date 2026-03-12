@@ -1,71 +1,67 @@
 {
-  "lastSynced": "2026-03-11T07:02:53.836Z",
+  "lastSynced": "2026-03-12T07:04:26.009Z",
   "periods": {
     "24h": {
-      "pageviews": 5,
-      "visitors": 4,
-      "visits": 4,
-      "bounces": 3,
-      "totaltime": 7
+      "pageviews": 17,
+      "visitors": 6,
+      "visits": 6,
+      "bounces": 4,
+      "totaltime": 120
     },
     "7d": {
-      "pageviews": 51,
-      "visitors": 32,
-      "visits": 35,
-      "bounces": 25,
-      "totaltime": 155
+      "pageviews": 55,
+      "visitors": 28,
+      "visits": 31,
+      "bounces": 21,
+      "totaltime": 248
     },
     "30d": {
-      "pageviews": 438,
-      "visitors": 178,
-      "visits": 192,
-      "bounces": 94,
-      "totaltime": 7159
+      "pageviews": 448,
+      "visitors": 181,
+      "visits": 195,
+      "bounces": 97,
+      "totaltime": 7235
     },
     "90d": {
-      "pageviews": 443,
-      "visitors": 179,
-      "visits": 193,
-      "bounces": 94,
-      "totaltime": 7213
+      "pageviews": 460,
+      "visitors": 185,
+      "visits": 199,
+      "bounces": 98,
+      "totaltime": 7333
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 20
+      "y": 24
     },
     {
       "x": "/about/",
       "y": 5
     },
     {
-      "x": "/blog/",
-      "y": 3
-    },
-    {
       "x": "/contact/",
-      "y": 3
+      "y": 5
     },
     {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 3
+      "x": "/blog/",
+      "y": 2
     },
     {
       "x": "/work/shopify/",
       "y": 2
     },
     {
-      "x": "/blog/new-year-same-me/",
+      "x": "/blog/the-double-diamond-is-dead/",
       "y": 2
     },
     {
       "x": "/blog/a-new-age-of-design-portfolio-sites/",
-      "y": 2
+      "y": 1
     },
     {
       "x": "/blog/my-current-design-stack/",
-      "y": 2
+      "y": 1
     }
   ],
   "referrers": [
@@ -85,37 +81,41 @@
   "countries": [
     {
       "x": "SG",
-      "y": 16
+      "y": 10
     },
     {
       "x": "US",
-      "y": 12
+      "y": 10
     },
     {
-      "x": "GB",
-      "y": 2
-    },
-    {
-      "x": "CA",
-      "y": 1
+      "x": "TR",
+      "y": 4
     },
     {
       "x": "CN",
+      "y": 2
+    },
+    {
+      "x": "GB",
+      "y": 1
+    },
+    {
+      "x": "CA",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 24
+      "y": 16
     },
     {
       "x": "desktop",
-      "y": 5
+      "y": 8
     },
     {
       "x": "mobile",
-      "y": 2
+      "y": 3
     },
     {
       "x": "tablet",
