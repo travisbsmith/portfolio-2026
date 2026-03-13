@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-03-12T07:04:26.009Z",
+  "lastSynced": "2026-03-13T07:02:59.713Z",
   "periods": {
     "24h": {
-      "pageviews": 17,
-      "visitors": 6,
-      "visits": 6,
-      "bounces": 4,
-      "totaltime": 120
+      "pageviews": 7,
+      "visitors": 3,
+      "visits": 3,
+      "bounces": 2,
+      "totaltime": 71
     },
     "7d": {
-      "pageviews": 55,
-      "visitors": 28,
-      "visits": 31,
-      "bounces": 21,
-      "totaltime": 248
+      "pageviews": 52,
+      "visitors": 26,
+      "visits": 27,
+      "bounces": 18,
+      "totaltime": 279
     },
     "30d": {
-      "pageviews": 448,
-      "visitors": 181,
-      "visits": 195,
-      "bounces": 97,
-      "totaltime": 7235
+      "pageviews": 324,
+      "visitors": 138,
+      "visits": 152,
+      "bounces": 81,
+      "totaltime": 5053
     },
     "90d": {
-      "pageviews": 460,
-      "visitors": 185,
-      "visits": 199,
-      "bounces": 98,
-      "totaltime": 7333
+      "pageviews": 467,
+      "visitors": 188,
+      "visits": 202,
+      "bounces": 100,
+      "totaltime": 7404
     }
   },
   "pages": [
@@ -48,30 +48,30 @@
       "y": 2
     },
     {
-      "x": "/work/shopify/",
+      "x": "/blog/my-current-design-stack/",
       "y": 2
     },
     {
-      "x": "/blog/the-double-diamond-is-dead/",
-      "y": 2
+      "x": "/work/plainsmart/",
+      "y": 1
+    },
+    {
+      "x": "/work/chicago-aviation/",
+      "y": 1
     },
     {
       "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 1
     },
     {
-      "x": "/blog/my-current-design-stack/",
+      "x": "/blog/the-double-diamond-is-dead/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "google.com",
-      "y": 4
-    },
-    {
-      "x": "linkedin.com",
-      "y": 1
+      "y": 3
     },
     {
       "x": "travisbsmith.substack.com",
@@ -81,15 +81,19 @@
   "countries": [
     {
       "x": "SG",
-      "y": 10
+      "y": 8
     },
     {
       "x": "US",
-      "y": 10
+      "y": 8
     },
     {
       "x": "TR",
       "y": 4
+    },
+    {
+      "x": "CO",
+      "y": 2
     },
     {
       "x": "CN",
@@ -107,15 +111,15 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 16
+      "y": 14
     },
     {
       "x": "desktop",
-      "y": 8
+      "y": 7
     },
     {
       "x": "mobile",
-      "y": 3
+      "y": 4
     },
     {
       "x": "tablet",
