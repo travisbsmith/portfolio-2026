@@ -1,55 +1,55 @@
 {
-  "lastSynced": "2026-03-14T06:56:57.514Z",
+  "lastSynced": "2026-03-15T07:06:40.978Z",
   "periods": {
     "24h": {
-      "pageviews": 3,
-      "visitors": 2,
-      "visits": 2,
-      "bounces": 1,
-      "totaltime": 35
+      "pageviews": 6,
+      "visitors": 4,
+      "visits": 4,
+      "bounces": 3,
+      "totaltime": 22
     },
     "7d": {
-      "pageviews": 53,
-      "visitors": 26,
-      "visits": 27,
+      "pageviews": 46,
+      "visitors": 25,
+      "visits": 25,
       "bounces": 17,
-      "totaltime": 314
+      "totaltime": 282
     },
     "30d": {
-      "pageviews": 243,
-      "visitors": 112,
-      "visits": 119,
-      "bounces": 67,
-      "totaltime": 4394
+      "pageviews": 224,
+      "visitors": 107,
+      "visits": 111,
+      "bounces": 63,
+      "totaltime": 3879
     },
     "90d": {
-      "pageviews": 470,
-      "visitors": 190,
-      "visits": 204,
-      "bounces": 101,
-      "totaltime": 7439
+      "pageviews": 476,
+      "visitors": 194,
+      "visits": 208,
+      "bounces": 104,
+      "totaltime": 7461
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 24
-    },
-    {
-      "x": "/about/",
-      "y": 5
+      "y": 23
     },
     {
       "x": "/contact/",
-      "y": 5
+      "y": 4
     },
     {
-      "x": "/blog/",
-      "y": 2
+      "x": "/about/",
+      "y": 3
     },
     {
       "x": "/blog/my-current-design-stack/",
       "y": 2
+    },
+    {
+      "x": "/blog/",
+      "y": 1
     },
     {
       "x": "/work/tie-bar/",
@@ -64,6 +64,10 @@
       "y": 1
     },
     {
+      "x": "/work/grubhub-onboarding/",
+      "y": 1
+    },
+    {
       "x": "/blog/a-new-age-of-design-portfolio-sites/",
       "y": 1
     },
@@ -75,7 +79,7 @@
   "referrers": [
     {
       "x": "google.com",
-      "y": 3
+      "y": 4
     },
     {
       "x": "linkedin.com",
@@ -88,11 +92,11 @@
   ],
   "countries": [
     {
-      "x": "US",
-      "y": 8
+      "x": "SG",
+      "y": 7
     },
     {
-      "x": "SG",
+      "x": "US",
       "y": 7
     },
     {
@@ -123,19 +127,15 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 14
+      "y": 15
     },
     {
       "x": "desktop",
-      "y": 7
+      "y": 6
     },
     {
       "x": "mobile",
       "y": 4
-    },
-    {
-      "x": "tablet",
-      "y": 1
     }
   ]
 }
