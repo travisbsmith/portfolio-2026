@@ -1,26 +1,26 @@
 {
-  "lastSynced": "2026-03-15T07:06:40.978Z",
+  "lastSynced": "2026-03-16T07:26:59.185Z",
   "periods": {
     "24h": {
-      "pageviews": 6,
-      "visitors": 4,
-      "visits": 4,
-      "bounces": 3,
-      "totaltime": 22
+      "pageviews": 0,
+      "visitors": 0,
+      "visits": 0,
+      "bounces": 0,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 46,
-      "visitors": 25,
-      "visits": 25,
-      "bounces": 17,
+      "pageviews": 45,
+      "visitors": 24,
+      "visits": 24,
+      "bounces": 16,
       "totaltime": 282
     },
     "30d": {
-      "pageviews": 224,
-      "visitors": 107,
-      "visits": 111,
-      "bounces": 63,
-      "totaltime": 3879
+      "pageviews": 202,
+      "visitors": 99,
+      "visits": 102,
+      "bounces": 59,
+      "totaltime": 3261
     },
     "90d": {
       "pageviews": 476,
@@ -33,7 +33,7 @@
   "pages": [
     {
       "x": "/",
-      "y": 23
+      "y": 22
     },
     {
       "x": "/contact/",
@@ -79,7 +79,7 @@
   "referrers": [
     {
       "x": "google.com",
-      "y": 4
+      "y": 3
     },
     {
       "x": "linkedin.com",
@@ -97,7 +97,7 @@
     },
     {
       "x": "US",
-      "y": 7
+      "y": 6
     },
     {
       "x": "TR",
@@ -135,7 +135,7 @@
     },
     {
       "x": "mobile",
-      "y": 4
+      "y": 3
     }
   ]
 }
