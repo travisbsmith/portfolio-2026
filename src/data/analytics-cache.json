@@ -1,47 +1,47 @@
 {
-  "lastSynced": "2026-03-16T07:26:59.185Z",
+  "lastSynced": "2026-03-17T07:13:09.515Z",
   "periods": {
     "24h": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
-      "bounces": 0,
+      "pageviews": 1,
+      "visitors": 1,
+      "visits": 1,
+      "bounces": 1,
       "totaltime": 0
     },
     "7d": {
-      "pageviews": 45,
-      "visitors": 24,
-      "visits": 24,
-      "bounces": 16,
-      "totaltime": 282
+      "pageviews": 39,
+      "visitors": 20,
+      "visits": 20,
+      "bounces": 14,
+      "totaltime": 255
     },
     "30d": {
-      "pageviews": 202,
-      "visitors": 99,
-      "visits": 102,
-      "bounces": 59,
-      "totaltime": 3261
+      "pageviews": 197,
+      "visitors": 98,
+      "visits": 101,
+      "bounces": 60,
+      "totaltime": 1861
     },
     "90d": {
-      "pageviews": 476,
-      "visitors": 194,
-      "visits": 208,
-      "bounces": 104,
+      "pageviews": 477,
+      "visitors": 195,
+      "visits": 209,
+      "bounces": 105,
       "totaltime": 7461
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 22
+      "y": 18
     },
     {
       "x": "/contact/",
-      "y": 4
+      "y": 3
     },
     {
       "x": "/about/",
-      "y": 3
+      "y": 2
     },
     {
       "x": "/blog/my-current-design-stack/",
@@ -79,14 +79,14 @@
   "referrers": [
     {
       "x": "google.com",
-      "y": 3
-    },
-    {
-      "x": "linkedin.com",
       "y": 1
     },
     {
       "x": "travisbsmith.substack.com",
+      "y": 1
+    },
+    {
+      "x": "linkedin.com",
       "y": 1
     }
   ],
@@ -96,12 +96,12 @@
       "y": 7
     },
     {
-      "x": "US",
-      "y": 6
-    },
-    {
       "x": "TR",
       "y": 4
+    },
+    {
+      "x": "US",
+      "y": 3
     },
     {
       "x": "CO",
@@ -116,10 +116,6 @@
       "y": 1
     },
     {
-      "x": "CA",
-      "y": 1
-    },
-    {
       "x": "GE",
       "y": 1
     }
@@ -127,15 +123,15 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 15
+      "y": 13
     },
     {
       "x": "desktop",
-      "y": 6
+      "y": 5
     },
     {
       "x": "mobile",
-      "y": 3
+      "y": 2
     }
   ]
 }
