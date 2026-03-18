@@ -1,39 +1,39 @@
 {
-  "lastSynced": "2026-03-17T07:13:09.515Z",
+  "lastSynced": "2026-03-18T07:10:41.533Z",
   "periods": {
     "24h": {
-      "pageviews": 1,
-      "visitors": 1,
-      "visits": 1,
-      "bounces": 1,
-      "totaltime": 0
+      "pageviews": 4,
+      "visitors": 3,
+      "visits": 3,
+      "bounces": 2,
+      "totaltime": 6
     },
     "7d": {
       "pageviews": 39,
       "visitors": 20,
       "visits": 20,
       "bounces": 14,
-      "totaltime": 255
+      "totaltime": 254
     },
     "30d": {
-      "pageviews": 197,
-      "visitors": 98,
-      "visits": 101,
-      "bounces": 60,
-      "totaltime": 1861
+      "pageviews": 201,
+      "visitors": 101,
+      "visits": 104,
+      "bounces": 62,
+      "totaltime": 1867
     },
     "90d": {
-      "pageviews": 477,
-      "visitors": 195,
-      "visits": 209,
-      "bounces": 105,
-      "totaltime": 7461
+      "pageviews": 482,
+      "visitors": 199,
+      "visits": 213,
+      "bounces": 108,
+      "totaltime": 7467
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 18
+      "y": 19
     },
     {
       "x": "/contact/",
@@ -48,22 +48,6 @@
       "y": 2
     },
     {
-      "x": "/blog/",
-      "y": 1
-    },
-    {
-      "x": "/work/tie-bar/",
-      "y": 1
-    },
-    {
-      "x": "/work/plainsmart/",
-      "y": 1
-    },
-    {
-      "x": "/work/chicago-aviation/",
-      "y": 1
-    },
-    {
       "x": "/work/grubhub-onboarding/",
       "y": 1
     },
@@ -72,17 +56,25 @@
       "y": 1
     },
     {
-      "x": "/blog/the-double-diamond-is-dead/",
+      "x": "/work/chicago-aviation/",
+      "y": 1
+    },
+    {
+      "x": "/work/tie-bar/",
+      "y": 1
+    },
+    {
+      "x": "/blog/",
+      "y": 1
+    },
+    {
+      "x": "/work/plainsmart/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "google.com",
-      "y": 1
-    },
-    {
-      "x": "travisbsmith.substack.com",
       "y": 1
     },
     {
@@ -96,12 +88,12 @@
       "y": 7
     },
     {
-      "x": "TR",
-      "y": 4
+      "x": "US",
+      "y": 5
     },
     {
-      "x": "US",
-      "y": 3
+      "x": "TR",
+      "y": 4
     },
     {
       "x": "CO",
@@ -109,10 +101,6 @@
     },
     {
       "x": "CN",
-      "y": 2
-    },
-    {
-      "x": "GB",
       "y": 1
     },
     {
@@ -123,11 +111,11 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 13
+      "y": 14
     },
     {
       "x": "desktop",
-      "y": 5
+      "y": 4
     },
     {
       "x": "mobile",
