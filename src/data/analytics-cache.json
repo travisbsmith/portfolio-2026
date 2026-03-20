@@ -1,46 +1,46 @@
 {
-  "lastSynced": "2026-03-19T07:05:22.695Z",
+  "lastSynced": "2026-03-20T07:03:54.096Z",
   "periods": {
     "24h": {
-      "pageviews": 3,
+      "pageviews": 5,
       "visitors": 3,
       "visits": 3,
-      "bounces": 3,
-      "totaltime": 0
+      "bounces": 2,
+      "totaltime": 1263
     },
     "7d": {
-      "pageviews": 25,
+      "pageviews": 23,
       "visitors": 17,
       "visits": 17,
       "bounces": 13,
-      "totaltime": 134
+      "totaltime": 1326
     },
     "30d": {
-      "pageviews": 189,
+      "pageviews": 180,
       "visitors": 99,
       "visits": 102,
-      "bounces": 62,
-      "totaltime": 1782
+      "bounces": 63,
+      "totaltime": 2638
     },
     "90d": {
-      "pageviews": 485,
-      "visitors": 202,
-      "visits": 216,
-      "bounces": 111,
-      "totaltime": 7467
+      "pageviews": 490,
+      "visitors": 205,
+      "visits": 219,
+      "bounces": 113,
+      "totaltime": 8730
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 15
-    },
-    {
-      "x": "/blog/my-current-design-stack/",
-      "y": 2
+      "y": 16
     },
     {
       "x": "/blog/",
+      "y": 2
+    },
+    {
+      "x": "/about/",
       "y": 1
     },
     {
@@ -52,14 +52,6 @@
       "y": 1
     },
     {
-      "x": "/work/plainsmart/",
-      "y": 1
-    },
-    {
-      "x": "/work/chicago-aviation/",
-      "y": 1
-    },
-    {
       "x": "/work/grubhub-onboarding/",
       "y": 1
     }
@@ -67,7 +59,7 @@
   "referrers": [
     {
       "x": "google.com",
-      "y": 1
+      "y": 2
     },
     {
       "x": "m.baidu.com",
@@ -88,11 +80,11 @@
       "y": 6
     },
     {
-      "x": "CO",
+      "x": "CN",
       "y": 2
     },
     {
-      "x": "CN",
+      "x": "CA",
       "y": 1
     },
     {
@@ -103,11 +95,11 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 15
+      "y": 16
     },
     {
       "x": "mobile",
-      "y": 2
+      "y": 1
     }
   ]
 }
