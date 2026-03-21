@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-03-20T07:03:54.096Z",
+  "lastSynced": "2026-03-21T06:54:16.322Z",
   "periods": {
     "24h": {
       "pageviews": 5,
       "visitors": 3,
       "visits": 3,
-      "bounces": 2,
-      "totaltime": 1263
+      "bounces": 1,
+      "totaltime": 40
     },
     "7d": {
-      "pageviews": 23,
-      "visitors": 17,
-      "visits": 17,
+      "pageviews": 25,
+      "visitors": 18,
+      "visits": 18,
       "bounces": 13,
-      "totaltime": 1326
+      "totaltime": 1331
     },
     "30d": {
-      "pageviews": 180,
-      "visitors": 99,
-      "visits": 102,
-      "bounces": 63,
-      "totaltime": 2638
+      "pageviews": 174,
+      "visitors": 94,
+      "visits": 97,
+      "bounces": 58,
+      "totaltime": 2605
     },
     "90d": {
-      "pageviews": 490,
-      "visitors": 205,
-      "visits": 219,
-      "bounces": 113,
-      "totaltime": 8730
+      "pageviews": 495,
+      "visitors": 208,
+      "visits": 222,
+      "bounces": 114,
+      "totaltime": 8770
     }
   },
   "pages": [
@@ -36,19 +36,19 @@
       "y": 16
     },
     {
+      "x": "/about/",
+      "y": 2
+    },
+    {
       "x": "/blog/",
       "y": 2
     },
     {
-      "x": "/about/",
-      "y": 1
-    },
-    {
-      "x": "/work/tie-bar/",
-      "y": 1
-    },
-    {
       "x": "/contact/",
+      "y": 2
+    },
+    {
+      "x": "/shopify/",
       "y": 1
     },
     {
@@ -64,10 +64,6 @@
     {
       "x": "m.baidu.com",
       "y": 1
-    },
-    {
-      "x": "linkedin.com",
-      "y": 1
     }
   ],
   "countries": [
@@ -77,7 +73,7 @@
     },
     {
       "x": "US",
-      "y": 6
+      "y": 7
     },
     {
       "x": "CN",
@@ -88,14 +84,14 @@
       "y": 1
     },
     {
-      "x": "GE",
+      "x": "TR",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "laptop",
-      "y": 16
+      "y": 17
     },
     {
       "x": "mobile",
