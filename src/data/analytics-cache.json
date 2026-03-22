@@ -1,39 +1,39 @@
 {
-  "lastSynced": "2026-03-21T06:54:16.322Z",
+  "lastSynced": "2026-03-22T06:59:21.283Z",
   "periods": {
     "24h": {
-      "pageviews": 5,
-      "visitors": 3,
-      "visits": 3,
+      "pageviews": 1,
+      "visitors": 1,
+      "visits": 1,
       "bounces": 1,
-      "totaltime": 40
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 25,
-      "visitors": 18,
-      "visits": 18,
-      "bounces": 13,
-      "totaltime": 1331
+      "pageviews": 20,
+      "visitors": 14,
+      "visits": 15,
+      "bounces": 11,
+      "totaltime": 1309
     },
     "30d": {
-      "pageviews": 174,
-      "visitors": 94,
-      "visits": 97,
-      "bounces": 58,
-      "totaltime": 2605
+      "pageviews": 171,
+      "visitors": 92,
+      "visits": 96,
+      "bounces": 59,
+      "totaltime": 2547
     },
     "90d": {
-      "pageviews": 495,
+      "pageviews": 496,
       "visitors": 208,
-      "visits": 222,
-      "bounces": 114,
+      "visits": 223,
+      "bounces": 115,
       "totaltime": 8770
     }
   },
   "pages": [
     {
       "x": "/",
-      "y": 16
+      "y": 12
     },
     {
       "x": "/about/",
@@ -50,16 +50,12 @@
     {
       "x": "/shopify/",
       "y": 1
-    },
-    {
-      "x": "/work/grubhub-onboarding/",
-      "y": 1
     }
   ],
   "referrers": [
     {
       "x": "google.com",
-      "y": 2
+      "y": 1
     },
     {
       "x": "m.baidu.com",
@@ -69,11 +65,11 @@
   "countries": [
     {
       "x": "SG",
-      "y": 7
+      "y": 5
     },
     {
       "x": "US",
-      "y": 7
+      "y": 5
     },
     {
       "x": "CN",
@@ -91,7 +87,7 @@
   "devices": [
     {
       "x": "laptop",
-      "y": 17
+      "y": 13
     },
     {
       "x": "mobile",
