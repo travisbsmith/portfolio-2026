@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-03-23T07:20:03.083Z",
+  "lastSynced": "2026-03-24T07:12:27.702Z",
   "periods": {
     "24h": {
-      "pageviews": 0,
-      "visitors": 0,
-      "visits": 0,
-      "bounces": 0,
-      "totaltime": 0
+      "pageviews": 3,
+      "visitors": 2,
+      "visits": 2,
+      "bounces": 1,
+      "totaltime": 5
     },
     "7d": {
-      "pageviews": 20,
+      "pageviews": 21,
       "visitors": 14,
       "visits": 15,
-      "bounces": 11,
-      "totaltime": 1309
+      "bounces": 10,
+      "totaltime": 1314
     },
     "30d": {
-      "pageviews": 169,
-      "visitors": 91,
-      "visits": 95,
-      "bounces": 59,
-      "totaltime": 2541
+      "pageviews": 172,
+      "visitors": 93,
+      "visits": 97,
+      "bounces": 60,
+      "totaltime": 2546
     },
     "90d": {
-      "pageviews": 496,
-      "visitors": 208,
-      "visits": 223,
-      "bounces": 115,
-      "totaltime": 8770
+      "pageviews": 499,
+      "visitors": 210,
+      "visits": 225,
+      "bounces": 116,
+      "totaltime": 8775
     }
   },
   "pages": [
@@ -36,15 +36,15 @@
       "y": 12
     },
     {
-      "x": "/about/",
-      "y": 2
+      "x": "/contact/",
+      "y": 3
     },
     {
       "x": "/blog/",
       "y": 2
     },
     {
-      "x": "/contact/",
+      "x": "/about/",
       "y": 2
     },
     {
@@ -64,23 +64,23 @@
   ],
   "countries": [
     {
-      "x": "SG",
-      "y": 5
+      "x": "US",
+      "y": 6
     },
     {
-      "x": "US",
-      "y": 5
+      "x": "SG",
+      "y": 4
     },
     {
       "x": "CN",
       "y": 2
     },
     {
-      "x": "CA",
+      "x": "TR",
       "y": 1
     },
     {
-      "x": "TR",
+      "x": "CA",
       "y": 1
     }
   ],
