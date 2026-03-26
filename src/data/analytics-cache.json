@@ -1,32 +1,32 @@
 {
-  "lastSynced": "2026-03-26T18:12:56.603Z",
+  "lastSynced": "2026-03-26T18:31:06.592Z",
   "periods": {
     "24h": {
-      "pageviews": 15,
+      "pageviews": 16,
       "visitors": 11,
-      "visits": 11,
-      "bounces": 7,
+      "visits": 12,
+      "bounces": 8,
       "totaltime": 404
     },
     "7d": {
-      "pageviews": 51,
+      "pageviews": 52,
       "visitors": 32,
-      "visits": 35,
-      "bounces": 23,
+      "visits": 36,
+      "bounces": 24,
       "totaltime": 3776
     },
     "30d": {
-      "pageviews": 204,
+      "pageviews": 205,
       "visitors": 115,
-      "visits": 121,
-      "bounces": 79,
+      "visits": 122,
+      "bounces": 80,
       "totaltime": 6189
     },
     "90d": {
-      "pageviews": 540,
+      "pageviews": 541,
       "visitors": 236,
-      "visits": 253,
-      "bounces": 135,
+      "visits": 254,
+      "bounces": 136,
       "totaltime": 12506
     }
   },
