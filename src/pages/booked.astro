@@ -1,0 +1,161 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import Button from '../components/Button.astro';
+---
+
+<BaseLayout
+  title="You're booked — Travis Smith | Shopify Expert"
+  description="Your intro call request has been received. Travis will reply within one business day with a few time options."
+>
+  <Navigation />
+
+  <main class="booked">
+    <div class="container container--narrow">
+
+      <div class="booked__card">
+        <span class="booked__check" aria-hidden="true">✓</span>
+        <span class="label">Request received</span>
+        <h1 class="booked__title">You're all set.</h1>
+        <p class="booked__body">
+          I'll reply to your email within one business day with a few time options for our call. No action needed on your end.
+        </p>
+        <div class="booked__divider"></div>
+        <p class="booked__next-label">What happens next</p>
+        <ol class="booked__steps">
+          <li>
+            <span class="booked__step-num">01</span>
+            <span>I review your answers and look up your store if you're live.</span>
+          </li>
+          <li>
+            <span class="booked__step-num">02</span>
+            <span>I reply with 2–3 time options that fit your availability.</span>
+          </li>
+          <li>
+            <span class="booked__step-num">03</span>
+            <span>You confirm, and I send a calendar invite with the video call link.</span>
+          </li>
+        </ol>
+        <div class="booked__cta">
+          <Button href="/shopify" variant="secondary" size="sm">Back to the consulting page</Button>
+          <a class="booked__email-link" href="mailto:hello@fully-operational.com">
+            Questions? Email me directly →
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .booked {
+    padding-top: calc(64px + var(--space-20));
+    padding-bottom: var(--space-20);
+    min-height: 80vh;
+    display: flex;
+    align-items: flex-start;
+  }
+
+  .booked__card {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+    max-width: 540px;
+  }
+
+  .booked__check {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    line-height: 1;
+    font-family: var(--font-mono);
+  }
+
+  .booked__card .label {
+    margin-top: calc(var(--space-2) * -1);
+  }
+
+  .booked__title {
+    font-size: clamp(2rem, 5vw, var(--text-4xl));
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+    margin-top: calc(var(--space-2) * -1);
+  }
+
+  .booked__body {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  .booked__divider {
+    border: none;
+    border-top: 1px solid var(--color-border);
+  }
+
+  .booked__next-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-text-tertiary);
+  }
+
+  .booked__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .booked__steps li {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-4);
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.6;
+  }
+
+  .booked__step-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    flex-shrink: 0;
+    padding-top: 3px;
+  }
+
+  .booked__cta {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    flex-wrap: wrap;
+    margin-top: var(--space-2);
+  }
+
+  .booked__email-link {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    transition: color var(--duration-fast) var(--ease);
+  }
+
+  .booked__email-link:hover {
+    color: var(--color-accent);
+  }
+</style>

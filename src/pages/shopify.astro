@@ -4,14 +4,15 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import Button from '../components/Button.astro';
 
-// Formspree: Create a free form at https://formspree.io, then replace with your form ID
-const FORMSPREE_FORM_ID = 'xpqjqedr';
+// Booking goes to the /book page (combined intake + scheduling request)
+// Scheduling is handled via Formspree → Travis replies with time options via Proton Mail
+const CAL_LINK = '/book';
 
 const serviceJsonLd = {
   "@context": "https://schema.org",
   "@type": "Service",
   "name": "Shopify Store Setup and Consulting",
-  "description": "Shopify expert consulting for new store setup and existing store optimization. Former Head of Design at Shopify (2020-2025) who led Shopify Email, Inbox, Forms, and Admin Customer/Marketing/Analytics. Also led Product, Design & Engineering at The Tie Bar; COO of ShopCasaVerde.com (11 years); and co-founder/CEO of middlemanager.store.",
+  "description": "Shopify expert consulting for new store setup and existing store optimization. Former Head of Design at Shopify (2020-2025).",
   "provider": {
     "@type": "Person",
     "name": "Travis Smith",
@@ -22,18 +23,97 @@ const serviceJsonLd = {
   "areaServed": "Worldwide",
   "serviceType": ["Shopify store setup", "Shopify consulting", "Shopify marketing tools", "E-commerce strategy"],
   "url": "https://fully-operational.com/shopify",
+  "offers": [
+    {
+      "@type": "Offer",
+      "name": "Clarity Session",
+      "price": "350",
+      "priceCurrency": "USD",
+      "description": "90-minute deep-dive on your store with a written action plan within 48 hours."
+    },
+    {
+      "@type": "Offer",
+      "name": "Store Launch Sprint",
+      "price": "1800",
+      "priceCurrency": "USD",
+      "description": "Full store setup: theme, products, checkout, apps, and a 90-day growth roadmap."
+    },
+    {
+      "@type": "Offer",
+      "name": "Insider Retainer",
+      "price": "2500",
+      "priceCurrency": "USD",
+      "description": "Monthly advisory: 2 strategy calls, async Slack access, monthly audit, and hands-on work."
+    }
+  ]
+};
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {
+      "@type": "Question",
+      "name": "Who is this consulting for?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Early-stage founders building on Shopify — whether you're setting up your first store or you're live and trying to grow. Best fit for founders who want a real expert in their corner, not a generic agency."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What does it cost?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Three options: a one-time Clarity Session at $350, a Store Launch Sprint at $1,800, or a monthly Insider Retainer at $2,500/month. The retainer is limited to 2–3 clients at a time."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What's included in the retainer?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Two 30-minute strategy calls per month, async Slack access with 24-hour response, a monthly written audit with your top 3 priorities, and up to 5 hours of hands-on work — app setup, email flows, UX fixes."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What is Travis Smith's background with Shopify?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Travis was Head of Design at Shopify from 2020 to 2025. His team built Shopify Email, Shopify Inbox, Shopify Forms, and the Customer, Marketing, and Analytics sections of Shopify Admin. His work helped merchants deliver $3.2B+ in GMV."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "How do I get started?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Book a free 30-minute intro call. No pitch — just a conversation about your store. If it's a fit, you'll have a proposal in your inbox the same day."
+      }
+    },
+    {
+      "@type": "Question",
+      "name": "What doesn't Travis help with?",
+      "acceptedAnswer": {
+        "@type": "Answer",
+        "text": "Paid ad management, copywriting, custom Shopify development, or running your store day-to-day. The focus is design, UX, app strategy, and growth advisory — not execution on everything."
+      }
+    }
+  ]
 };
 ---
 
-<BaseLayout 
-  title="Shopify Expert — Store Setup & Consulting | Travis Smith" 
-  description="Former Head of Design at Shopify. Led Product, Design & Engineering at The Tie Bar; COO of ShopCasaVerde.com; CEO of middlemanager.store. Get your store set up right or make your existing Shopify store work harder. Non-technical, practical guidance."
+<BaseLayout
+  title="Shopify Expert — Store Setup & Consulting | Travis Smith"
+  description="Former Head of Design at Shopify. Expert consulting for early-stage founders — store setup, growth strategy, and app selection. Book a free intro call."
   image="/images/work/shopify-og.png"
-  jsonLd={serviceJsonLd}
+  jsonLd={[serviceJsonLd, faqJsonLd]}
 >
   <Navigation />
-  
+
   <main class="shopify">
+
     <!-- Hero -->
     <section class="shopify__hero">
       <div class="container container--narrow">
@@ -42,24 +122,13 @@ const serviceJsonLd = {
           I helped design the Shopify tools you use. Now I help you use them.
         </h1>
         <p class="shopify__subtitle">
-          Whether you're just starting out or your store has been running for years — I make Shopify simple. No jargon, no overwhelm. Just practical guidance from someone who spent four years building the platform.
+          Five years as Head of Product Design at Shopify. I work with a small number of early-stage founders who want to build their store the right way — without the trial and error.
         </p>
-        
-        <form class="shopify__form shopify__form--hero" action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} method="POST">
-          <input type="hidden" name="_subject" value="Shopify expert signup" />
-          <input type="hidden" name="_next" value="https://fully-operational.com/shopify/?thanks=1" />
-          <input type="email" name="email" placeholder="Your email" required class="shopify__input" />
-          <select name="interest" class="shopify__select">
-            <option value="">I'm a...</option>
-            <option value="new">New to Shopify — need help setting up</option>
-            <option value="existing">Existing store — want to use it better</option>
-            <option value="exploring">Just exploring</option>
-          </select>
-          <Button type="submit">Get notified</Button>
-        </form>
-        {Astro.url.searchParams.get('thanks') === '1' && (
-          <p class="shopify__form-message shopify__form-message--success">Thanks! I'll be in touch.</p>
-        )}
+        <div class="shopify__hero-cta">
+          <Button href={CAL_LINK} size="lg">Book a free 30-min call</Button>
+          <Button href="#services" variant="secondary" size="lg">See what's included</Button>
+        </div>
+        <p class="shopify__availability">Currently taking 1–2 new clients.</p>
       </div>
     </section>
 
@@ -70,7 +139,7 @@ const serviceJsonLd = {
           <div class="shopify__proof">
             <h2 class="shopify__section-title">Built at Shopify</h2>
             <p class="shopify__proof-text">
-              I was a Head of Design at Shopify from 2020 to 2025. My team built the tools you use every day: <strong>Shopify Email</strong>, <strong>Shopify Inbox</strong>, <strong>Shopify Forms</strong>, and the Customer, Marketing, and Analytics sections of Shopify Admin.
+              I was Head of Design at Shopify from 2020 to 2025. My team built the tools you use every day: <strong>Shopify Email</strong>, <strong>Shopify Inbox</strong>, <strong>Shopify Forms</strong>, and the Customer, Marketing, and Analytics sections of Shopify Admin.
             </p>
             <p class="shopify__proof-text">
               We helped merchants deliver $3.2B+ in sales and grew adoption of Shopify's built-in tools by 50%. I know how the platform works from the inside — and I know what gets in the way when you're trying to run your business.
@@ -96,10 +165,10 @@ const serviceJsonLd = {
         </p>
         <ul class="shopify__roots-list">
           <li>
-            <strong>Lead Product, Design & Engineering at <a href="https://www.thetiebar.com/" target="_blank" rel="noopener">The Tie Bar</a></strong> — an ecommerce site offering accessories and style essentials.
+            <strong>Led Product, Design & Engineering at <a href="https://www.thetiebar.com/" target="_blank" rel="noopener">The Tie Bar</a></strong> — an ecommerce accessories brand.
           </li>
           <li>
-            <strong>Started and was COO of <a href="https://www.shopcasaverde.com" target="_blank" rel="noopener">ShopCasaVerde.com</a></strong> — ethically sourced homegoods from around the world for 11 years.
+            <strong>Started and was COO of <a href="https://www.shopcasaverde.com" target="_blank" rel="noopener">ShopCasaVerde.com</a></strong> — ethically sourced homegoods, 11 years.
           </li>
           <li>
             <strong>Co-founder and CEO of <a href="https://middlemanager.store/" target="_blank" rel="noopener">middlemanager.store</a></strong> — a Shopify store.
@@ -108,71 +177,186 @@ const serviceJsonLd = {
       </div>
     </section>
 
-    <!-- Who You Help -->
-    <section class="shopify__section">
-      <div class="container">
-        <h2 class="shopify__section-title">Who I Help</h2>
-        <div class="shopify__audience">
-          <article class="shopify__audience-card">
-            <h3 class="shopify__audience-title">New to Shopify</h3>
-            <p>Just signed up and feeling overwhelmed? I help you get your store set up right from the start — products, payments, shipping, and your first sales. No tech background required.</p>
-          </article>
-          <article class="shopify__audience-card">
-            <h3 class="shopify__audience-title">Existing stores</h3>
-            <p>Your store is running but you know you're not getting the most out of it. I help you use Shopify Email, customer segmentation, and marketing tools to grow without adding complexity.</p>
-          </article>
-        </div>
-      </div>
-    </section>
-
-    <!-- What You Offer -->
+    <!-- Who I Help -->
     <section class="shopify__section shopify__section--alt">
       <div class="container">
-        <h2 class="shopify__section-title">What I Offer</h2>
-        <div class="shopify__offer-grid">
-          <div class="shopify__offer">
-            <h3 class="shopify__offer-title">Store setup</h3>
-            <p>Get your first store configured correctly. Products, payments, shipping, and the basics that actually matter.</p>
-          </div>
-          <div class="shopify__offer">
-            <h3 class="shopify__offer-title">Marketing & customer data</h3>
-            <p>Use Shopify Email, Inbox, and Forms to reach customers. Segment your audience and send the right message at the right time.</p>
-          </div>
-          <div class="shopify__offer">
-            <h3 class="shopify__offer-title">Strategic guidance</h3>
-            <p>Hands-on advice without the tech speak. I explain what to do and why, in plain language.</p>
-          </div>
+        <h2 class="shopify__section-title">Who I help</h2>
+        <div class="shopify__audience">
+          <article class="shopify__audience-card">
+            <h3 class="shopify__audience-title">Just getting started</h3>
+            <p>You've got a product and you're setting up on Shopify. I help you get it right from the start — theme, products, checkout, and the apps that actually matter. No wasted time, no wrong turns.</p>
+          </article>
+          <article class="shopify__audience-card">
+            <h3 class="shopify__audience-title">Live and trying to grow</h3>
+            <p>Your store is running but you're not sure what to focus on. I help you use Shopify's built-in tools, fix the UX issues costing you conversions, and build a growth system that isn't just guesswork.</p>
+          </article>
         </div>
       </div>
     </section>
 
-    <!-- CTA + Form -->
-    <section class="shopify__section">
-      <div class="container container--narrow">
-        <h2 class="shopify__section-title">Get notified when spots open</h2>
-        <p class="shopify__cta-text">
-          I'm building a small cohort of Shopify merchants to work with. Drop your email and I'll reach out when I have availability.
-        </p>
-        
-        <form class="shopify__form shopify__form--cta" action={`https://formspree.io/f/${FORMSPREE_FORM_ID}`} method="POST">
-          <input type="hidden" name="_subject" value="Shopify expert signup" />
-          <input type="hidden" name="_next" value="https://fully-operational.com/shopify/?thanks=1" />
-          <input type="email" name="email" placeholder="Your email" required class="shopify__input" />
-          <select name="interest" class="shopify__select">
-            <option value="">I'm a...</option>
-            <option value="new">New to Shopify — need help setting up</option>
-            <option value="existing">Existing store — want to use it better</option>
-            <option value="exploring">Just exploring</option>
-          </select>
-          <Button type="submit">Join the waitlist</Button>
-        </form>
-        {Astro.url.searchParams.get('thanks') === '1' && (
-          <p class="shopify__form-message shopify__form-message--success">Thanks! I'll be in touch.</p>
-        )}
+    <!-- Services & Pricing -->
+    <section id="services" class="shopify__section">
+      <div class="container">
+        <h2 class="shopify__section-title">Services & pricing</h2>
+        <p class="shopify__services-intro">Three ways to work together. No long-term contracts. Cancel anytime.</p>
+        <div class="shopify__services">
+
+          <article class="shopify__service-card">
+            <div class="shopify__service-header">
+              <div>
+                <span class="shopify__service-num">01</span>
+                <h3 class="shopify__service-name">Clarity Session</h3>
+              </div>
+              <div class="shopify__service-price-block">
+                <span class="shopify__service-price">$350</span>
+                <span class="shopify__service-cadence">one-time</span>
+              </div>
+            </div>
+            <p class="shopify__service-desc">A 90-minute deep-dive on your store. I'll audit your UX, app stack, marketing setup, and the things that are holding you back. You get a written action plan with 3–5 prioritized recommendations within 48 hours.</p>
+            <p class="shopify__service-fit">Good if you want expert eyes on your store before committing to anything bigger.</p>
+            <Button href={CAL_LINK} variant="secondary" size="sm">Book intro call</Button>
+          </article>
+
+          <article class="shopify__service-card shopify__service-card--featured">
+            <div class="shopify__service-header">
+              <div>
+                <span class="shopify__service-num">02</span>
+                <h3 class="shopify__service-name">Insider Retainer</h3>
+              </div>
+              <div class="shopify__service-price-block">
+                <span class="shopify__service-price">$2,500</span>
+                <span class="shopify__service-cadence">per month</span>
+              </div>
+            </div>
+            <span class="shopify__service-tag">Most popular</span>
+            <p class="shopify__service-desc">Ongoing advisory for founders who want an expert in their corner. Two 30-min strategy calls per month, async Slack access with 24-hr response, a monthly written audit with your top priorities, and up to 5 hrs/month of hands-on work.</p>
+            <p class="shopify__service-fit">Limited to 2–3 clients at a time. Cancel anytime before the next billing date.</p>
+            <Button href={CAL_LINK} size="sm">Book intro call</Button>
+          </article>
+
+          <article class="shopify__service-card">
+            <div class="shopify__service-header">
+              <div>
+                <span class="shopify__service-num">03</span>
+                <h3 class="shopify__service-name">Store Launch Sprint</h3>
+              </div>
+              <div class="shopify__service-price-block">
+                <span class="shopify__service-price">$1,800</span>
+                <span class="shopify__service-cadence">flat fee</span>
+              </div>
+            </div>
+            <p class="shopify__service-desc">For founders ready to go from zero to live. Theme selection and setup, product pages, navigation, checkout config, your starter app stack, and a 90-day growth roadmap. Delivered in 2–3 weeks.</p>
+            <p class="shopify__service-fit">Comes with a retainer offer at the end — once the store is right, the question is how to grow it.</p>
+            <Button href={CAL_LINK} variant="secondary" size="sm">Book intro call</Button>
+          </article>
+
+        </div>
       </div>
     </section>
+
+    <!-- What I don't do -->
+    <section class="shopify__section shopify__section--alt">
+      <div class="container">
+        <div class="shopify__dont-grid">
+          <div>
+            <h2 class="shopify__section-title">What I don't do</h2>
+            <p class="shopify__dont-intro">Being clear about this upfront saves everyone time.</p>
+          </div>
+          <ul class="shopify__dont-list">
+            <li>
+              <strong>Run your ads.</strong>
+              No paid media buying, creative production, or campaign management.
+            </li>
+            <li>
+              <strong>Write your copy.</strong>
+              You know your brand. I'll help shape the strategy, not the sentences.
+            </li>
+            <li>
+              <strong>Build custom code.</strong>
+              No Liquid development or custom app builds. I work with what Shopify gives you.
+            </li>
+            <li>
+              <strong>Manage your store day-to-day.</strong>
+              I'm an advisor, not an operator. You make the decisions; I make sure they're the right ones.
+            </li>
+            <li>
+              <strong>Take on everyone.</strong>
+              Two to three retainer clients at a time, maximum. I don't scale by spreading thin.
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- How it works -->
+    <section class="shopify__section">
+      <div class="container">
+        <h2 class="shopify__section-title">How to start</h2>
+        <ol class="shopify__steps">
+          <li class="shopify__step">
+            <span class="shopify__step-num">01</span>
+            <div>
+              <h3 class="shopify__step-title">Book a free 30-min call</h3>
+              <p>We talk about your store, your goals, and whether working together makes sense. No pitch — just a real conversation. You'll fill out a short intake form when you book.</p>
+            </div>
+          </li>
+          <li class="shopify__step">
+            <span class="shopify__step-num">02</span>
+            <div>
+              <h3 class="shopify__step-title">Get a proposal the same day</h3>
+              <p>If it's a fit, I'll send a short proposal within 2 hours. It'll be clear about what's included, what it costs, and what happens next.</p>
+            </div>
+          </li>
+          <li class="shopify__step">
+            <span class="shopify__step-num">03</span>
+            <div>
+              <h3 class="shopify__step-title">Pay and hit the ground running</h3>
+              <p>Pay the first invoice via Stripe. I'll send an onboarding doc, set up your Notion workspace, and we'll book your first strategy call. Done.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="shopify__book-cta">
+          <Button href={CAL_LINK} size="lg">Book a free 30-min call</Button>
+          <p class="shopify__book-note">Currently taking 1–2 new clients. &mdash; <a href="mailto:hello@fully-operational.com">hello@fully-operational.com</a></p>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="shopify__section shopify__section--alt">
+      <div class="container container--narrow">
+        <h2 class="shopify__section-title">Questions</h2>
+        <dl class="shopify__faq">
+          <div class="shopify__faq-item">
+            <dt>Who is this for?</dt>
+            <dd>Early-stage founders building on Shopify. Best fit if you're live with some traffic, or getting ready to launch and want to do it right. Not a fit if you need an agency to fully run things for you.</dd>
+          </div>
+          <div class="shopify__faq-item">
+            <dt>What does the retainer actually include?</dt>
+            <dd>Two 30-min strategy calls per month, async Slack access Monday–Friday (24-hr response), a monthly written audit with your top 3 priorities, and up to 5 hrs/month of hands-on work — app setup, email flows, UX fixes. Extra hours beyond 5 are available at $200/hr.</dd>
+          </div>
+          <div class="shopify__faq-item">
+            <dt>Is there a contract?</dt>
+            <dd>No long-term contracts. The retainer is month-to-month — cancel anytime before your next billing date. The Sprint and Clarity Session are flat-fee projects with no ongoing commitment.</dd>
+          </div>
+          <div class="shopify__faq-item">
+            <dt>What's Travis's background with Shopify?</dt>
+            <dd>Head of Design at Shopify from 2020 to 2025. Led the teams that built Shopify Email, Inbox, Forms, and the Customer, Marketing, and Analytics sections of Admin. Also: led Product, Design & Engineering at The Tie Bar; COO of ShopCasaVerde.com for 11 years; co-founder and CEO of middlemanager.store.</dd>
+          </div>
+          <div class="shopify__faq-item">
+            <dt>How do you access my store?</dt>
+            <dd>Via Shopify Collaborator Access — you give me a 4-digit code, I request access from my Shopify Partner dashboard, and you approve it. It doesn't count toward your staff user limit and you can revoke it anytime.</dd>
+          </div>
+          <div class="shopify__faq-item">
+            <dt>What if I'm just starting out and not sure if I need this?</dt>
+            <dd>Start with a Clarity Session ($350). It's a 90-min audit with a written action plan. A lot of founders find it gives them enough clarity to move forward on their own — and that's completely fine.</dd>
+          </div>
+        </dl>
+      </div>
+    </section>
+
   </main>
-  
+
   <Footer />
 </BaseLayout>
 
@@ -182,6 +366,7 @@ const serviceJsonLd = {
     padding-bottom: var(--space-20);
   }
 
+  /* ── Hero ── */
   .shopify__hero {
     margin-bottom: var(--space-20);
   }
@@ -204,39 +389,25 @@ const serviceJsonLd = {
     font-size: var(--text-lg);
     color: var(--color-text-secondary);
     line-height: 1.7;
-    margin-bottom: var(--space-12);
+    margin-bottom: var(--space-10);
     max-width: 560px;
   }
 
-  .shopify__form {
+  .shopify__hero-cta {
     display: flex;
-    flex-wrap: wrap;
     gap: var(--space-3);
+    flex-wrap: wrap;
     align-items: center;
+    margin-bottom: var(--space-4);
   }
 
-  .shopify__input,
-  .shopify__select {
-    padding: var(--space-3) var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    font-family: var(--font-body);
-    font-size: var(--text-base);
-    background: var(--color-bg);
-    min-width: 220px;
+  .shopify__availability {
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    font-family: var(--font-mono);
   }
 
-  .shopify__input:focus,
-  .shopify__select:focus {
-    outline: none;
-    border-color: var(--color-accent);
-  }
-
-  .shopify__select {
-    cursor: pointer;
-    color: var(--color-text-secondary);
-  }
-
+  /* ── Sections ── */
   .shopify__section {
     padding: var(--space-16) 0;
   }
@@ -251,6 +422,7 @@ const serviceJsonLd = {
     margin-bottom: var(--space-8);
   }
 
+  /* ── Social proof ── */
   .shopify__grid {
     display: grid;
     grid-template-columns: 1fr 280px;
@@ -297,6 +469,7 @@ const serviceJsonLd = {
     margin-bottom: 0;
   }
 
+  /* ── Roots ── */
   .shopify__roots-intro {
     font-size: var(--text-lg);
     color: var(--color-text-secondary);
@@ -340,6 +513,7 @@ const serviceJsonLd = {
     color: var(--color-accent);
   }
 
+  /* ── Audience ── */
   .shopify__audience {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -365,61 +539,248 @@ const serviceJsonLd = {
     margin: 0;
   }
 
-  .shopify__offer-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: var(--space-8);
+  /* ── Services & Pricing ── */
+  .shopify__services-intro {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    margin-bottom: var(--space-10);
   }
 
-  .shopify__offer {
-    padding: var(--space-6);
+  .shopify__services {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-6);
+    align-items: start;
+  }
+
+  .shopify__service-card {
+    padding: var(--space-8);
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
   }
 
-  .shopify__offer-title {
+  .shopify__service-card--featured {
+    border-color: var(--color-text);
+  }
+
+  .shopify__service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: var(--space-4);
+  }
+
+  .shopify__service-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    display: block;
+    margin-bottom: var(--space-1);
+  }
+
+  .shopify__service-name {
+    font-size: var(--text-xl);
+    font-weight: 500;
+  }
+
+  .shopify__service-price-block {
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  .shopify__service-price {
+    display: block;
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    line-height: 1;
+  }
+
+  .shopify__service-cadence {
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  .shopify__service-tag {
+    display: inline-block;
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--color-accent);
+    margin-top: calc(var(--space-4) * -1);
+  }
+
+  .shopify__service-desc {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+  }
+
+  .shopify__service-fit {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    line-height: 1.6;
+    font-style: italic;
+  }
+
+  /* ── What I don't ── */
+  .shopify__dont-grid {
+    display: grid;
+    grid-template-columns: 280px 1fr;
+    gap: var(--space-16);
+    align-items: start;
+  }
+
+  .shopify__dont-intro {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin-top: calc(var(--space-8) * -1);
+  }
+
+  .shopify__dont-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-6);
+  }
+
+  .shopify__dont-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    padding-left: var(--space-8);
+    position: relative;
+  }
+
+  .shopify__dont-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+
+  .shopify__dont-list strong {
+    color: var(--color-text);
+  }
+
+  /* ── How to start ── */
+  .shopify__steps {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 var(--space-12) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    max-width: 640px;
+  }
+
+  .shopify__step {
+    display: flex;
+    gap: var(--space-6);
+    align-items: flex-start;
+  }
+
+  .shopify__step-num {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    flex-shrink: 0;
+    padding-top: 4px;
+  }
+
+  .shopify__step-title {
     font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+
+  .shopify__step p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+  }
+
+  .shopify__book-cta {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .shopify__book-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+  }
+
+  .shopify__book-note a {
+    color: var(--color-text-secondary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+
+  .shopify__book-note a:hover {
+    color: var(--color-accent);
+  }
+
+  /* ── FAQ ── */
+  .shopify__faq {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .shopify__faq-item {
+    padding: var(--space-6) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .shopify__faq-item:first-child {
+    border-top: 1px solid var(--color-border);
+  }
+
+  .shopify__faq-item dt {
+    font-size: var(--text-base);
     font-weight: 500;
     margin-bottom: var(--space-3);
   }
 
-  .shopify__offer p {
+  .shopify__faq-item dd {
     font-size: var(--text-base);
     color: var(--color-text-secondary);
-    line-height: 1.6;
+    line-height: 1.7;
     margin: 0;
   }
 
-  .shopify__cta-text {
-    font-size: var(--text-lg);
-    color: var(--color-text-secondary);
-    margin-bottom: var(--space-8);
-  }
+  /* ── Responsive ── */
+  @media (max-width: 900px) {
+    .shopify__services {
+      grid-template-columns: 1fr;
+    }
 
-  .shopify__form-message {
-    width: 100%;
-    margin: var(--space-3) 0 0;
-    font-size: var(--text-sm);
-  }
+    .shopify__dont-grid {
+      grid-template-columns: 1fr;
+    }
 
-  .shopify__form-message--success {
-    color: #22c55e;
-  }
-
-  .shopify__form-message--error {
-    color: #e53e3e;
+    .shopify__dont-intro {
+      margin-top: 0;
+    }
   }
 
   @media (max-width: 768px) {
-    .shopify__form {
+    .shopify__hero-cta {
       flex-direction: column;
       align-items: stretch;
-    }
-
-    .shopify__input,
-    .shopify__select {
-      min-width: 100%;
     }
 
     .shopify__grid {
@@ -430,9 +791,13 @@ const serviceJsonLd = {
       grid-template-columns: 1fr;
     }
 
-    .shopify__offer-grid {
-      grid-template-columns: 1fr;
+    .shopify__service-header {
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .shopify__service-price-block {
+      text-align: left;
     }
   }
 </style>
-
