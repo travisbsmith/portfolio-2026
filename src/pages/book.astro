@@ -3,10 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 
-// TODO: Create a free account at formspree.io → New Form → copy the form ID
-// Replace YOUR_FORMSPREE_ID below with your actual form ID (e.g. "xwkgdpbn")
-const FORMSPREE_ID = 'mjgpkkkg';
-const FORMSPREE_ENDPOINT = `https://formspree.io/f/${FORMSPREE_ID}`;
+const BASIN_ENDPOINT = 'https://usebasin.com/f/ec85376522d8';
 
 // The page users are sent to after submission
 const SUCCESS_URL = 'https://fully-operational.com/booked';
@@ -48,14 +45,12 @@ const SUCCESS_URL = 'https://fully-operational.com/booked';
       <form
         id="booking-form"
         class="book__form"
-        action={FORMSPREE_ENDPOINT}
+        action={BASIN_ENDPOINT}
         method="POST"
       >
-        <!-- Formspree redirect after success -->
+        <!-- Basin: redirect after success -->
         <input type="hidden" name="_next" value={SUCCESS_URL} />
-        <!-- Subject line in Travis's inbox -->
-        <input type="hidden" name="_subject" value="New intro call request — fully-operational.com" />
-        <!-- Spam honeypot -->
+        <!-- Basin: spam honeypot -->
         <input type="text" name="_gotcha" style="display:none" />
 
         <!-- Section 1: About You -->
