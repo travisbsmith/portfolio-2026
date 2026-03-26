@@ -1,32 +1,32 @@
 {
-  "lastSynced": "2026-03-26T19:10:36.358Z",
+  "lastSynced": "2026-03-26T19:28:19.480Z",
   "periods": {
     "24h": {
-      "pageviews": 16,
+      "pageviews": 17,
       "visitors": 11,
-      "visits": 12,
-      "bounces": 8,
+      "visits": 13,
+      "bounces": 9,
       "totaltime": 404
     },
     "7d": {
-      "pageviews": 52,
+      "pageviews": 53,
       "visitors": 32,
-      "visits": 36,
-      "bounces": 24,
+      "visits": 37,
+      "bounces": 25,
       "totaltime": 3776
     },
     "30d": {
-      "pageviews": 205,
+      "pageviews": 206,
       "visitors": 115,
-      "visits": 122,
-      "bounces": 80,
+      "visits": 123,
+      "bounces": 81,
       "totaltime": 6189
     },
     "90d": {
-      "pageviews": 541,
+      "pageviews": 542,
       "visitors": 236,
-      "visits": 254,
-      "bounces": 136,
+      "visits": 255,
+      "bounces": 137,
       "totaltime": 12506
     }
   },
@@ -76,7 +76,7 @@
       "y": 2
     },
     {
-      "x": "SG",
+      "x": "TR",
       "y": 1
     },
     {
@@ -84,7 +84,7 @@
       "y": 1
     },
     {
-      "x": "TR",
+      "x": "SG",
       "y": 1
     }
   ],
