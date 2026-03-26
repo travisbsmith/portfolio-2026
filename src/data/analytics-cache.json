@@ -1,47 +1,47 @@
 {
-  "lastSynced": "2026-03-26T07:18:41.572Z",
+  "lastSynced": "2026-03-26T18:12:56.603Z",
   "periods": {
     "24h": {
-      "pageviews": 36,
-      "visitors": 22,
-      "visits": 24,
-      "bounces": 16,
-      "totaltime": 3411
+      "pageviews": 15,
+      "visitors": 11,
+      "visits": 11,
+      "bounces": 7,
+      "totaltime": 404
     },
     "7d": {
-      "pageviews": 50,
-      "visitors": 30,
-      "visits": 33,
-      "bounces": 21,
-      "totaltime": 4719
+      "pageviews": 51,
+      "visitors": 32,
+      "visits": 35,
+      "bounces": 23,
+      "totaltime": 3776
     },
     "30d": {
-      "pageviews": 201,
-      "visitors": 112,
-      "visits": 118,
-      "bounces": 76,
-      "totaltime": 5877
+      "pageviews": 204,
+      "visitors": 115,
+      "visits": 121,
+      "bounces": 79,
+      "totaltime": 6189
     },
     "90d": {
-      "pageviews": 535,
-      "visitors": 232,
-      "visits": 249,
-      "bounces": 132,
-      "totaltime": 12186
+      "pageviews": 540,
+      "visitors": 236,
+      "visits": 253,
+      "bounces": 135,
+      "totaltime": 12506
     }
   },
   "pages": [
     {
-      "x": "/",
-      "y": 17
+      "x": "/shopify/",
+      "y": 19
     },
     {
-      "x": "/shopify/",
+      "x": "/",
       "y": 16
     },
     {
       "x": "/about/",
-      "y": 6
+      "y": 5
     },
     {
       "x": "/contact/",
@@ -49,7 +49,7 @@
     },
     {
       "x": "/blog/",
-      "y": 2
+      "y": 1
     },
     {
       "x": "/work/shopify/",
@@ -59,7 +59,7 @@
   "referrers": [
     {
       "x": "google.com",
-      "y": 4
+      "y": 3
     },
     {
       "x": "umatrcs.online",
@@ -69,19 +69,19 @@
   "countries": [
     {
       "x": "US",
-      "y": 23
+      "y": 27
     },
     {
       "x": "CN",
       "y": 2
     },
     {
-      "x": "CA",
-      "y": 2
+      "x": "SG",
+      "y": 1
     },
     {
-      "x": "SG",
-      "y": 2
+      "x": "CA",
+      "y": 1
     },
     {
       "x": "TR",
@@ -91,7 +91,7 @@
   "devices": [
     {
       "x": "mobile",
-      "y": 17
+      "y": 19
     },
     {
       "x": "laptop",
