@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-03-26T19:28:19.480Z",
+  "lastSynced": "2026-03-27T07:17:13.658Z",
   "periods": {
     "24h": {
-      "pageviews": 17,
-      "visitors": 11,
-      "visits": 13,
-      "bounces": 9,
-      "totaltime": 404
+      "pageviews": 10,
+      "visitors": 6,
+      "visits": 8,
+      "bounces": 6,
+      "totaltime": 326
     },
     "7d": {
-      "pageviews": 53,
-      "visitors": 32,
-      "visits": 37,
+      "pageviews": 55,
+      "visitors": 33,
+      "visits": 38,
       "bounces": 25,
-      "totaltime": 3776
+      "totaltime": 3782
     },
     "30d": {
-      "pageviews": 206,
+      "pageviews": 201,
       "visitors": 115,
       "visits": 123,
-      "bounces": 81,
-      "totaltime": 6189
+      "bounces": 82,
+      "totaltime": 6079
     },
     "90d": {
-      "pageviews": 542,
-      "visitors": 236,
-      "visits": 255,
-      "bounces": 137,
-      "totaltime": 12506
+      "pageviews": 545,
+      "visitors": 238,
+      "visits": 257,
+      "bounces": 138,
+      "totaltime": 12512
     }
   },
   "pages": [
@@ -37,7 +37,7 @@
     },
     {
       "x": "/",
-      "y": 16
+      "y": 17
     },
     {
       "x": "/about/",
@@ -45,7 +45,7 @@
     },
     {
       "x": "/contact/",
-      "y": 3
+      "y": 4
     },
     {
       "x": "/blog/",
@@ -69,14 +69,14 @@
   "countries": [
     {
       "x": "US",
-      "y": 27
+      "y": 28
     },
     {
       "x": "CN",
       "y": 2
     },
     {
-      "x": "TR",
+      "x": "SG",
       "y": 1
     },
     {
@@ -84,14 +84,14 @@
       "y": 1
     },
     {
-      "x": "SG",
+      "x": "TR",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "mobile",
-      "y": 19
+      "y": 20
     },
     {
       "x": "laptop",
