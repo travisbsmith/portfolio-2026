@@ -1,43 +1,43 @@
 {
-  "lastSynced": "2026-03-27T07:17:13.658Z",
+  "lastSynced": "2026-03-28T07:05:43.796Z",
   "periods": {
     "24h": {
-      "pageviews": 10,
-      "visitors": 6,
-      "visits": 8,
-      "bounces": 6,
-      "totaltime": 326
+      "pageviews": 19,
+      "visitors": 7,
+      "visits": 7,
+      "bounces": 4,
+      "totaltime": 582
     },
     "7d": {
-      "pageviews": 55,
-      "visitors": 33,
-      "visits": 38,
-      "bounces": 25,
-      "totaltime": 3782
+      "pageviews": 68,
+      "visitors": 37,
+      "visits": 41,
+      "bounces": 27,
+      "totaltime": 4324
     },
     "30d": {
-      "pageviews": 201,
-      "visitors": 115,
-      "visits": 123,
-      "bounces": 82,
-      "totaltime": 6079
+      "pageviews": 218,
+      "visitors": 120,
+      "visits": 128,
+      "bounces": 84,
+      "totaltime": 6661
     },
     "90d": {
-      "pageviews": 545,
-      "visitors": 238,
-      "visits": 257,
-      "bounces": 138,
-      "totaltime": 12512
+      "pageviews": 564,
+      "visitors": 245,
+      "visits": 264,
+      "bounces": 142,
+      "totaltime": 13094
     }
   },
   "pages": [
     {
       "x": "/shopify/",
-      "y": 19
+      "y": 22
     },
     {
       "x": "/",
-      "y": 17
+      "y": 19
     },
     {
       "x": "/about/",
@@ -45,57 +45,77 @@
     },
     {
       "x": "/contact/",
-      "y": 4
+      "y": 5
     },
     {
       "x": "/blog/",
-      "y": 1
+      "y": 2
+    },
+    {
+      "x": "/book/",
+      "y": 2
     },
     {
       "x": "/work/shopify/",
+      "y": 1
+    },
+    {
+      "x": "/work/plainsmart/",
+      "y": 1
+    },
+    {
+      "x": "/blog/new-year-same-me/",
       "y": 1
     }
   ],
   "referrers": [
     {
       "x": "google.com",
-      "y": 3
+      "y": 5
     },
     {
       "x": "umatrcs.online",
+      "y": 1
+    },
+    {
+      "x": "linkedin.com",
+      "y": 1
+    },
+    {
+      "x": "usebasin.com",
       "y": 1
     }
   ],
   "countries": [
     {
       "x": "US",
-      "y": 28
+      "y": 31
+    },
+    {
+      "x": "GB",
+      "y": 2
     },
     {
       "x": "CN",
       "y": 2
     },
     {
-      "x": "SG",
+      "x": "PK",
       "y": 1
     },
     {
       "x": "CA",
-      "y": 1
-    },
-    {
-      "x": "TR",
       "y": 1
     }
   ],
   "devices": [
     {
       "x": "mobile",
-      "y": 20
+      "y": 23
     },
     {
       "x": "laptop",
-      "y": 13
+      "y": 14
     }
   ]
 }
