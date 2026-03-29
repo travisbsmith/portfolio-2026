@@ -1,33 +1,33 @@
 {
-  "lastSynced": "2026-03-28T07:05:43.796Z",
+  "lastSynced": "2026-03-29T07:12:53.855Z",
   "periods": {
     "24h": {
-      "pageviews": 19,
-      "visitors": 7,
-      "visits": 7,
-      "bounces": 4,
-      "totaltime": 582
+      "pageviews": 7,
+      "visitors": 4,
+      "visits": 6,
+      "bounces": 5,
+      "totaltime": 431
     },
     "7d": {
-      "pageviews": 68,
-      "visitors": 37,
-      "visits": 41,
-      "bounces": 27,
-      "totaltime": 4324
+      "pageviews": 75,
+      "visitors": 40,
+      "visits": 47,
+      "bounces": 32,
+      "totaltime": 4755
     },
     "30d": {
       "pageviews": 218,
-      "visitors": 120,
-      "visits": 128,
-      "bounces": 84,
-      "totaltime": 6661
+      "visitors": 119,
+      "visits": 130,
+      "bounces": 86,
+      "totaltime": 7070
     },
     "90d": {
-      "pageviews": 564,
-      "visitors": 245,
-      "visits": 264,
-      "bounces": 142,
-      "totaltime": 13094
+      "pageviews": 571,
+      "visitors": 248,
+      "visits": 270,
+      "bounces": 147,
+      "totaltime": 13525
     }
   },
   "pages": [
@@ -37,11 +37,11 @@
     },
     {
       "x": "/",
-      "y": 19
+      "y": 21
     },
     {
       "x": "/about/",
-      "y": 5
+      "y": 6
     },
     {
       "x": "/contact/",
@@ -74,6 +74,10 @@
       "y": 5
     },
     {
+      "x": "app.raindrop.io",
+      "y": 1
+    },
+    {
       "x": "umatrcs.online",
       "y": 1
     },
@@ -89,7 +93,7 @@
   "countries": [
     {
       "x": "US",
-      "y": 31
+      "y": 32
     },
     {
       "x": "GB",
@@ -104,7 +108,15 @@
       "y": 1
     },
     {
+      "x": "IL",
+      "y": 1
+    },
+    {
       "x": "CA",
+      "y": 1
+    },
+    {
+      "x": "TR",
       "y": 1
     }
   ],
@@ -115,7 +127,7 @@
     },
     {
       "x": "laptop",
-      "y": 14
+      "y": 17
     }
   ]
 }
