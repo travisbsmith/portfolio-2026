@@ -15,7 +15,7 @@ export async function sendEmail({
   html: string;
   replyTo?: string;
 }): Promise<{ id?: string; error?: string }> {
-  const resend = new Resend(import.meta.env.RESEND_API_KEY);
+  const resend = new Resend(import.meta.env.RESEND_API_KEY ?? process.env.RESEND_API_KEY);
   const { data, error } = await resend.emails.send({
     from: 'Travis Smith <travis@fully-operational.com>',
     to,

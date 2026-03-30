@@ -8,11 +8,11 @@ export const prerender = false;
 // Also secured with CRON_SECRET so it can't be triggered externally
 export const GET: APIRoute = async ({ request }) => {
   const authHeader = request.headers.get('authorization');
-  if (authHeader !== `Bearer ${import.meta.env.CRON_SECRET}`) {
+  if (authHeader !== `Bearer ${import.meta.env.CRON_SECRET ?? process.env.CRON_SECRET}`) {
     return new Response('Unauthorized', { status: 401 });
   }
 
-  const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
+  const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY ?? '');
   const results: string[] = [];
 
   // --- Check for invoices open > 3 days ---

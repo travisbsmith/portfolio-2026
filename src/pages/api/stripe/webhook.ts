@@ -4,7 +4,7 @@ import { sendEmail } from '../email/send';
 
 export const prerender = false;
 
-const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
+const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY ?? '');
 
 export const POST: APIRoute = async ({ request }) => {
   const sig = request.headers.get('stripe-signature');
