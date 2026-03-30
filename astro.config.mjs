@@ -6,7 +6,7 @@ import vercel from '@astrojs/vercel';
 // https://astro.build/config
 export default defineConfig({
   site: 'https://fully-operational.com',
-  output: 'hybrid',
+  output: 'static',
   adapter: vercel(),
   build: {
     assets: '_assets'
