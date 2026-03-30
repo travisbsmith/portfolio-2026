@@ -1,43 +1,43 @@
 {
-  "lastSynced": "2026-03-29T07:12:53.855Z",
+  "lastSynced": "2026-03-30T07:52:22.687Z",
   "periods": {
     "24h": {
-      "pageviews": 7,
-      "visitors": 4,
-      "visits": 6,
-      "bounces": 5,
-      "totaltime": 431
+      "pageviews": 4,
+      "visitors": 3,
+      "visits": 4,
+      "bounces": 4,
+      "totaltime": 0
     },
     "7d": {
-      "pageviews": 75,
-      "visitors": 40,
-      "visits": 47,
-      "bounces": 32,
+      "pageviews": 79,
+      "visitors": 43,
+      "visits": 51,
+      "bounces": 36,
       "totaltime": 4755
     },
     "30d": {
-      "pageviews": 218,
-      "visitors": 119,
-      "visits": 130,
-      "bounces": 86,
-      "totaltime": 7070
+      "pageviews": 210,
+      "visitors": 117,
+      "visits": 129,
+      "bounces": 89,
+      "totaltime": 6901
     },
     "90d": {
-      "pageviews": 571,
-      "visitors": 248,
-      "visits": 270,
-      "bounces": 147,
+      "pageviews": 575,
+      "visitors": 251,
+      "visits": 274,
+      "bounces": 151,
       "totaltime": 13525
     }
   },
   "pages": [
     {
       "x": "/shopify/",
-      "y": 22
+      "y": 23
     },
     {
       "x": "/",
-      "y": 21
+      "y": 22
     },
     {
       "x": "/about/",
@@ -45,7 +45,7 @@
     },
     {
       "x": "/contact/",
-      "y": 5
+      "y": 6
     },
     {
       "x": "/blog/",
@@ -93,14 +93,14 @@
   "countries": [
     {
       "x": "US",
-      "y": 32
-    },
-    {
-      "x": "GB",
-      "y": 2
+      "y": 34
     },
     {
       "x": "CN",
+      "y": 3
+    },
+    {
+      "x": "GB",
       "y": 2
     },
     {
@@ -123,11 +123,15 @@
   "devices": [
     {
       "x": "mobile",
-      "y": 23
+      "y": 24
     },
     {
       "x": "laptop",
-      "y": 17
+      "y": 18
+    },
+    {
+      "x": "desktop",
+      "y": 1
     }
   ]
 }
