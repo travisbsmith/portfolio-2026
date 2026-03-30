@@ -1,282 +1,575 @@
 ---
+export const prerender = false;
+
 import BaseLayout from '../layouts/BaseLayout.astro';
 import * as fs from 'fs';
 import * as path from 'path';
+import Stripe from 'stripe';
 
-// Load analytics cache at build time
-let analyticsData: any = null;
-try {
-  const cachePath = path.join(process.cwd(), 'src/data/analytics-cache.json');
-  if (fs.existsSync(cachePath)) {
-    analyticsData = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
+const SESSION_COOKIE = 'dashboard_session';
+const SESSION_VALUE = 'authenticated';
+const DASHBOARD_PASSWORD = import.meta.env.DASHBOARD_PASSWORD;
+
+let isAuthenticated = false;
+let loginError = '';
+
+// Handle POST: login or logout
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const action = formData.get('_action');
+
+  if (action === 'logout') {
+    Astro.cookies.delete(SESSION_COOKIE, { path: '/' });
+    return Astro.redirect('/dashboard');
   }
-} catch (e) {
-  console.error('Could not load analytics cache:', e);
+
+  const password = formData.get('password');
+  if (password === DASHBOARD_PASSWORD) {
+    Astro.cookies.set(SESSION_COOKIE, SESSION_VALUE, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: 60 * 60 * 24 * 7,
+      path: '/',
+    });
+    return Astro.redirect('/dashboard');
+  } else {
+    loginError = 'Incorrect password';
+  }
 }
 
-// Load posts cache at build time
+isAuthenticated = Astro.cookies.get(SESSION_COOKIE)?.value === SESSION_VALUE;
+
+// Analytics cache (read at request time on SSR)
+let analyticsData: any = null;
 let postsData: any = null;
-try {
-  const postsCachePath = path.join(process.cwd(), 'src/data/posts-cache.json');
-  if (fs.existsSync(postsCachePath)) {
-    postsData = JSON.parse(fs.readFileSync(postsCachePath, 'utf-8'));
+
+if (isAuthenticated) {
+  try {
+    const cachePath = path.join(process.cwd(), 'src/data/analytics-cache.json');
+    if (fs.existsSync(cachePath)) {
+      analyticsData = JSON.parse(fs.readFileSync(cachePath, 'utf-8'));
+    }
+  } catch (e) {
+    console.error('Could not load analytics cache:', e);
   }
-} catch (e) {
-  console.error('Could not load posts cache:', e);
+
+  try {
+    const postsCachePath = path.join(process.cwd(), 'src/data/posts-cache.json');
+    if (fs.existsSync(postsCachePath)) {
+      postsData = JSON.parse(fs.readFileSync(postsCachePath, 'utf-8'));
+    }
+  } catch (e) {
+    console.error('Could not load posts cache:', e);
+  }
+}
+
+// Clients — hardcoded (update stripeCustomerId after first invoice)
+const clients = [
+  {
+    name: 'Add your first client',
+    email: '',
+    service: '—',
+    stage: 'Lead',
+    stripeCustomerId: '',
+  },
+];
+
+// Fetch Stripe invoices per client
+const stripeInvoicesByClient: Record<string, any[]> = {};
+if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
+  try {
+    const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
+    for (const client of clients) {
+      if (client.stripeCustomerId) {
+        try {
+          const invoices = await stripe.invoices.list({
+            customer: client.stripeCustomerId,
+            limit: 5,
+          });
+          stripeInvoicesByClient[client.email] = invoices.data;
+        } catch {
+          stripeInvoicesByClient[client.email] = [];
+        }
+      }
+    }
+  } catch {
+    // Stripe not configured yet
+  }
 }
 ---
 
-<BaseLayout title="Analytics Dashboard — Travis Smith" description="Private analytics dashboard">
-  <div id="auth-screen" class="auth-screen">
-    <div class="auth-card">
-      <h1>Analytics Dashboard</h1>
-      <p>Enter password to access</p>
-      <form id="auth-form">
-        <input type="password" id="password" placeholder="Password" autocomplete="current-password" />
-        <button type="submit">Access Dashboard</button>
+<BaseLayout title="Dashboard — Travis Smith" description="Private dashboard">
+
+  {!isAuthenticated ? (
+    <!-- Login Screen -->
+    <div class="auth-screen">
+      <div class="auth-card">
+        <h1>Dashboard</h1>
+        <p>Enter password to access</p>
+        <form method="POST">
+          <input type="hidden" name="_action" value="login" />
+          <input
+            type="password"
+            name="password"
+            placeholder="Password"
+            autocomplete="current-password"
+            autofocus
+          />
+          <button type="submit">Access Dashboard</button>
+        </form>
+        {loginError && <p class="error">{loginError}</p>}
+      </div>
+    </div>
+  ) : (
+    <!-- Authenticated Dashboard -->
+    <div class="dashboard">
+      <header class="dashboard-header">
+        <div class="container">
+          <div class="header-content">
+            <div>
+              <a href="/" class="back-link">&larr; Back to site</a>
+              <h1>Dashboard</h1>
+            </div>
+            <div class="header-actions">
+              <!-- Tab switcher -->
+              <div class="tab-nav">
+                <button class="tab-btn active" data-tab="clients">Clients</button>
+                <button class="tab-btn" data-tab="analytics">Analytics</button>
+              </div>
+              <!-- Analytics date range (only shown on analytics tab) -->
+              <select id="date-range" class="analytics-only" style="display:none">
+                <option value="24h">Last 24 hours</option>
+                <option value="7d" selected>Last 7 days</option>
+                <option value="30d">Last 30 days</option>
+                <option value="90d">Last 90 days</option>
+              </select>
+              <!-- Logout -->
+              <form method="POST" style="display:inline">
+                <input type="hidden" name="_action" value="logout" />
+                <button type="submit" class="btn-secondary">Logout</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </header>
+
+      <main class="dashboard-main">
+        <div class="container">
+
+          <!-- ═══════════════════════════════════════════
+               CLIENTS TAB
+          ════════════════════════════════════════════ -->
+          <div id="tab-clients" class="tab-panel active">
+
+            <div class="section-header">
+              <h2>Clients</h2>
+              <button class="btn-primary" id="new-invoice-btn">+ New Invoice</button>
+            </div>
+
+            <section class="section">
+              <div class="table-container">
+                <table class="clients-table">
+                  <thead>
+                    <tr>
+                      <th>Client</th>
+                      <th>Service</th>
+                      <th>Stage</th>
+                      <th>Latest Invoice</th>
+                      <th>Amount</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {clients.map((client) => {
+                      const invoices = stripeInvoicesByClient[client.email] ?? [];
+                      const latest = invoices[0];
+                      const statusLabel = latest?.status ?? '—';
+                      const amount = latest ? `$${((latest.amount_due ?? 0) / 100).toFixed(2)}` : '—';
+                      const invoiceUrl = latest?.hosted_invoice_url ?? null;
+                      return (
+                        <tr>
+                          <td>
+                            <div class="client-name">{client.name}</div>
+                            <div class="client-email">{client.email}</div>
+                          </td>
+                          <td>{client.service}</td>
+                          <td>
+                            <span class={`stage-badge stage-${client.stage.toLowerCase().replace(/\s+/g, '-')}`}>
+                              {client.stage}
+                            </span>
+                          </td>
+                          <td>
+                            {invoiceUrl ? (
+                              <a href={invoiceUrl} target="_blank" rel="noopener" class={`invoice-status status-${statusLabel}`}>
+                                {statusLabel}
+                              </a>
+                            ) : (
+                              <span class="invoice-status status-none">{statusLabel}</span>
+                            )}
+                          </td>
+                          <td class="mono">{amount}</td>
+                          <td>
+                            <div class="action-btns">
+                              <button
+                                class="btn-sm btn-outline followup-btn"
+                                data-email={client.email}
+                                data-name={client.name}
+                                data-invoice-url={invoiceUrl ?? ''}
+                              >
+                                Follow up
+                              </button>
+                            </div>
+                          </td>
+                        </tr>
+                      );
+                    })}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <!-- Invoice history per client -->
+            {clients.filter(c => (stripeInvoicesByClient[c.email] ?? []).length > 0).map((client) => (
+              <section class="section">
+                <h3>{client.name} — Invoice History</h3>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Invoice</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Amount</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(stripeInvoicesByClient[client.email] ?? []).map((inv: any) => (
+                        <tr>
+                          <td>
+                            {inv.hosted_invoice_url ? (
+                              <a href={inv.hosted_invoice_url} target="_blank" rel="noopener" class="invoice-link">
+                                {inv.number ?? inv.id.slice(-8)}
+                              </a>
+                            ) : (
+                              <span>{inv.number ?? inv.id.slice(-8)}</span>
+                            )}
+                          </td>
+                          <td>{new Date(inv.created * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}</td>
+                          <td><span class={`invoice-status status-${inv.status}`}>{inv.status}</span></td>
+                          <td class="mono">${((inv.amount_due ?? 0) / 100).toFixed(2)}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            ))}
+
+          </div>
+
+          <!-- ═══════════════════════════════════════════
+               ANALYTICS TAB
+          ════════════════════════════════════════════ -->
+          <div id="tab-analytics" class="tab-panel">
+
+            <!-- Status Bar -->
+            <div class="status-bar">
+              <span id="last-updated">
+                Data as of: {analyticsData ? new Date(analyticsData.lastSynced).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'No data yet'}
+              </span>
+              <span class="status-note">Updates with each site build (daily at 6 AM UTC)</span>
+            </div>
+
+            <!-- Key Metrics -->
+            <section class="metrics-grid" id="key-metrics">
+              {analyticsData && Object.entries(analyticsData.periods).map(([period, data]: [string, any]) => (
+                <div class={`period-data ${period === '7d' ? '' : 'hidden'}`} data-period={period}>
+                  <div class="metrics-grid--inner">
+                    <div class="metric-card">
+                      <div class="metric-label">Total Views</div>
+                      <div class="metric-value">{data.pageviews.toLocaleString()}</div>
+                    </div>
+                    <div class="metric-card">
+                      <div class="metric-label">Unique Visitors</div>
+                      <div class="metric-value">{data.visitors.toLocaleString()}</div>
+                    </div>
+                    <div class="metric-card">
+                      <div class="metric-label">Bounce Rate</div>
+                      <div class="metric-value">{data.visits > 0 ? Math.round(data.bounces / data.visits * 100) : 0}%</div>
+                    </div>
+                    <div class="metric-card">
+                      <div class="metric-label">Avg. Visit Duration</div>
+                      <div class="metric-value">
+                        {data.visits > 0
+                          ? `${Math.floor(data.totaltime / data.visits / 60)}m ${Math.round(data.totaltime / data.visits % 60)}s`
+                          : '0s'}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ))}
+              {!analyticsData && (
+                <div class="metrics-grid--inner">
+                  <div class="metric-card"><div class="metric-label">Total Views</div><div class="metric-value">0</div></div>
+                  <div class="metric-card"><div class="metric-label">Unique Visitors</div><div class="metric-value">0</div></div>
+                  <div class="metric-card"><div class="metric-label">Bounce Rate</div><div class="metric-value">0%</div></div>
+                  <div class="metric-card"><div class="metric-label">Avg. Visit Duration</div><div class="metric-value">0s</div></div>
+                </div>
+              )}
+            </section>
+
+            <!-- LLM Traffic Section -->
+            <section class="section">
+              <h2>🤖 AI/LLM Traffic</h2>
+              <div class="metrics-grid--inner metrics-grid--3">
+                {(() => {
+                  const pages = analyticsData?.pages || [];
+                  const llmsTxt = pages.find((p: any) => p.x === '/llms.txt')?.y || 0;
+                  const llmsFull = pages.find((p: any) => p.x === '/llms-full.txt')?.y || 0;
+                  const blogMd = pages.filter((p: any) => p.x.endsWith('.md')).reduce((sum: number, p: any) => sum + p.y, 0);
+                  return (
+                    <>
+                      <div class="metric-card metric-card--highlight">
+                        <div class="metric-label">llms.txt Views</div>
+                        <div class="metric-value">{llmsTxt}</div>
+                      </div>
+                      <div class="metric-card metric-card--highlight">
+                        <div class="metric-label">Blog .md Views</div>
+                        <div class="metric-value">{blogMd}</div>
+                      </div>
+                      <div class="metric-card metric-card--highlight">
+                        <div class="metric-label">llms-full.txt Views</div>
+                        <div class="metric-value">{llmsFull}</div>
+                      </div>
+                    </>
+                  );
+                })()}
+              </div>
+            </section>
+
+            <!-- Two Column Layout -->
+            <div class="two-column">
+              <!-- Top Pages -->
+              <section class="section">
+                <h2>Top Pages</h2>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Page</th>
+                        <th>Views</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(analyticsData?.pages || []).length > 0 ? (
+                        (analyticsData.pages as any[]).slice(0, 10).map((p: any) => (
+                          <tr>
+                            <td>{p.x}</td>
+                            <td>{p.y}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr><td colspan="2" class="empty">No data yet - check back after some traffic</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <!-- Referrers -->
+              <section class="section">
+                <h2>Top Referrers</h2>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Source</th>
+                        <th>Visitors</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(analyticsData?.referrers || []).length > 0 ? (
+                        (analyticsData.referrers as any[]).slice(0, 10).map((r: any) => (
+                          <tr>
+                            <td>{r.x || '(direct)'}</td>
+                            <td>{r.y}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr><td colspan="2" class="empty">No referrer data yet</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <!-- More Stats -->
+            <div class="two-column">
+              <!-- Countries -->
+              <section class="section">
+                <h2>Countries</h2>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Country</th>
+                        <th>Visitors</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(analyticsData?.countries || []).length > 0 ? (
+                        (analyticsData.countries as any[]).slice(0, 10).map((c: any) => (
+                          <tr>
+                            <td>{c.x}</td>
+                            <td>{c.y}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr><td colspan="2" class="empty">No country data yet</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+
+              <!-- Devices -->
+              <section class="section">
+                <h2>Devices</h2>
+                <div class="table-container">
+                  <table>
+                    <thead>
+                      <tr>
+                        <th>Device</th>
+                        <th>Visitors</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {(analyticsData?.devices || []).length > 0 ? (
+                        (analyticsData.devices as any[]).slice(0, 5).map((d: any) => (
+                          <tr>
+                            <td>{d.x}</td>
+                            <td>{d.y}</td>
+                          </tr>
+                        ))
+                      ) : (
+                        <tr><td colspan="2" class="empty">No device data yet</td></tr>
+                      )}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            </div>
+
+            <!-- Substack Stats -->
+            <section class="section">
+              <h2>📝 Substack Posts</h2>
+              <div class="substack-stats">
+                <div class="metric-card">
+                  <div class="metric-label">Total Posts</div>
+                  <div class="metric-value">{postsData?.posts?.length || 0}</div>
+                </div>
+                <div class="substack-posts">
+                  {postsData?.posts?.slice(0, 5).map((post: any) => (
+                    <div class="substack-post">
+                      <span class="substack-post-title">{post.title}</span>
+                      <span class="substack-post-date">{new Date(post.date).toLocaleDateString()}</span>
+                    </div>
+                  )) || <p class="empty">No posts synced yet</p>}
+                </div>
+              </div>
+            </section>
+
+          </div>
+          <!-- end analytics tab -->
+
+        </div>
+      </main>
+    </div>
+  )}
+
+  <!-- ═══════════════════════════════════════════
+       NEW INVOICE MODAL
+  ════════════════════════════════════════════ -->
+  <div id="invoice-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>New Invoice</h2>
+        <button class="modal-close" aria-label="Close">&times;</button>
+      </div>
+      <form id="invoice-form" class="modal-body">
+        <div class="form-row">
+          <label for="inv-name">Client Name</label>
+          <input type="text" id="inv-name" name="clientName" required placeholder="Jane Founder" />
+        </div>
+        <div class="form-row">
+          <label for="inv-email">Client Email</label>
+          <input type="email" id="inv-email" name="clientEmail" required placeholder="jane@example.com" />
+        </div>
+        <div class="form-row">
+          <label for="inv-service">Service</label>
+          <select id="inv-service" name="service">
+            <option value="Clarity Session">Clarity Session</option>
+            <option value="Store Launch Sprint">Store Launch Sprint</option>
+            <option value="Insider Retainer">Insider Retainer</option>
+            <option value="Custom">Custom</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="inv-amount">Amount (USD)</label>
+          <input type="number" id="inv-amount" name="amount" required min="1" step="0.01" placeholder="500" />
+        </div>
+        <div class="form-row">
+          <label for="inv-desc">Description</label>
+          <textarea id="inv-desc" name="description" rows="3" placeholder="90-min store audit + written action plan"></textarea>
+        </div>
+        <div id="invoice-feedback" class="form-feedback"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-close-btn">Cancel</button>
+          <button type="submit" class="btn-primary" id="send-invoice-btn">Send Invoice</button>
+        </div>
       </form>
-      <p id="auth-error" class="error"></p>
     </div>
   </div>
 
-  <div id="dashboard" class="dashboard" style="display: none;">
-    <header class="dashboard-header">
-      <div class="container">
-        <div class="header-content">
-          <div>
-            <a href="/" class="back-link">&larr; Back to site</a>
-            <h1>Analytics Dashboard</h1>
-          </div>
-          <div class="header-actions">
-            <select id="date-range">
-              <option value="24h">Last 24 hours</option>
-              <option value="7d" selected>Last 7 days</option>
-              <option value="30d">Last 30 days</option>
-              <option value="90d">Last 90 days</option>
-            </select>
-            <button id="logout-btn" class="btn-secondary">Logout</button>
-          </div>
-        </div>
+  <!-- ═══════════════════════════════════════════
+       FOLLOW-UP MODAL
+  ════════════════════════════════════════════ -->
+  <div id="followup-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>Send Follow-up</h2>
+        <button class="modal-close-followup" aria-label="Close">&times;</button>
       </div>
-    </header>
-
-    <main class="dashboard-main">
-      <div class="container">
-        <!-- Status Bar -->
-        <div class="status-bar">
-          <span id="last-updated">
-            Data as of: {analyticsData ? new Date(analyticsData.lastSynced).toLocaleString('en-US', { month: 'short', day: 'numeric', year: 'numeric', hour: 'numeric', minute: '2-digit' }) : 'No data yet'}
-          </span>
-          <span class="status-note">Updates with each site build (daily at 6 AM UTC)</span>
+      <form id="followup-form" class="modal-body">
+        <div class="form-row">
+          <label for="fu-to">To</label>
+          <input type="email" id="fu-to" name="to" required />
         </div>
-
-        <!-- Key Metrics -->
-        <section class="metrics-grid" id="key-metrics">
-          {analyticsData && Object.entries(analyticsData.periods).map(([period, data]: [string, any]) => (
-            <div class={`period-data ${period === '7d' ? '' : 'hidden'}`} data-period={period}>
-              <div class="metrics-grid--inner">
-                <div class="metric-card">
-                  <div class="metric-label">Total Views</div>
-                  <div class="metric-value">{data.pageviews.toLocaleString()}</div>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label">Unique Visitors</div>
-                  <div class="metric-value">{data.visitors.toLocaleString()}</div>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label">Bounce Rate</div>
-                  <div class="metric-value">{data.visits > 0 ? Math.round(data.bounces / data.visits * 100) : 0}%</div>
-                </div>
-                <div class="metric-card">
-                  <div class="metric-label">Avg. Visit Duration</div>
-                  <div class="metric-value">
-                    {data.visits > 0 
-                      ? `${Math.floor(data.totaltime / data.visits / 60)}m ${Math.round(data.totaltime / data.visits % 60)}s`
-                      : '0s'}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
-          {!analyticsData && (
-            <div class="metrics-grid--inner">
-              <div class="metric-card"><div class="metric-label">Total Views</div><div class="metric-value">0</div></div>
-              <div class="metric-card"><div class="metric-label">Unique Visitors</div><div class="metric-value">0</div></div>
-              <div class="metric-card"><div class="metric-label">Bounce Rate</div><div class="metric-value">0%</div></div>
-              <div class="metric-card"><div class="metric-label">Avg. Visit Duration</div><div class="metric-value">0s</div></div>
-            </div>
-          )}
-        </section>
-
-        <!-- LLM Traffic Section -->
-        <section class="section">
-          <h2>🤖 AI/LLM Traffic</h2>
-          <div class="metrics-grid--inner metrics-grid--3">
-            {(() => {
-              const pages = analyticsData?.pages || [];
-              const llmsTxt = pages.find((p: any) => p.x === '/llms.txt')?.y || 0;
-              const llmsFull = pages.find((p: any) => p.x === '/llms-full.txt')?.y || 0;
-              const blogMd = pages.filter((p: any) => p.x.endsWith('.md')).reduce((sum: number, p: any) => sum + p.y, 0);
-              return (
-                <>
-                  <div class="metric-card metric-card--highlight">
-                    <div class="metric-label">llms.txt Views</div>
-                    <div class="metric-value">{llmsTxt}</div>
-                  </div>
-                  <div class="metric-card metric-card--highlight">
-                    <div class="metric-label">Blog .md Views</div>
-                    <div class="metric-value">{blogMd}</div>
-                  </div>
-                  <div class="metric-card metric-card--highlight">
-                    <div class="metric-label">llms-full.txt Views</div>
-                    <div class="metric-value">{llmsFull}</div>
-                  </div>
-                </>
-              );
-            })()}
-          </div>
-        </section>
-
-        <!-- Two Column Layout -->
-        <div class="two-column">
-          <!-- Top Pages -->
-          <section class="section">
-            <h2>Top Pages</h2>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Page</th>
-                    <th>Views</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(analyticsData?.pages || []).length > 0 ? (
-                    (analyticsData.pages as any[]).slice(0, 10).map((p: any) => (
-                      <tr>
-                        <td>{p.x}</td>
-                        <td>{p.y}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr><td colspan="2" class="empty">No data yet - check back after some traffic</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!-- Referrers -->
-          <section class="section">
-            <h2>Top Referrers</h2>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Source</th>
-                    <th>Visitors</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(analyticsData?.referrers || []).length > 0 ? (
-                    (analyticsData.referrers as any[]).slice(0, 10).map((r: any) => (
-                      <tr>
-                        <td>{r.x || '(direct)'}</td>
-                        <td>{r.y}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr><td colspan="2" class="empty">No referrer data yet</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </section>
+        <div class="form-row">
+          <label for="fu-subject">Subject</label>
+          <input type="text" id="fu-subject" name="subject" required value="Quick note from Travis" />
         </div>
-
-        <!-- More Stats -->
-        <div class="two-column">
-          <!-- Countries -->
-          <section class="section">
-            <h2>Countries</h2>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Country</th>
-                    <th>Visitors</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(analyticsData?.countries || []).length > 0 ? (
-                    (analyticsData.countries as any[]).slice(0, 10).map((c: any) => (
-                      <tr>
-                        <td>{c.x}</td>
-                        <td>{c.y}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr><td colspan="2" class="empty">No country data yet</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </section>
-
-          <!-- Devices -->
-          <section class="section">
-            <h2>Devices</h2>
-            <div class="table-container">
-              <table>
-                <thead>
-                  <tr>
-                    <th>Device</th>
-                    <th>Visitors</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {(analyticsData?.devices || []).length > 0 ? (
-                    (analyticsData.devices as any[]).slice(0, 5).map((d: any) => (
-                      <tr>
-                        <td>{d.x}</td>
-                        <td>{d.y}</td>
-                      </tr>
-                    ))
-                  ) : (
-                    <tr><td colspan="2" class="empty">No device data yet</td></tr>
-                  )}
-                </tbody>
-              </table>
-            </div>
-          </section>
+        <div class="form-row">
+          <label for="fu-body">Message</label>
+          <textarea id="fu-body" name="body" rows="6" required></textarea>
         </div>
-
-        <!-- Substack Stats -->
-        <section class="section">
-          <h2>📝 Substack Posts</h2>
-          <div class="substack-stats">
-            <div class="metric-card">
-              <div class="metric-label">Total Posts</div>
-              <div class="metric-value">{postsData?.posts?.length || 0}</div>
-            </div>
-            <div class="substack-posts">
-              {postsData?.posts?.slice(0, 5).map((post: any) => (
-                <div class="substack-post">
-                  <span class="substack-post-title">{post.title}</span>
-                  <span class="substack-post-date">{new Date(post.date).toLocaleDateString()}</span>
-                </div>
-              )) || <p class="empty">No posts synced yet</p>}
-            </div>
-          </div>
-        </section>
-
-      </div>
-    </main>
+        <div id="followup-feedback" class="form-feedback"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-close-followup-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Send Email</button>
+        </div>
+      </form>
+    </div>
   </div>
+
 </BaseLayout>
 
 <style>
-  /* Auth Screen */
+  /* ── Auth ── */
   .auth-screen {
     min-height: 100vh;
     display: flex;
@@ -342,7 +635,7 @@ try {
     margin-top: var(--space-4);
   }
 
-  /* Dashboard */
+  /* ── Dashboard shell ── */
   .dashboard {
     min-height: 100vh;
     background: var(--color-bg-alt);
@@ -373,9 +666,7 @@ try {
     letter-spacing: 0.05em;
   }
 
-  .back-link:hover {
-    color: var(--color-accent);
-  }
+  .back-link:hover { color: var(--color-accent); }
 
   .header-content h1 {
     font-size: var(--text-2xl);
@@ -398,6 +689,60 @@ try {
     cursor: pointer;
   }
 
+  /* ── Tab nav ── */
+  .tab-nav {
+    display: flex;
+    gap: 2px;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: 2px;
+  }
+
+  .tab-btn {
+    padding: var(--space-2) var(--space-4);
+    background: transparent;
+    border: none;
+    border-radius: calc(var(--radius-md) - 2px);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    color: var(--color-text-secondary);
+    transition: all var(--duration-fast) var(--ease);
+  }
+
+  .tab-btn.active {
+    background: var(--color-bg);
+    color: var(--color-text);
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+
+  /* ── Tab panels ── */
+  .tab-panel {
+    display: none;
+  }
+
+  .tab-panel.active {
+    display: block;
+  }
+
+  /* ── Buttons ── */
+  .btn-primary {
+    padding: var(--space-2) var(--space-5);
+    background: var(--color-accent);
+    color: white;
+    border: none;
+    border-radius: var(--radius-md);
+    font-family: inherit;
+    font-size: var(--text-sm);
+    font-weight: 500;
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease);
+  }
+
+  .btn-primary:hover { background: var(--color-accent-hover); }
+
   .btn-secondary {
     padding: var(--space-2) var(--space-4);
     background: var(--color-bg);
@@ -414,10 +759,107 @@ try {
     color: var(--color-accent);
   }
 
+  .btn-sm {
+    padding: var(--space-1) var(--space-3);
+    font-size: var(--text-xs);
+    border-radius: var(--radius-sm);
+  }
+
+  .btn-outline {
+    background: transparent;
+    border: 1px solid var(--color-border);
+    font-family: inherit;
+    cursor: pointer;
+    transition: all var(--duration-fast) var(--ease);
+  }
+
+  .btn-outline:hover {
+    border-color: var(--color-accent);
+    color: var(--color-accent);
+  }
+
+  /* ── Dashboard main ── */
   .dashboard-main {
     padding: var(--space-8) 0;
   }
 
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: var(--space-4);
+  }
+
+  .section-header h2 {
+    font-size: var(--text-xl);
+    margin: 0;
+  }
+
+  /* ── Client table ── */
+  .clients-table .client-name {
+    font-weight: 500;
+  }
+
+  .clients-table .client-email {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+
+  .stage-badge {
+    display: inline-block;
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+  }
+
+  .stage-active { border-color: #38a169; color: #38a169; }
+  .stage-lead { border-color: #d69e2e; color: #d69e2e; }
+  .stage-proposal { border-color: var(--color-accent); color: var(--color-accent); }
+  .stage-closed { border-color: var(--color-text-tertiary); color: var(--color-text-tertiary); }
+
+  .invoice-status {
+    display: inline-block;
+    padding: 2px var(--space-2);
+    border-radius: var(--radius-sm);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+
+  a.invoice-status { text-decoration: none; }
+  a.invoice-status:hover { text-decoration: underline; }
+
+  .status-paid { color: #38a169; }
+  .status-open { color: #d69e2e; }
+  .status-draft { color: var(--color-text-tertiary); }
+  .status-void, .status-uncollectible { color: #e53e3e; }
+  .status-none { color: var(--color-text-tertiary); }
+
+  .action-btns {
+    display: flex;
+    gap: var(--space-2);
+  }
+
+  .invoice-link {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .mono {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+  }
+
+  /* ── Status bar (analytics) ── */
   .status-bar {
     display: flex;
     justify-content: space-between;
@@ -428,11 +870,7 @@ try {
     margin-bottom: var(--space-6);
   }
 
-  .status-note {
-    color: var(--color-text-tertiary);
-  }
-
-  /* Metrics Grid */
+  /* ── Metrics Grid ── */
   .metrics-grid {
     margin-bottom: var(--space-8);
   }
@@ -447,28 +885,16 @@ try {
     grid-template-columns: repeat(3, 1fr);
   }
 
-  .period-data {
-    display: none;
-  }
-
-  .period-data.active {
-    display: block;
-  }
-
-  .hidden {
-    display: none;
-  }
+  .period-data { display: none; }
+  .period-data.active { display: block; }
+  .hidden { display: none; }
 
   @media (max-width: 900px) {
-    .metrics-grid--inner {
-      grid-template-columns: repeat(2, 1fr);
-    }
+    .metrics-grid--inner { grid-template-columns: repeat(2, 1fr); }
   }
 
   @media (max-width: 500px) {
-    .metrics-grid--inner {
-      grid-template-columns: 1fr;
-    }
+    .metrics-grid--inner { grid-template-columns: 1fr; }
   }
 
   .metric-card {
@@ -498,7 +924,7 @@ try {
     color: var(--color-text);
   }
 
-  /* Sections */
+  /* ── Sections ── */
   .section {
     background: var(--color-bg);
     padding: var(--space-6);
@@ -512,6 +938,12 @@ try {
     margin-bottom: var(--space-4);
   }
 
+  .section h3 {
+    font-size: var(--text-base);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
   .two-column {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -519,15 +951,11 @@ try {
   }
 
   @media (max-width: 768px) {
-    .two-column {
-      grid-template-columns: 1fr;
-    }
+    .two-column { grid-template-columns: 1fr; }
   }
 
-  /* Tables */
-  .table-container {
-    overflow-x: auto;
-  }
+  /* ── Tables ── */
+  .table-container { overflow-x: auto; }
 
   table {
     width: 100%;
@@ -550,25 +978,20 @@ try {
     font-weight: 500;
   }
 
-  td {
-    color: var(--color-text);
-  }
+  td { color: var(--color-text); }
 
-  td:last-child {
-    text-align: right;
-    font-family: var(--font-mono);
-  }
+  td:last-child { text-align: right; font-family: var(--font-mono); }
+  th:last-child { text-align: right; }
 
-  th:last-child {
-    text-align: right;
-  }
+  .clients-table td:last-child { text-align: left; font-family: inherit; }
+  .clients-table th:last-child { text-align: left; }
 
   .empty {
     color: var(--color-text-tertiary);
     font-style: italic;
   }
 
-  /* Substack Stats */
+  /* ── Substack ── */
   .substack-stats {
     display: grid;
     grid-template-columns: 150px 1fr;
@@ -577,9 +1000,7 @@ try {
   }
 
   @media (max-width: 600px) {
-    .substack-stats {
-      grid-template-columns: 1fr;
-    }
+    .substack-stats { grid-template-columns: 1fr; }
   }
 
   .substack-posts {
@@ -597,82 +1018,293 @@ try {
     border-radius: var(--radius-sm);
   }
 
-  .substack-post-title {
-    font-weight: 500;
-  }
+  .substack-post-title { font-weight: 500; }
 
   .substack-post-date {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
   }
+
+  /* ── Modal ── */
+  .modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 200;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .modal.open {
+    display: flex;
+  }
+
+  .modal-backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.5);
+  }
+
+  .modal-dialog {
+    position: relative;
+    background: var(--color-bg);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    width: 100%;
+    max-width: 480px;
+    margin: var(--space-4);
+  }
+
+  .modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: var(--space-6);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .modal-header h2 {
+    font-size: var(--text-xl);
+    margin: 0;
+  }
+
+  .modal-close, .modal-close-followup {
+    background: none;
+    border: none;
+    font-size: var(--text-2xl);
+    cursor: pointer;
+    color: var(--color-text-tertiary);
+    line-height: 1;
+    padding: 0;
+  }
+
+  .modal-close:hover, .modal-close-followup:hover {
+    color: var(--color-text);
+  }
+
+  .modal-body {
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+  }
+
+  .form-row {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+
+  .form-row label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+  }
+
+  .form-row input,
+  .form-row select,
+  .form-row textarea {
+    padding: var(--space-3) var(--space-4);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    font-family: inherit;
+    background: var(--color-bg);
+    color: var(--color-text);
+    transition: border-color var(--duration-fast) var(--ease);
+  }
+
+  .form-row input:focus,
+  .form-row select:focus,
+  .form-row textarea:focus {
+    outline: none;
+    border-color: var(--color-accent);
+  }
+
+  .form-row textarea { resize: vertical; }
+
+  .form-feedback {
+    font-size: var(--text-sm);
+    min-height: 1.4em;
+  }
+
+  .form-feedback.success { color: #38a169; }
+  .form-feedback.error { color: #e53e3e; }
+
+  .modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: var(--space-3);
+    padding-top: var(--space-2);
+  }
 </style>
 
 <script>
-  const DASHBOARD_PASSWORD = 'travis2026';
-  const AUTH_KEY = 'portfolio_dashboard_auth';
+  // ── Tab switching ──
+  const tabBtns = document.querySelectorAll<HTMLButtonElement>('.tab-btn');
+  const tabPanels = document.querySelectorAll<HTMLElement>('.tab-panel');
+  const dateRangeEl = document.getElementById('date-range') as HTMLSelectElement | null;
 
-  const authScreen = document.getElementById('auth-screen')!;
-  const dashboard = document.getElementById('dashboard')!;
-  const authForm = document.getElementById('auth-form')!;
-  const authError = document.getElementById('auth-error')!;
-  const passwordInput = document.getElementById('password') as HTMLInputElement;
-  const dateRange = document.getElementById('date-range') as HTMLSelectElement;
-  const logoutBtn = document.getElementById('logout-btn')!;
-
-  function checkAuth(): boolean {
-    return sessionStorage.getItem(AUTH_KEY) === 'true';
-  }
-
-  function initAuth() {
-    if (checkAuth()) {
-      showDashboard();
-    } else {
-      authScreen.style.display = 'flex';
-      dashboard.style.display = 'none';
-    }
-  }
-
-  authForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    if (passwordInput.value === DASHBOARD_PASSWORD) {
-      sessionStorage.setItem(AUTH_KEY, 'true');
-      showDashboard();
-    } else {
-      authError.textContent = 'Incorrect password';
-      passwordInput.value = '';
-    }
-  });
-
-  logoutBtn.addEventListener('click', () => {
-    sessionStorage.removeItem(AUTH_KEY);
-    authScreen.style.display = 'flex';
-    dashboard.style.display = 'none';
-    passwordInput.value = '';
-    authError.textContent = '';
-  });
-
-  function showDashboard() {
-    authScreen.style.display = 'none';
-    dashboard.style.display = 'block';
-    // Show the default period (7d)
-    switchPeriod('7d');
-  }
-
-  // Period switcher
-  function switchPeriod(period: string) {
-    document.querySelectorAll('.period-data').forEach(el => {
-      el.classList.remove('active');
+  tabBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const target = btn.dataset.tab!;
+      tabBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      tabPanels.forEach(p => p.classList.remove('active'));
+      document.getElementById(`tab-${target}`)?.classList.add('active');
+      if (dateRangeEl) {
+        dateRangeEl.style.display = target === 'analytics' ? '' : 'none';
+      }
     });
-    const target = document.querySelector(`.period-data[data-period="${period}"]`);
-    if (target) {
-      target.classList.add('active');
-    }
-  }
-
-  dateRange.addEventListener('change', () => {
-    switchPeriod(dateRange.value);
   });
 
-  initAuth();
+  // ── Analytics period switcher ──
+  function switchPeriod(period: string) {
+    document.querySelectorAll('.period-data').forEach(el => el.classList.remove('active'));
+    document.querySelector(`.period-data[data-period="${period}"]`)?.classList.add('active');
+  }
+
+  dateRangeEl?.addEventListener('change', () => switchPeriod(dateRangeEl.value));
+  switchPeriod('7d');
+
+  // ── Invoice modal ──
+  const invoiceModal = document.getElementById('invoice-modal')!;
+  const invoiceForm = document.getElementById('invoice-form') as HTMLFormElement;
+  const invoiceFeedback = document.getElementById('invoice-feedback')!;
+  const sendInvoiceBtn = document.getElementById('send-invoice-btn') as HTMLButtonElement;
+
+  document.getElementById('new-invoice-btn')?.addEventListener('click', () => {
+    invoiceModal.classList.add('open');
+    invoiceModal.setAttribute('aria-hidden', 'false');
+  });
+
+  function closeInvoiceModal() {
+    invoiceModal.classList.remove('open');
+    invoiceModal.setAttribute('aria-hidden', 'true');
+    invoiceFeedback.textContent = '';
+    invoiceFeedback.className = 'form-feedback';
+  }
+
+  invoiceModal.querySelector('.modal-close')?.addEventListener('click', closeInvoiceModal);
+  invoiceModal.querySelector('.modal-close-btn')?.addEventListener('click', closeInvoiceModal);
+  invoiceModal.querySelector('.modal-backdrop')?.addEventListener('click', closeInvoiceModal);
+
+  invoiceForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    sendInvoiceBtn.disabled = true;
+    sendInvoiceBtn.textContent = 'Sending…';
+    invoiceFeedback.textContent = '';
+    invoiceFeedback.className = 'form-feedback';
+
+    const data = {
+      clientName: (invoiceForm.elements.namedItem('clientName') as HTMLInputElement).value,
+      clientEmail: (invoiceForm.elements.namedItem('clientEmail') as HTMLInputElement).value,
+      service: (invoiceForm.elements.namedItem('service') as HTMLSelectElement).value,
+      amount: parseFloat((invoiceForm.elements.namedItem('amount') as HTMLInputElement).value),
+      description: (invoiceForm.elements.namedItem('description') as HTMLTextAreaElement).value,
+    };
+
+    try {
+      const res = await fetch('/api/stripe/invoice', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        invoiceFeedback.textContent = `Invoice sent to ${data.clientEmail}`;
+        invoiceFeedback.className = 'form-feedback success';
+        invoiceForm.reset();
+        setTimeout(closeInvoiceModal, 2000);
+      } else {
+        invoiceFeedback.textContent = json.error ?? 'Something went wrong';
+        invoiceFeedback.className = 'form-feedback error';
+      }
+    } catch {
+      invoiceFeedback.textContent = 'Network error — try again';
+      invoiceFeedback.className = 'form-feedback error';
+    } finally {
+      sendInvoiceBtn.disabled = false;
+      sendInvoiceBtn.textContent = 'Send Invoice';
+    }
+  });
+
+  // ── Follow-up modal ──
+  const followupModal = document.getElementById('followup-modal')!;
+  const followupForm = document.getElementById('followup-form') as HTMLFormElement;
+  const followupFeedback = document.getElementById('followup-feedback')!;
+
+  document.querySelectorAll<HTMLButtonElement>('.followup-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const email = btn.dataset.email ?? '';
+      const name = btn.dataset.name ?? '';
+      const invoiceUrl = btn.dataset.invoiceUrl ?? '';
+
+      (followupForm.elements.namedItem('to') as HTMLInputElement).value = email;
+      (followupForm.elements.namedItem('subject') as HTMLInputElement).value = `Quick note from Travis`;
+
+      const bodyLines = [
+        `Hi ${name.split(' ')[0]},`,
+        '',
+        invoiceUrl
+          ? `Just a quick check-in — your invoice is still open.\n\nView and pay here: ${invoiceUrl}`
+          : 'Just following up on our conversation — let me know if you have any questions.',
+        '',
+        '— Travis',
+      ];
+      (followupForm.elements.namedItem('body') as HTMLTextAreaElement).value = bodyLines.join('\n');
+
+      followupModal.classList.add('open');
+      followupModal.setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  function closeFollowupModal() {
+    followupModal.classList.remove('open');
+    followupModal.setAttribute('aria-hidden', 'true');
+    followupFeedback.textContent = '';
+    followupFeedback.className = 'form-feedback';
+  }
+
+  followupModal.querySelector('.modal-close-followup')?.addEventListener('click', closeFollowupModal);
+  followupModal.querySelector('.modal-close-followup-btn')?.addEventListener('click', closeFollowupModal);
+  followupModal.querySelector('.modal-backdrop')?.addEventListener('click', closeFollowupModal);
+
+  followupForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = followupForm.querySelector<HTMLButtonElement>('[type="submit"]')!;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Sending…';
+
+    const to = (followupForm.elements.namedItem('to') as HTMLInputElement).value;
+    const subject = (followupForm.elements.namedItem('subject') as HTMLInputElement).value;
+    const body = (followupForm.elements.namedItem('body') as HTMLTextAreaElement).value;
+    const html = body.split('\n').map(l => `<p>${l}</p>`).join('');
+
+    try {
+      const res = await fetch('/api/email/send', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ to, subject, html }),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        followupFeedback.textContent = `Email sent to ${to}`;
+        followupFeedback.className = 'form-feedback success';
+        setTimeout(closeFollowupModal, 2000);
+      } else {
+        followupFeedback.textContent = json.error ?? 'Something went wrong';
+        followupFeedback.className = 'form-feedback error';
+      }
+    } catch {
+      followupFeedback.textContent = 'Network error — try again';
+      followupFeedback.className = 'form-feedback error';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Send Email';
+    }
+  });
 </script>

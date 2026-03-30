@@ -1,11 +1,13 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
 import sitemap from '@astrojs/sitemap';
+import vercel from '@astrojs/vercel';
 
 // https://astro.build/config
 export default defineConfig({
   site: 'https://fully-operational.com',
-  output: 'static',
+  output: 'hybrid',
+  adapter: vercel(),
   build: {
     assets: '_assets'
   },
@@ -19,7 +21,9 @@ export default defineConfig({
         'https://fully-operational.com/shopify',
         'https://fully-operational.com/shopify.md',
       ],
-      filter: (page) => !page.includes('/dashboard'),
+      filter: (page) =>
+        !page.includes('/dashboard') &&
+        !page.includes('/api/'),
     }),
   ],
 });
