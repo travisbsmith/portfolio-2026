@@ -36,6 +36,21 @@ Allow: /
 User-agent: cohere-ai
 Allow: /
 
+User-agent: meta-externalagent
+Allow: /
+
+User-agent: YouBot
+Allow: /
+
+User-agent: Amazonbot
+Allow: /
+
+User-agent: DuckAssistBot
+Allow: /
+
+User-agent: Bytespider
+Allow: /
+
 # Sitemap
 Sitemap: https://fully-operational.com/sitemap-index.xml
 

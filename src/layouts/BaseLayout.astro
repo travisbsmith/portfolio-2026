@@ -6,7 +6,7 @@ interface Props {
   title: string;
   description?: string;
   image?: string;
-  jsonLd?: Record<string, any>;
+  jsonLd?: Record<string, any> | Record<string, any>[];
 }
 
 const { 
@@ -31,8 +31,28 @@ const personSchema = {
     "https://www.linkedin.com/in/travisbsmithux/",
     "https://substack.com/@travisbsmith"
   ],
-  "knowsAbout": ["Product Design", "Design Leadership", "Design Systems", "UX Strategy", "Team Building"],
+  "knowsAbout": [
+    "Product Design",
+    "Design Leadership",
+    "Design Systems",
+    "UX Strategy",
+    "Team Building",
+    "Shopify",
+    "E-commerce Design",
+    "Fractional Design Leadership",
+    "Design Operations",
+    "User Research",
+    "Content Strategy",
+    "Cross-functional Team Leadership",
+    "Design Consulting"
+  ],
   "email": "hello@fully-operational.com",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Kansas City",
+    "addressRegion": "MO",
+    "addressCountry": "US"
+  },
 };
 ---
 
@@ -48,6 +68,7 @@ const personSchema = {
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
+    <meta name="author" content="Travis Smith" />
     
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
@@ -79,9 +100,9 @@ const personSchema = {
     
     <!-- Structured Data -->
     <script type="application/ld+json" set:html={JSON.stringify(personSchema)} />
-    {jsonLd && (
-      <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
-    )}
+    {jsonLd && (Array.isArray(jsonLd) ? jsonLd : [jsonLd]).map((schema) => (
+      <script type="application/ld+json" set:html={JSON.stringify(schema)} />
+    ))}
     
     <!-- Umami Analytics (Privacy-Friendly) -->
     <script defer src="https://cloud.umami.is/script.js" data-website-id="c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6" data-domains="fully-operational.com"></script>

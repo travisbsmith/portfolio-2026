@@ -67,9 +67,29 @@ const principles = [
 ];
 ---
 
-<BaseLayout 
-  title="About — Travis Smith" 
-  description="Design leader with 15+ years building products and teams."
+<BaseLayout
+  title="About — Travis Smith"
+  description="Travis Smith is a design leader with 17+ years building products and high-performing teams at Shopify, Grubhub, and Deel. Based in Kansas City. Available for consulting and fractional design leadership."
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "ProfilePage",
+    "name": "About Travis Smith",
+    "url": "https://fully-operational.com/about/",
+    "mainEntity": {
+      "@type": "Person",
+      "name": "Travis Smith",
+      "url": "https://fully-operational.com",
+      "jobTitle": "Head of Design, People Experiences",
+      "worksFor": { "@type": "Organization", "name": "Deel" },
+      "description": "Design leader with 17+ years building products and leading cross-functional teams at Shopify, Grubhub, and Deel.",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kansas City",
+        "addressRegion": "MO",
+        "addressCountry": "US"
+      }
+    }
+  }}
 >
   <Navigation />
   

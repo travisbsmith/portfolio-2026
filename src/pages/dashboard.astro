@@ -5,6 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import * as fs from 'fs';
 import * as path from 'path';
 import Stripe from 'stripe';
+import { getLeads, type Lead } from '../lib/leads';
 
 const SESSION_COOKIE = 'dashboard_session';
 const SESSION_VALUE = 'authenticated';
@@ -64,32 +65,31 @@ if (isAuthenticated) {
   }
 }
 
-// Clients — hardcoded (update stripeCustomerId after first invoice)
-const clients = [
-  {
-    name: 'Add your first client',
-    email: '',
-    service: '—',
-    stage: 'Lead',
-    stripeCustomerId: '',
-  },
-];
-
-// Fetch Stripe invoices per client
-const stripeInvoicesByClient: Record<string, any[]> = {};
-if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
+// Leads from KV
+let leads: Lead[] = [];
+if (isAuthenticated) {
   try {
-    const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY);
-    for (const client of clients) {
-      if (client.stripeCustomerId) {
+    leads = await getLeads();
+  } catch {
+    leads = [];
+  }
+}
+
+// Fetch Stripe invoices per lead
+const stripeInvoicesByClient: Record<string, any[]> = {};
+if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY)) {
+  try {
+    const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY ?? '');
+    for (const lead of leads) {
+      if (lead.stripeCustomerId) {
         try {
           const invoices = await stripe.invoices.list({
-            customer: client.stripeCustomerId,
+            customer: lead.stripeCustomerId,
             limit: 5,
           });
-          stripeInvoicesByClient[client.email] = invoices.data;
+          stripeInvoicesByClient[lead.email] = invoices.data;
         } catch {
-          stripeInvoicesByClient[client.email] = [];
+          stripeInvoicesByClient[lead.email] = [];
         }
       }
     }
@@ -163,76 +163,92 @@ if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
           <div id="tab-clients" class="tab-panel active">
 
             <div class="section-header">
-              <h2>Clients</h2>
+              <h2>Leads & Clients</h2>
               <button class="btn-primary" id="new-invoice-btn">+ New Invoice</button>
             </div>
 
-            <section class="section">
-              <div class="table-container">
-                <table class="clients-table">
-                  <thead>
-                    <tr>
-                      <th>Client</th>
-                      <th>Service</th>
-                      <th>Stage</th>
-                      <th>Latest Invoice</th>
-                      <th>Amount</th>
-                      <th>Actions</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {clients.map((client) => {
-                      const invoices = stripeInvoicesByClient[client.email] ?? [];
-                      const latest = invoices[0];
-                      const statusLabel = latest?.status ?? '—';
-                      const amount = latest ? `$${((latest.amount_due ?? 0) / 100).toFixed(2)}` : '—';
-                      const invoiceUrl = latest?.hosted_invoice_url ?? null;
-                      return (
-                        <tr>
-                          <td>
-                            <div class="client-name">{client.name}</div>
-                            <div class="client-email">{client.email}</div>
-                          </td>
-                          <td>{client.service}</td>
-                          <td>
-                            <span class={`stage-badge stage-${client.stage.toLowerCase().replace(/\s+/g, '-')}`}>
-                              {client.stage}
-                            </span>
-                          </td>
-                          <td>
-                            {invoiceUrl ? (
-                              <a href={invoiceUrl} target="_blank" rel="noopener" class={`invoice-status status-${statusLabel}`}>
-                                {statusLabel}
-                              </a>
-                            ) : (
-                              <span class="invoice-status status-none">{statusLabel}</span>
-                            )}
-                          </td>
-                          <td class="mono">{amount}</td>
-                          <td>
-                            <div class="action-btns">
-                              <button
-                                class="btn-sm btn-outline followup-btn"
-                                data-email={client.email}
-                                data-name={client.name}
-                                data-invoice-url={invoiceUrl ?? ''}
-                              >
-                                Follow up
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      );
-                    })}
-                  </tbody>
-                </table>
-              </div>
-            </section>
-
-            <!-- Invoice history per client -->
-            {clients.filter(c => (stripeInvoicesByClient[c.email] ?? []).length > 0).map((client) => (
+            {leads.length === 0 ? (
+              <section class="section empty-state">
+                <p>No leads yet. When someone fills out <strong>/book</strong>, they'll appear here automatically.</p>
+              </section>
+            ) : (
               <section class="section">
-                <h3>{client.name} — Invoice History</h3>
+                <div class="table-container">
+                  <table class="clients-table">
+                    <thead>
+                      <tr>
+                        <th>Person</th>
+                        <th>Interested in</th>
+                        <th>Stage</th>
+                        <th>Latest Invoice</th>
+                        <th>Amount</th>
+                        <th>Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {leads.map((lead) => {
+                        const invoices = stripeInvoicesByClient[lead.email] ?? [];
+                        const latest = invoices[0];
+                        const statusLabel = latest?.status ?? '—';
+                        const amount = latest ? `$${((latest.amount_due ?? 0) / 100).toFixed(2)}` : '—';
+                        const invoiceUrl = latest?.hosted_invoice_url ?? null;
+                        return (
+                          <tr>
+                            <td>
+                              <div class="client-name">{lead.name}</div>
+                              <div class="client-email">{lead.email}</div>
+                              {lead.storeUrl && <div class="client-store"><a href={lead.storeUrl} target="_blank" rel="noopener">{lead.storeUrl.replace(/^https?:\/\//, '')}</a></div>}
+                            </td>
+                            <td>
+                              <div class="service-interest">{lead.serviceInterest || '—'}</div>
+                              {lead.storeStatus && <div class="store-status-small">{lead.storeStatus}</div>}
+                            </td>
+                            <td>
+                              <span class={`stage-badge stage-${lead.stage.toLowerCase().replace(/\s+/g, '-')}`}>
+                                {lead.stage}
+                              </span>
+                            </td>
+                            <td>
+                              {invoiceUrl ? (
+                                <a href={invoiceUrl} target="_blank" rel="noopener" class={`invoice-status status-${statusLabel}`}>
+                                  {statusLabel}
+                                </a>
+                              ) : (
+                                <span class="invoice-status status-none">{statusLabel}</span>
+                              )}
+                            </td>
+                            <td class="mono">{amount}</td>
+                            <td>
+                              <div class="action-btns">
+                                <button
+                                  class="btn-sm btn-outline edit-lead-btn"
+                                  data-lead={JSON.stringify(lead)}
+                                >
+                                  Edit
+                                </button>
+                                <button
+                                  class="btn-sm btn-outline followup-btn"
+                                  data-email={lead.email}
+                                  data-name={lead.name}
+                                  data-invoice-url={invoiceUrl ?? ''}
+                                >
+                                  Follow up
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              </section>
+            )}
+
+            <!-- Invoice history per lead -->
+            {leads.filter(l => (stripeInvoicesByClient[l.email] ?? []).length > 0).map((lead) => (
+              <section class="section">
+                <h3>{lead.name} — Invoice History</h3>
                 <div class="table-container">
                   <table>
                     <thead>
@@ -244,7 +260,7 @@ if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
                       </tr>
                     </thead>
                     <tbody>
-                      {(stripeInvoicesByClient[client.email] ?? []).map((inv: any) => (
+                      {(stripeInvoicesByClient[lead.email] ?? []).map((inv: any) => (
                         <tr>
                           <td>
                             {inv.hosted_invoice_url ? (
@@ -488,6 +504,65 @@ if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
       </main>
     </div>
   )}
+
+  <!-- ═══════════════════════════════════════════
+       EDIT LEAD MODAL
+  ════════════════════════════════════════════ -->
+  <div id="edit-lead-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog modal-dialog--wide">
+      <div class="modal-header">
+        <div>
+          <h2 id="edit-lead-title">Edit Lead</h2>
+          <p id="edit-lead-subtitle" class="modal-subtitle"></p>
+        </div>
+        <button class="modal-close modal-close-edit" aria-label="Close">&times;</button>
+      </div>
+      <div class="modal-body modal-body--split">
+        <!-- Left: intake info (read-only) -->
+        <div class="lead-intake">
+          <h3>Intake</h3>
+          <div class="intake-field"><span class="intake-label">Store URL</span><span id="il-store-url" class="intake-value">—</span></div>
+          <div class="intake-field"><span class="intake-label">Store Status</span><span id="il-store-status" class="intake-value">—</span></div>
+          <div class="intake-field"><span class="intake-label">Interested In</span><span id="il-service" class="intake-value">—</span></div>
+          <div class="intake-field"><span class="intake-label">Challenge</span><span id="il-challenge" class="intake-value intake-value--long">—</span></div>
+          <div class="intake-field"><span class="intake-label">Availability</span><span id="il-availability" class="intake-value">—</span></div>
+          <div class="intake-field"><span class="intake-label">Timezone</span><span id="il-timezone" class="intake-value">—</span></div>
+          <div class="intake-field"><span class="intake-label">Referral</span><span id="il-referral" class="intake-value">—</span></div>
+          <div class="intake-field"><span class="intake-label">Their Notes</span><span id="il-notes" class="intake-value intake-value--long">—</span></div>
+        </div>
+        <!-- Right: editable fields -->
+        <form id="edit-lead-form" class="lead-edit">
+          <h3>Your Notes</h3>
+          <input type="hidden" id="el-id" name="id" />
+          <div class="form-row">
+            <label for="el-stage">Stage</label>
+            <select id="el-stage" name="stage">
+              <option value="Lead">Lead</option>
+              <option value="Call Scheduled">Call Scheduled</option>
+              <option value="Proposal Sent">Proposal Sent</option>
+              <option value="Active">Active</option>
+              <option value="Closed">Closed</option>
+            </select>
+          </div>
+          <div class="form-row">
+            <label for="el-notes">Internal Notes</label>
+            <textarea id="el-notes" name="internalNotes" rows="8" placeholder="Notes from the discovery call, what they need, red flags, next steps..."></textarea>
+          </div>
+          <div class="form-row">
+            <label for="el-stripe-id">Stripe Customer ID</label>
+            <input type="text" id="el-stripe-id" name="stripeCustomerId" placeholder="cus_..." />
+            <span class="form-hint">Fill in after first invoice is sent</span>
+          </div>
+          <div id="edit-lead-feedback" class="form-feedback"></div>
+          <div class="modal-actions">
+            <button type="button" class="btn-secondary modal-close-edit-btn">Cancel</button>
+            <button type="submit" class="btn-primary">Save Changes</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
 
   <!-- ═══════════════════════════════════════════
        NEW INVOICE MODAL
@@ -795,12 +870,36 @@ if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
     margin: 0;
   }
 
+  /* ── Empty state ── */
+  .empty-state {
+    text-align: center;
+    padding: var(--space-12) var(--space-6);
+    color: var(--color-text-secondary);
+  }
+
   /* ── Client table ── */
   .clients-table .client-name {
     font-weight: 500;
   }
 
   .clients-table .client-email {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
+
+  .clients-table .client-store a {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+  }
+
+  .service-interest {
+    font-size: var(--text-sm);
+  }
+
+  .store-status-small {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-text-tertiary);
@@ -1140,6 +1239,70 @@ if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
     gap: var(--space-3);
     padding-top: var(--space-2);
   }
+
+  /* ── Wide modal (edit lead) ── */
+  .modal-dialog--wide {
+    max-width: 800px;
+  }
+
+  .modal-subtitle {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    margin: var(--space-1) 0 0;
+    font-family: var(--font-mono);
+  }
+
+  .modal-body--split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-6);
+  }
+
+  @media (max-width: 600px) {
+    .modal-body--split { grid-template-columns: 1fr; }
+  }
+
+  .lead-intake h3,
+  .lead-edit h3 {
+    font-size: var(--text-sm);
+    font-family: var(--font-mono);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-4);
+  }
+
+  .intake-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    margin-bottom: var(--space-3);
+  }
+
+  .intake-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    color: var(--color-text-tertiary);
+  }
+
+  .intake-value {
+    font-size: var(--text-sm);
+    color: var(--color-text);
+  }
+
+  .intake-value--long {
+    white-space: pre-wrap;
+    line-height: 1.5;
+  }
+
+  .form-hint {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    margin-top: 2px;
+  }
 </style>
 
 <script>
@@ -1305,6 +1468,96 @@ if (isAuthenticated && import.meta.env.STRIPE_SECRET_KEY) {
     } finally {
       submitBtn.disabled = false;
       submitBtn.textContent = 'Send Email';
+    }
+  });
+
+  // ── Edit Lead modal ──
+  const editLeadModal = document.getElementById('edit-lead-modal')!;
+  const editLeadForm = document.getElementById('edit-lead-form') as HTMLFormElement;
+  const editLeadFeedback = document.getElementById('edit-lead-feedback')!;
+
+  function closeEditLeadModal() {
+    editLeadModal.classList.remove('open');
+    editLeadModal.setAttribute('aria-hidden', 'true');
+    editLeadFeedback.textContent = '';
+    editLeadFeedback.className = 'form-feedback';
+  }
+
+  editLeadModal.querySelector('.modal-close-edit')?.addEventListener('click', closeEditLeadModal);
+  editLeadModal.querySelector('.modal-close-edit-btn')?.addEventListener('click', closeEditLeadModal);
+  editLeadModal.querySelector('.modal-backdrop')?.addEventListener('click', closeEditLeadModal);
+
+  document.querySelectorAll<HTMLButtonElement>('.edit-lead-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      let lead: any;
+      try { lead = JSON.parse(btn.dataset.lead ?? '{}'); } catch { return; }
+
+      // Populate header
+      (document.getElementById('edit-lead-title') as HTMLElement).textContent = lead.name ?? 'Edit Lead';
+      (document.getElementById('edit-lead-subtitle') as HTMLElement).textContent = lead.email ?? '';
+
+      // Populate intake (read-only)
+      const set = (id: string, val: string) => {
+        const el = document.getElementById(id);
+        if (el) el.textContent = val || '—';
+      };
+      set('il-store-url', lead.storeUrl);
+      set('il-store-status', lead.storeStatus);
+      set('il-service', lead.serviceInterest);
+      set('il-challenge', lead.challenge);
+      set('il-availability', lead.availability);
+      set('il-timezone', lead.timezone);
+      set('il-referral', lead.referral);
+      set('il-notes', lead.additionalNotes);
+
+      // Populate editable fields
+      (editLeadForm.elements.namedItem('id') as HTMLInputElement).value = lead.id ?? '';
+      (editLeadForm.elements.namedItem('stage') as HTMLSelectElement).value = lead.stage ?? 'Lead';
+      (editLeadForm.elements.namedItem('internalNotes') as HTMLTextAreaElement).value = lead.internalNotes ?? '';
+      (editLeadForm.elements.namedItem('stripeCustomerId') as HTMLInputElement).value = lead.stripeCustomerId ?? '';
+
+      editLeadModal.classList.add('open');
+      editLeadModal.setAttribute('aria-hidden', 'false');
+    });
+  });
+
+  editLeadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const submitBtn = editLeadForm.querySelector<HTMLButtonElement>('[type="submit"]')!;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving…';
+    editLeadFeedback.textContent = '';
+    editLeadFeedback.className = 'form-feedback';
+
+    const id = (editLeadForm.elements.namedItem('id') as HTMLInputElement).value;
+    const patch = {
+      stage: (editLeadForm.elements.namedItem('stage') as HTMLSelectElement).value,
+      internalNotes: (editLeadForm.elements.namedItem('internalNotes') as HTMLTextAreaElement).value,
+      stripeCustomerId: (editLeadForm.elements.namedItem('stripeCustomerId') as HTMLInputElement).value,
+    };
+
+    try {
+      const res = await fetch(`/api/leads/${id}`, {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(patch),
+      });
+
+      if (res.ok) {
+        editLeadFeedback.textContent = 'Saved';
+        editLeadFeedback.className = 'form-feedback success';
+        setTimeout(() => { closeEditLeadModal(); window.location.reload(); }, 800);
+      } else {
+        const json = await res.json().catch(() => ({}));
+        editLeadFeedback.textContent = json.error ?? 'Could not save';
+        editLeadFeedback.className = 'form-feedback error';
+      }
+    } catch {
+      editLeadFeedback.textContent = 'Network error — try again';
+      editLeadFeedback.className = 'form-feedback error';
+    } finally {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Save Changes';
     }
   });
 </script>

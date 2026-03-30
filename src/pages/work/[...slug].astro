@@ -21,12 +21,57 @@ const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
 const currentIndex = sortedWork.findIndex(w => w.id === entry.id);
 const prevWork = currentIndex > 0 ? sortedWork[currentIndex - 1] : null;
 const nextWork = currentIndex < sortedWork.length - 1 ? sortedWork[currentIndex + 1] : null;
+
+const caseStudyUrl = `https://fully-operational.com/work/${entry.id}/`;
+
+const caseStudySchema = {
+  "@context": "https://schema.org",
+  "@type": "CreativeWork",
+  "name": `${entry.data.title} — ${entry.data.company}`,
+  "description": entry.data.description,
+  "url": caseStudyUrl,
+  "datePublished": entry.data.date.toISOString().split('T')[0],
+  "author": {
+    "@type": "Person",
+    "name": "Travis Smith",
+    "url": "https://fully-operational.com"
+  },
+  "keywords": entry.data.tags.join(', '),
+  "image": `https://fully-operational.com${entry.data.image}`,
+  "about": { "@type": "Organization", "name": entry.data.company },
+};
+
+const breadcrumbSchema = {
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://fully-operational.com/"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Work",
+      "item": "https://fully-operational.com/#work"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": `${entry.data.title} — ${entry.data.company}`,
+      "item": caseStudyUrl
+    }
+  ]
+};
 ---
 
-<BaseLayout 
+<BaseLayout
   title={`${entry.data.title} - ${entry.data.company} | Travis Smith`}
   description={entry.data.description}
   image={entry.data.image}
+  jsonLd={[caseStudySchema, breadcrumbSchema]}
 >
   <Navigation />
   

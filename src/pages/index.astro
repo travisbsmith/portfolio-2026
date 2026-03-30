@@ -11,7 +11,21 @@ const allWork = await getCollection('work');
 const sortedWork = allWork.sort((a, b) => a.data.order - b.data.order);
 ---
 
-<BaseLayout title="Travis Smith — Design Leader">
+<BaseLayout
+  title="Travis Smith — Design Leader"
+  jsonLd={{
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "Travis Smith — Design Leader",
+    "url": "https://fully-operational.com",
+    "description": "Portfolio and writing of Travis Smith, design leader with 17+ years building products and teams at Shopify, Grubhub, and Deel. Available for consulting and fractional design leadership.",
+    "author": {
+      "@type": "Person",
+      "name": "Travis Smith",
+      "url": "https://fully-operational.com"
+    }
+  }}
+>
   <Navigation />
   
   <main>
