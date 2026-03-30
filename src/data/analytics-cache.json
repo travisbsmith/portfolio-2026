@@ -1,32 +1,32 @@
 {
-  "lastSynced": "2026-03-30T07:52:22.687Z",
+  "lastSynced": "2026-03-30T17:19:03.615Z",
   "periods": {
     "24h": {
-      "pageviews": 4,
-      "visitors": 3,
-      "visits": 4,
-      "bounces": 4,
+      "pageviews": 5,
+      "visitors": 4,
+      "visits": 5,
+      "bounces": 5,
       "totaltime": 0
     },
     "7d": {
-      "pageviews": 79,
-      "visitors": 43,
+      "pageviews": 78,
+      "visitors": 42,
       "visits": 51,
-      "bounces": 36,
-      "totaltime": 4755
+      "bounces": 37,
+      "totaltime": 4750
     },
     "30d": {
-      "pageviews": 210,
+      "pageviews": 211,
       "visitors": 117,
-      "visits": 129,
-      "bounces": 89,
+      "visits": 130,
+      "bounces": 90,
       "totaltime": 6901
     },
     "90d": {
-      "pageviews": 575,
+      "pageviews": 576,
       "visitors": 251,
-      "visits": 274,
-      "bounces": 151,
+      "visits": 275,
+      "bounces": 152,
       "totaltime": 13525
     }
   },
@@ -37,7 +37,7 @@
     },
     {
       "x": "/",
-      "y": 22
+      "y": 21
     },
     {
       "x": "/about/",
@@ -45,7 +45,7 @@
     },
     {
       "x": "/contact/",
-      "y": 6
+      "y": 5
     },
     {
       "x": "/blog/",
@@ -93,7 +93,7 @@
   "countries": [
     {
       "x": "US",
-      "y": 34
+      "y": 33
     },
     {
       "x": "CN",
@@ -127,7 +127,7 @@
     },
     {
       "x": "laptop",
-      "y": 18
+      "y": 17
     },
     {
       "x": "desktop",
