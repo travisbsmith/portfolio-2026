@@ -51,8 +51,6 @@ jobs:
       - name: Ping IndexNow (notify Bing/ChatGPT)
         run: npx tsx scripts/ping-indexnow.ts
 
-      - name: Deploy to Vercel
-        run: npx vercel --prod --token=${{ secrets.VERCEL_TOKEN }} --yes
-        env:
-          VERCEL_ORG_ID: ${{ secrets.VERCEL_ORG_ID }}
-          VERCEL_PROJECT_ID: ${{ secrets.VERCEL_PROJECT_ID }}
+      # Vercel deploys automatically via GitHub integration on push to main.
+      # The daily cron triggers a cache sync + commit above, which Vercel
+      # picks up as a new push and rebuilds the site automatically.
