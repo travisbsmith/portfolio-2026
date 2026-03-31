@@ -1,10 +1,7 @@
-import { kv } from '@vercel/kv';
-
 export type LeadStage = 'Lead' | 'Call Scheduled' | 'Proposal Sent' | 'Active' | 'Closed';
 
 export interface Lead {
   id: string;
-  // From booking form
   name: string;
   email: string;
   storeUrl: string;
@@ -15,7 +12,6 @@ export interface Lead {
   timezone?: string;
   referral?: string;
   additionalNotes?: string;
-  // Managed in dashboard
   stage: LeadStage;
   internalNotes: string;
   stripeCustomerId: string;
@@ -25,8 +21,17 @@ export interface Lead {
 
 const KV_KEY = 'leads';
 
+async function getKV() {
+  const url = process.env.KV_REST_API_URL;
+  const token = process.env.KV_REST_API_TOKEN;
+  if (!url || !token) throw new Error('KV env vars not set');
+  const { createClient } = await import('@vercel/kv');
+  return createClient({ url, token });
+}
+
 export async function getLeads(): Promise<Lead[]> {
   try {
+    const kv = await getKV();
     return (await kv.get<Lead[]>(KV_KEY)) ?? [];
   } catch {
     return [];
@@ -34,17 +39,19 @@ export async function getLeads(): Promise<Lead[]> {
 }
 
 export async function saveLead(lead: Lead): Promise<void> {
+  const kv = await getKV();
   const leads = await getLeads();
   const idx = leads.findIndex((l) => l.id === lead.id);
   if (idx >= 0) {
     leads[idx] = { ...leads[idx], ...lead, updatedAt: new Date().toISOString() };
   } else {
-    leads.unshift(lead); // newest first
+    leads.unshift(lead);
   }
   await kv.set(KV_KEY, leads);
 }
 
 export async function updateLead(id: string, patch: Partial<Lead>): Promise<Lead | null> {
+  const kv = await getKV();
   const leads = await getLeads();
   const idx = leads.findIndex((l) => l.id === id);
   if (idx < 0) return null;

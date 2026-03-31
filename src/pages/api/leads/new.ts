@@ -53,7 +53,12 @@ export const POST: APIRoute = async ({ request, url, redirect }) => {
     updatedAt: now,
   };
 
-  await saveLead(lead);
+  // Save to KV — non-fatal if KV not configured yet
+  try {
+    await saveLead(lead);
+  } catch (e) {
+    console.error('KV save failed:', e);
+  }
 
   // Email Travis a notification
   try {
@@ -77,7 +82,6 @@ export const POST: APIRoute = async ({ request, url, redirect }) => {
       `,
     });
   } catch (e) {
-    // Email failure shouldn't block the lead being saved
     console.error('Failed to send lead notification email:', e);
   }
 
