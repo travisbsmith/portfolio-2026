@@ -220,12 +220,12 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
                             <td class="mono">{amount}</td>
                             <td>
                               <div class="action-btns">
-                                <button
-                                  class="btn-sm btn-outline edit-lead-btn"
-                                  data-lead={JSON.stringify(lead)}
+                                <a
+                                  href={`/dashboard/${lead.id}`}
+                                  class="btn-sm btn-outline"
                                 >
-                                  Edit
-                                </button>
+                                  View
+                                </a>
                                 <button
                                   class="btn-sm btn-outline followup-btn"
                                   data-email={lead.email}
@@ -504,65 +504,6 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
       </main>
     </div>
   )}
-
-  <!-- ═══════════════════════════════════════════
-       EDIT LEAD MODAL
-  ════════════════════════════════════════════ -->
-  <div id="edit-lead-modal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop"></div>
-    <div class="modal-dialog modal-dialog--wide">
-      <div class="modal-header">
-        <div>
-          <h2 id="edit-lead-title">Edit Lead</h2>
-          <p id="edit-lead-subtitle" class="modal-subtitle"></p>
-        </div>
-        <button class="modal-close modal-close-edit" aria-label="Close">&times;</button>
-      </div>
-      <div class="modal-body modal-body--split">
-        <!-- Left: intake info (read-only) -->
-        <div class="lead-intake">
-          <h3>Intake</h3>
-          <div class="intake-field"><span class="intake-label">Store URL</span><span id="il-store-url" class="intake-value">—</span></div>
-          <div class="intake-field"><span class="intake-label">Store Status</span><span id="il-store-status" class="intake-value">—</span></div>
-          <div class="intake-field"><span class="intake-label">Interested In</span><span id="il-service" class="intake-value">—</span></div>
-          <div class="intake-field"><span class="intake-label">Challenge</span><span id="il-challenge" class="intake-value intake-value--long">—</span></div>
-          <div class="intake-field"><span class="intake-label">Availability</span><span id="il-availability" class="intake-value">—</span></div>
-          <div class="intake-field"><span class="intake-label">Timezone</span><span id="il-timezone" class="intake-value">—</span></div>
-          <div class="intake-field"><span class="intake-label">Referral</span><span id="il-referral" class="intake-value">—</span></div>
-          <div class="intake-field"><span class="intake-label">Their Notes</span><span id="il-notes" class="intake-value intake-value--long">—</span></div>
-        </div>
-        <!-- Right: editable fields -->
-        <form id="edit-lead-form" class="lead-edit">
-          <h3>Your Notes</h3>
-          <input type="hidden" id="el-id" name="id" />
-          <div class="form-row">
-            <label for="el-stage">Stage</label>
-            <select id="el-stage" name="stage">
-              <option value="Lead">Lead</option>
-              <option value="Call Scheduled">Call Scheduled</option>
-              <option value="Proposal Sent">Proposal Sent</option>
-              <option value="Active">Active</option>
-              <option value="Closed">Closed</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <label for="el-notes">Internal Notes</label>
-            <textarea id="el-notes" name="internalNotes" rows="8" placeholder="Notes from the discovery call, what they need, red flags, next steps..."></textarea>
-          </div>
-          <div class="form-row">
-            <label for="el-stripe-id">Stripe Customer ID</label>
-            <input type="text" id="el-stripe-id" name="stripeCustomerId" placeholder="cus_..." />
-            <span class="form-hint">Fill in after first invoice is sent</span>
-          </div>
-          <div id="edit-lead-feedback" class="form-feedback"></div>
-          <div class="modal-actions">
-            <button type="button" class="btn-secondary modal-close-edit-btn">Cancel</button>
-            <button type="submit" class="btn-primary">Save Changes</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
 
   <!-- ═══════════════════════════════════════════
        NEW INVOICE MODAL
@@ -1471,93 +1412,4 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     }
   });
 
-  // ── Edit Lead modal ──
-  const editLeadModal = document.getElementById('edit-lead-modal')!;
-  const editLeadForm = document.getElementById('edit-lead-form') as HTMLFormElement;
-  const editLeadFeedback = document.getElementById('edit-lead-feedback')!;
-
-  function closeEditLeadModal() {
-    editLeadModal.classList.remove('open');
-    editLeadModal.setAttribute('aria-hidden', 'true');
-    editLeadFeedback.textContent = '';
-    editLeadFeedback.className = 'form-feedback';
-  }
-
-  editLeadModal.querySelector('.modal-close-edit')?.addEventListener('click', closeEditLeadModal);
-  editLeadModal.querySelector('.modal-close-edit-btn')?.addEventListener('click', closeEditLeadModal);
-  editLeadModal.querySelector('.modal-backdrop')?.addEventListener('click', closeEditLeadModal);
-
-  document.querySelectorAll<HTMLButtonElement>('.edit-lead-btn').forEach(btn => {
-    btn.addEventListener('click', () => {
-      let lead: any;
-      try { lead = JSON.parse(btn.dataset.lead ?? '{}'); } catch { return; }
-
-      // Populate header
-      (document.getElementById('edit-lead-title') as HTMLElement).textContent = lead.name ?? 'Edit Lead';
-      (document.getElementById('edit-lead-subtitle') as HTMLElement).textContent = lead.email ?? '';
-
-      // Populate intake (read-only)
-      const set = (id: string, val: string) => {
-        const el = document.getElementById(id);
-        if (el) el.textContent = val || '—';
-      };
-      set('il-store-url', lead.storeUrl);
-      set('il-store-status', lead.storeStatus);
-      set('il-service', lead.serviceInterest);
-      set('il-challenge', lead.challenge);
-      set('il-availability', lead.availability);
-      set('il-timezone', lead.timezone);
-      set('il-referral', lead.referral);
-      set('il-notes', lead.additionalNotes);
-
-      // Populate editable fields
-      (editLeadForm.elements.namedItem('id') as HTMLInputElement).value = lead.id ?? '';
-      (editLeadForm.elements.namedItem('stage') as HTMLSelectElement).value = lead.stage ?? 'Lead';
-      (editLeadForm.elements.namedItem('internalNotes') as HTMLTextAreaElement).value = lead.internalNotes ?? '';
-      (editLeadForm.elements.namedItem('stripeCustomerId') as HTMLInputElement).value = lead.stripeCustomerId ?? '';
-
-      editLeadModal.classList.add('open');
-      editLeadModal.setAttribute('aria-hidden', 'false');
-    });
-  });
-
-  editLeadForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const submitBtn = editLeadForm.querySelector<HTMLButtonElement>('[type="submit"]')!;
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Saving…';
-    editLeadFeedback.textContent = '';
-    editLeadFeedback.className = 'form-feedback';
-
-    const id = (editLeadForm.elements.namedItem('id') as HTMLInputElement).value;
-    const patch = {
-      stage: (editLeadForm.elements.namedItem('stage') as HTMLSelectElement).value,
-      internalNotes: (editLeadForm.elements.namedItem('internalNotes') as HTMLTextAreaElement).value,
-      stripeCustomerId: (editLeadForm.elements.namedItem('stripeCustomerId') as HTMLInputElement).value,
-    };
-
-    try {
-      const res = await fetch(`/api/leads/${id}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(patch),
-      });
-
-      if (res.ok) {
-        editLeadFeedback.textContent = 'Saved';
-        editLeadFeedback.className = 'form-feedback success';
-        setTimeout(() => { closeEditLeadModal(); window.location.reload(); }, 800);
-      } else {
-        const json = await res.json().catch(() => ({}));
-        editLeadFeedback.textContent = json.error ?? 'Could not save';
-        editLeadFeedback.className = 'form-feedback error';
-      }
-    } catch {
-      editLeadFeedback.textContent = 'Network error — try again';
-      editLeadFeedback.className = 'form-feedback error';
-    } finally {
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Save Changes';
-    }
-  });
 </script>
