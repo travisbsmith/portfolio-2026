@@ -67,7 +67,39 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
   <div class="lead-body container">
     <div class="lead-main">
 
-      <!-- 1. Discovery Call Guide -->
+      <!-- 1. Intake Details -->
+      <section class="card">
+        <div class="card__header"><h2>Intake Form</h2></div>
+        <div class="card__body intake-grid">
+          {[
+            ['Store URL', lead.storeUrl],
+            ['Store Status', lead.storeStatus],
+            ['Interested In', lead.serviceInterest],
+            ['Availability', lead.availability],
+            ['Timezone', lead.timezone],
+            ['Referral', lead.referral],
+          ].map(([label, value]) => value ? (
+            <div class="intake-row">
+              <span class="intake-label">{label}</span>
+              <span class="intake-value">{value}</span>
+            </div>
+          ) : null)}
+          {lead.challenge && (
+            <div class="intake-row intake-row--full">
+              <span class="intake-label">Their Challenge</span>
+              <span class="intake-value intake-value--long">{lead.challenge}</span>
+            </div>
+          )}
+          {lead.additionalNotes && (
+            <div class="intake-row intake-row--full">
+              <span class="intake-label">Their Notes</span>
+              <span class="intake-value intake-value--long">{lead.additionalNotes}</span>
+            </div>
+          )}
+        </div>
+      </section>
+
+      <!-- 2. Discovery Call Guide -->
       <section class="card" id="call-guide-card">
         <button class="card__toggle" id="guide-toggle" aria-expanded="false">
           <span class="card__toggle-label">
@@ -143,7 +175,7 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
         </div>
       </section>
 
-      <!-- 2. Notes -->
+      <!-- 3. Notes -->
       <section class="card">
         <div class="card__header">
           <h2>Your Notes</h2>
@@ -156,38 +188,6 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
             placeholder="Notes from the call — what they said, key problems, budget signals, next steps..."
             data-lead-id={lead.id}
           >{lead.internalNotes}</textarea>
-        </div>
-      </section>
-
-      <!-- 3. Intake Details -->
-      <section class="card">
-        <div class="card__header"><h2>Intake Form</h2></div>
-        <div class="card__body intake-grid">
-          {[
-            ['Store URL', lead.storeUrl],
-            ['Store Status', lead.storeStatus],
-            ['Interested In', lead.serviceInterest],
-            ['Availability', lead.availability],
-            ['Timezone', lead.timezone],
-            ['Referral', lead.referral],
-          ].map(([label, value]) => value ? (
-            <div class="intake-row">
-              <span class="intake-label">{label}</span>
-              <span class="intake-value">{value}</span>
-            </div>
-          ) : null)}
-          {lead.challenge && (
-            <div class="intake-row intake-row--full">
-              <span class="intake-label">Their Challenge</span>
-              <span class="intake-value intake-value--long">{lead.challenge}</span>
-            </div>
-          )}
-          {lead.additionalNotes && (
-            <div class="intake-row intake-row--full">
-              <span class="intake-label">Their Notes</span>
-              <span class="intake-value intake-value--long">{lead.additionalNotes}</span>
-            </div>
-          )}
         </div>
       </section>
 
