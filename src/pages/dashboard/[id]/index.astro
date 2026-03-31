@@ -1,9 +1,9 @@
 ---
 export const prerender = false;
 
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import DashboardNav from '../../components/DashboardNav.astro';
-import { getLeads } from '../../lib/leads';
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import DashboardNav from '../../../components/DashboardNav.astro';
+import { getLeads } from '../../../lib/leads';
 import Stripe from 'stripe';
 
 // Auth
@@ -205,7 +205,7 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
         <div class="card__header"><h2>Actions</h2></div>
         <div class="card__body">
           <div class="sidebar-actions">
-            <button class="action-btn action-btn--accent" id="btn-proposal">Send Proposal</button>
+            <a href={`/dashboard/${lead.id}/proposal`} class="action-btn action-btn--accent action-btn--link">Send Proposal ↗</a>
             <button class="action-btn" id="btn-invoice">Send Invoice</button>
             <button class="action-btn" id="btn-followup">Send Follow-up</button>
           </div>
@@ -235,29 +235,6 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
             <div class="panel-actions">
               <button type="button" class="btn-cancel" data-panel="invoice">Cancel</button>
               <button type="submit" class="btn-send">Send Invoice</button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Proposal form panel -->
-        <div class="action-panel" id="panel-proposal" hidden>
-          <form id="proposal-form">
-            <div class="form-row">
-              <label>To</label>
-              <input type="email" name="to" value={lead.email} readonly />
-            </div>
-            <div class="form-row">
-              <label>Subject</label>
-              <input type="text" name="subject" id="prop-subject" value={`Proposal: ${lead.name} × Fully Operational`} />
-            </div>
-            <div class="form-row">
-              <label>Body</label>
-              <textarea name="body" id="prop-body" rows="14"></textarea>
-            </div>
-            <div id="proposal-feedback" class="form-feedback"></div>
-            <div class="panel-actions">
-              <button type="button" class="btn-cancel" data-panel="proposal">Cancel</button>
-              <button type="submit" class="btn-send btn-send--accent">Send Proposal</button>
             </div>
           </form>
         </div>
@@ -764,6 +741,12 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
     border-color: var(--color-accent-hover);
   }
 
+  .action-btn--link {
+    display: block;
+    text-align: left;
+    text-decoration: none;
+  }
+
   /* Action panels */
   .action-panel {
     padding: var(--space-6);
@@ -981,22 +964,6 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
   latestOpenInvoiceUrl: latestOpenInvoice?.hosted_invoice_url ?? '',
 }}>
 
-// ── Proposal templates ──
-const PROPOSAL_TEMPLATES = {
-  'Clarity Session': {
-    price: '$500',
-    block: `- 90-minute deep-dive on your store via video call\n- I'll review your UX, app stack, marketing setup, and biggest growth blockers\n- Written action plan with your top 3–5 priorities delivered within 48 hours\n\nTo book: Pay here → [Stripe link] and I'll send a calendar invite`,
-  },
-  'Store Launch Sprint': {
-    price: '$2,500/month',
-    block: `**Month 1 — Foundation**\n- Store architecture: product data model, metafields, collections, navigation\n- Consumer education pages + ingredient/product index (the content that converts before you have reviews)\n- Email waitlist setup — pre-launch page + Klaviyo or Shopify Email so you're building the list now\n- App stack map: exactly which apps you need, which to skip, zero vendor lock-in\n\n**Ongoing**\n- 10–15 hours/month\n- Email access for questions between sessions\n- Monthly check-in on priorities\n\n**Investment:** $2,500/month — Month 1 is on me while we establish the engagement.\n\nTo get started: Reply here and I'll send a kickoff doc with what I need from you to begin.`,
-  },
-  'Insider Retainer': {
-    price: '$3,500/month',
-    block: `- 2 × 30-min strategy calls per month\n- Async access Mon–Fri (email), 24-hr response\n- Monthly written audit: top 3 priorities + recommendations\n- Up to 5 hrs/month of hands-on work\n- Month-to-month, cancel anytime\n\nTo get started: Pay the first month here → [Stripe link] and I'll send an onboarding doc`,
-  },
-};
-
 // ── Call guide toggle ──
 const guideToggle = document.getElementById('guide-toggle');
 const guideBody = document.getElementById('guide-body');
@@ -1075,7 +1042,7 @@ notesTextarea.addEventListener('input', () => {
 
 // ── Action panel toggles ──
 function openPanel(name) {
-  ['invoice','proposal','followup'].forEach(p => {
+  ['invoice','followup'].forEach(p => {
     document.getElementById('panel-' + p).hidden = p !== name;
   });
 }
@@ -1094,20 +1061,6 @@ document.getElementById('btn-invoice').addEventListener('click', () => {
     if (serviceInterest && serviceInterest.includes(key)) { amountEl.value = val; break; }
   }
   openPanel('invoice');
-});
-
-document.getElementById('btn-proposal').addEventListener('click', () => {
-  // Find matching template
-  let template = null;
-  for (const [key, tpl] of Object.entries(PROPOSAL_TEMPLATES)) {
-    if (serviceInterest && serviceInterest.includes(key)) { template = { key, ...tpl }; break; }
-  }
-  const firstName = leadName.split(' ')[0];
-  const body = template
-    ? `Hi ${firstName},\n\nGreat talking today. Here's what I'd suggest based on our conversation.\n\n---\n\n**${template.key || 'Service'}**\n[One sentence on why this is the right fit — reference something they said on the call.]\n\n**What's included:**\n${template.block}\n\n**Investment:** ${template.price}\n\nQuestions? Just reply here.\n\n— Travis\ntravis@fully-operational.com`
-    : `Hi ${firstName},\n\nGreat talking today. Here's what I'd suggest based on our conversation.\n\n---\n\n[SERVICE + details]\n\n**Investment:** [PRICE]\n\nQuestions? Just reply here.\n\n— Travis\ntravis@fully-operational.com`;
-  document.getElementById('prop-body').value = body;
-  openPanel('proposal');
 });
 
 document.getElementById('btn-followup').addEventListener('click', () => {
@@ -1158,48 +1111,6 @@ document.getElementById('invoice-form').addEventListener('submit', async (e) => 
     feedback.className = 'form-feedback error';
   } finally {
     btn.disabled = false; btn.textContent = 'Send Invoice';
-  }
-});
-
-// ── Proposal form ──
-document.getElementById('proposal-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const btn = e.target.querySelector('.btn-send');
-  const feedback = document.getElementById('proposal-feedback');
-  btn.disabled = true; btn.textContent = 'Sending…';
-  feedback.textContent = ''; feedback.className = 'form-feedback';
-  const body = document.getElementById('prop-body').value;
-  const html = body.split('\n').map(l => `<p>${l || '&nbsp;'}</p>`).join('');
-  try {
-    const res = await fetch('/api/email/send', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: leadEmail,
-        subject: document.getElementById('prop-subject').value,
-        html,
-      }),
-    });
-    const json = await res.json();
-    if (res.ok) {
-      feedback.textContent = 'Proposal sent ✓';
-      feedback.className = 'form-feedback success';
-      // Auto-update stage to Proposal Sent
-      await fetch(`/api/leads/${leadId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage: 'Proposal Sent' }),
-      });
-      setTimeout(() => location.reload(), 1500);
-    } else {
-      feedback.textContent = json.error ?? 'Something went wrong';
-      feedback.className = 'form-feedback error';
-    }
-  } catch {
-    feedback.textContent = 'Network error';
-    feedback.className = 'form-feedback error';
-  } finally {
-    btn.disabled = false; btn.textContent = 'Send Proposal';
   }
 });
 
