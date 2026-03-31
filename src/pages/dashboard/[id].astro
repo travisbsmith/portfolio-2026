@@ -74,6 +74,8 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
           {[
             ['Store URL', lead.storeUrl],
             ['Store Status', lead.storeStatus],
+            ['Launch Date', lead.launchDate],
+            ['Visual Designer', lead.hasVisualDesigner],
             ['Interested In', lead.serviceInterest],
             ['Availability', lead.availability],
             ['Timezone', lead.timezone],
@@ -984,8 +986,8 @@ const PROPOSAL_TEMPLATES = {
     block: `- 90-minute deep-dive on your store via video call\n- I'll review your UX, app stack, marketing setup, and biggest growth blockers\n- Written action plan with your top 3–5 priorities delivered within 48 hours\n\nTo book: Pay here → [Stripe link] and I'll send a calendar invite`,
   },
   'Store Launch Sprint': {
-    price: '$2,500 flat fee',
-    block: `- Theme selection and full UX setup\n- Product pages, navigation, and checkout configuration\n- Starter app stack recommendation and setup\n- 90-day "what to do next" growth roadmap\n- Delivered in 2–3 weeks\n- 50% deposit to start ($1,250), 50% on delivery\n\nTo get started: Pay the deposit here → [Stripe link] and I'll send a kickoff doc`,
+    price: '$2,500/month',
+    block: `**Month 1 — Foundation**\n- Store architecture: product data model, metafields, collections, navigation\n- Consumer education pages + ingredient/product index (the content that converts before you have reviews)\n- Email waitlist setup — pre-launch page + Klaviyo or Shopify Email so you're building the list now\n- App stack map: exactly which apps you need, which to skip, zero vendor lock-in\n\n**Ongoing**\n- 10–15 hours/month\n- Email access for questions between sessions\n- Monthly check-in on priorities\n\n**Investment:** $2,500/month — Month 1 is on me while we establish the engagement.\n\nTo get started: Reply here and I'll send a kickoff doc with what I need from you to begin.`,
   },
   'Insider Retainer': {
     price: '$3,500/month',

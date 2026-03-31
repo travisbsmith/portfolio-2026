@@ -108,6 +108,18 @@ import Footer from '../components/Footer.astro';
               </label>
             </div>
           </div>
+
+          <div class="book__field" id="launch-date-field" style="display:none">
+            <label class="book__label" for="launch_date">Target launch date</label>
+            <input
+              class="book__input book__input--sm"
+              type="text"
+              id="launch_date"
+              name="launch_date"
+              placeholder="e.g. September 2026, Q4 this year"
+            />
+            <span class="book__hint">Helps me understand your timeline. No pressure if it's flexible.</span>
+          </div>
         </fieldset>
 
         <!-- Section 2: What You Need -->
@@ -247,6 +259,24 @@ import Footer from '../components/Footer.astro';
           </div>
 
           <div class="book__field">
+            <label class="book__label">Do you work with a visual designer?</label>
+            <div class="book__radio-group">
+              <label class="book__radio-label">
+                <input type="radio" name="has_visual_designer" value="Yes" />
+                <span>Yes — I have a designer</span>
+              </label>
+              <label class="book__radio-label">
+                <input type="radio" name="has_visual_designer" value="No" />
+                <span>No — I handle design myself</span>
+              </label>
+              <label class="book__radio-label">
+                <input type="radio" name="has_visual_designer" value="Looking" />
+                <span>Not yet, but I'm looking</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="book__field">
             <label class="book__label" for="notes">Anything else you want me to know before the call?</label>
             <textarea
               class="book__input book__textarea"
@@ -275,6 +305,20 @@ import Footer from '../components/Footer.astro';
 
   <Footer />
 </BaseLayout>
+
+<script>
+  // Show launch date field for pre-launch store statuses
+  const statusInputs = document.querySelectorAll('input[name="store_status"]');
+  const launchDateField = document.getElementById('launch-date-field');
+
+  function updateLaunchDateVisibility() {
+    const selected = (document.querySelector('input[name="store_status"]:checked') as HTMLInputElement)?.value ?? '';
+    const prelaunch = selected === 'Not started yet' || selected === 'In progress, not live';
+    if (launchDateField) launchDateField.style.display = prelaunch ? 'flex' : 'none';
+  }
+
+  statusInputs.forEach(input => input.addEventListener('change', updateLaunchDateVisibility));
+</script>
 
 <style>
   .book {

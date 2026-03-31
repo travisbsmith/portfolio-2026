@@ -1,0 +1,449 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+---
+
+<BaseLayout
+  title="Shopify App Recommendations — What's Actually Worth It | Travis Smith"
+  description="An honest guide to the Shopify App Store from a former Shopify Head of Design. Which apps to use, which to skip, and how to avoid getting locked in."
+>
+  <Navigation />
+
+  <main class="apps">
+    <div class="container container--narrow">
+
+      <header class="apps__header">
+        <span class="label">Resource</span>
+        <h1 class="apps__title">Shopify App Recommendations</h1>
+        <p class="apps__subtitle">
+          The App Store has 10,000+ apps. Most of them you don't need. Here's how I think about it — and the ones I actually recommend.
+        </p>
+        <p class="apps__byline">By Travis Smith — former Head of Design at Shopify, 2020–2025</p>
+      </header>
+
+      <!-- The One Rule -->
+      <section class="apps__section">
+        <h2 class="apps__section-title">Start with one rule</h2>
+        <div class="apps__callout">
+          <p>Only install apps with the <strong>"Built for Shopify"</strong> badge.</p>
+        </div>
+        <p class="apps__body">
+          That badge means the app meets Shopify's technical standards: it uses Shopify's native UI components, doesn't bloat your theme, handles data correctly, and goes through a review process. Apps without it can slow your store, break on updates, and create data problems that are hard to untangle later.
+        </p>
+        <p class="apps__body">
+          There are exceptions — a few established apps predate the badge program — but it's a good first filter when you're evaluating anything new.
+        </p>
+      </section>
+
+      <!-- Vendor Lock-in -->
+      <section class="apps__section">
+        <h2 class="apps__section-title">Avoid vendor lock-in</h2>
+        <p class="apps__body">
+          Some apps are easy to leave. Others trap you. Signs you're getting locked in:
+        </p>
+        <ul class="apps__list">
+          <li>Your product descriptions, metafields, or customer data live <em>inside</em> the app — not in Shopify's native fields</li>
+          <li>The app creates its own customer accounts or loyalty points that don't export cleanly</li>
+          <li>Removing the app would break your theme or delete content</li>
+          <li>The pricing is low to start but jumps sharply as your order volume grows</li>
+        </ul>
+        <p class="apps__body">
+          The safest approach: use Shopify's native fields (metafields, metaobjects) to store your data, and use apps only for functionality on top of that data — not as the data store itself.
+        </p>
+      </section>
+
+      <!-- Categories -->
+      <section class="apps__section">
+        <h2 class="apps__section-title">What I recommend by category</h2>
+
+        <div class="apps__categories">
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Email & SMS</h3>
+            <p class="apps__category-note">Start here before anything else. Email is your most reliable revenue channel.</p>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Klaviyo</span>
+                  <span class="apps__rec-tag">Best in class</span>
+                </div>
+                <p>The standard for Shopify email. Deep native integration, powerful segmentation, and flows that actually work. More expensive than alternatives but worth it once you have volume. Start on the free plan.</p>
+              </div>
+              <div class="apps__rec">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Shopify Email</span>
+                  <span class="apps__rec-tag">Free · Built-in</span>
+                </div>
+                <p>Underrated for early-stage stores. It's built into your admin, no extra cost for the first 10,000 emails/month, and handles basic flows and campaigns well. Good for pre-launch waitlists and the first 6–12 months.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Pre-launch waitlists</h3>
+            <p class="apps__category-note">For founders building toward a launch date.</p>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Shopify Forms</span>
+                  <span class="apps__rec-tag">Free · Built-in</span>
+                </div>
+                <p>Built by my former team at Shopify. It's a native form builder that syncs directly to your customer list and Klaviyo. Use it for your waitlist page — no third-party tools needed, and the data goes exactly where you want it.</p>
+              </div>
+              <div class="apps__rec">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Klaviyo + landing page</span>
+                </div>
+                <p>If you want more control over the waitlist experience, a simple page with an embedded Klaviyo form works well. You get segmentation, automations, and the welcome sequence all in one place from day one.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Customer quiz & personalization</h3>
+            <p class="apps__category-note">For stores with enough SKUs to warrant guided discovery.</p>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Octane AI</span>
+                  <span class="apps__rec-tag">Built for Shopify</span>
+                </div>
+                <p>Purpose-built product quiz for Shopify. Results link directly to products and collections, integrates with Klaviyo to tag customers by their answers, and has a clean UI. Best option if a quiz is central to your customer experience.</p>
+              </div>
+              <div class="apps__rec">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Typeform + Klaviyo</span>
+                </div>
+                <p>A lighter-weight option if you don't need results to map directly to products. Typeform for the quiz experience, Klaviyo to capture responses and trigger personalized flows. More setup but more flexibility.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Education & content pages</h3>
+            <p class="apps__category-note">For brands where consumer education is part of the conversion — supplements, wellness, food, specialty products.</p>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Shopify Metafields + Metaobjects</span>
+                  <span class="apps__rec-tag">Native · No app needed</span>
+                </div>
+                <p>Use Shopify's native metafields to store structured ingredient or product data (benefits, sourcing, usage, certifications), then reference it in your theme. Your data stays in Shopify — not locked inside a third-party app. This is the right architecture for an ingredient index.</p>
+              </div>
+              <div class="apps__rec">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Shopify Pages</span>
+                  <span class="apps__rec-tag">Free · Built-in</span>
+                </div>
+                <p>For standalone education pages (what is X, how it works, sourcing story), Shopify's native page editor is enough to start. Pair with a well-built theme section for consistent layout across education content.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Reviews & social proof</h3>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Judge.me</span>
+                  <span class="apps__rec-tag">Built for Shopify · Free plan</span>
+                </div>
+                <p>Best value in the category. Generous free plan, automatic review request emails, photo/video reviews, and good Shopify native integration. Don't pay for Yotpo until you're at serious scale.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Search & discovery</h3>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Shopify Search & Discovery</span>
+                  <span class="apps__rec-tag">Free · Built-in</span>
+                </div>
+                <p>Free, built by Shopify, and better than most paid alternatives for stores under 500 SKUs. Set up product recommendations, configure filters, and customize search results — all without a third-party app eating into your margin.</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="apps__category">
+            <h3 class="apps__category-title">Subscriptions</h3>
+            <div class="apps__recs">
+              <div class="apps__rec apps__rec--top">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Shopify Subscriptions</span>
+                  <span class="apps__rec-tag">Free · Built-in</span>
+                </div>
+                <p>Shopify's native subscription offering launched in 2024. Free, no revenue cut, and handles the basics well for most early-stage stores. Try this before paying for Recharge or Bold.</p>
+              </div>
+              <div class="apps__rec">
+                <div class="apps__rec-header">
+                  <span class="apps__rec-name">Recharge</span>
+                </div>
+                <p>The right choice if you need advanced subscription logic — bundles, prepaid plans, custom billing intervals, loyalty tiers. Costs more but worth it when subscriptions are core to your business model.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- What to skip -->
+      <section class="apps__section">
+        <h2 class="apps__section-title">What to skip (usually)</h2>
+        <ul class="apps__skip-list">
+          <li>
+            <strong>Countdown timers and urgency apps.</strong>
+            They work for some stores, but most add visual clutter and train customers to wait for deals.
+          </li>
+          <li>
+            <strong>Pop-up apps with their own email lists.</strong>
+            Capture email into Klaviyo or Shopify Email from day one — not a pop-up vendor's proprietary list.
+          </li>
+          <li>
+            <strong>Page builder apps.</strong>
+            Shogun, PageFly, etc. are useful but they make your theme dependent on a third party. Use a well-built Shopify theme with good section flexibility instead.
+          </li>
+          <li>
+            <strong>Upsell/cross-sell apps early on.</strong>
+            These are optimization-layer tools. Get your core store right first.
+          </li>
+          <li>
+            <strong>Anything that rewrites your checkout.</strong>
+            Unless you're on Shopify Plus, you can't modify checkout anyway — and you shouldn't want to. Shopify's native checkout converts better than any customized version.
+          </li>
+        </ul>
+      </section>
+
+      <!-- CTA -->
+      <section class="apps__cta">
+        <h2>Want a specific recommendation?</h2>
+        <p>Every store is different. Book a free call and I'll tell you exactly which apps make sense for what you're building — and which ones to avoid.</p>
+        <Button href="/book" size="lg">Book a free 30-min call</Button>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .apps {
+    padding-top: calc(64px + var(--space-12));
+    padding-bottom: var(--space-20);
+  }
+
+  .apps__header {
+    margin-bottom: var(--space-16);
+  }
+
+  .apps__header .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .apps__title {
+    font-size: clamp(1.75rem, 4vw, var(--text-4xl));
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+
+  .apps__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: var(--space-3);
+  }
+
+  .apps__byline {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .apps__section {
+    margin-bottom: var(--space-16);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .apps__section:last-of-type {
+    border-bottom: none;
+  }
+
+  .apps__section-title {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin-bottom: var(--space-6);
+  }
+
+  .apps__callout {
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-accent);
+    padding: var(--space-4) var(--space-6);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin-bottom: var(--space-6);
+    font-size: var(--text-lg);
+    line-height: 1.6;
+  }
+
+  .apps__body {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-4);
+    max-width: 640px;
+  }
+
+  .apps__body:last-child { margin-bottom: 0; }
+
+  .apps__list {
+    padding-left: var(--space-6);
+    margin: 0 0 var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 640px;
+  }
+
+  .apps__list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+
+  /* Categories */
+  .apps__categories {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-12);
+  }
+
+  .apps__category-title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-2);
+  }
+
+  .apps__category-note {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    font-style: italic;
+    margin-bottom: var(--space-4);
+    line-height: 1.5;
+  }
+
+  .apps__recs {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .apps__rec {
+    padding: var(--space-4) var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+
+  .apps__rec--top {
+    border-color: var(--color-border-strong);
+    background: var(--color-bg-alt);
+  }
+
+  .apps__rec-header {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    margin-bottom: var(--space-2);
+    flex-wrap: wrap;
+  }
+
+  .apps__rec-name {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .apps__rec-tag {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    color: var(--color-accent);
+  }
+
+  .apps__rec p { margin: 0; }
+
+  /* Skip list */
+  .apps__skip-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    max-width: 640px;
+  }
+
+  .apps__skip-list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    padding-left: var(--space-8);
+    position: relative;
+  }
+
+  .apps__skip-list li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+  }
+
+  .apps__skip-list strong {
+    color: var(--color-text);
+  }
+
+  /* CTA */
+  .apps__cta {
+    padding: var(--space-12) var(--space-10);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .apps__cta h2 {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .apps__cta p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 480px;
+  }
+
+  @media (max-width: 640px) {
+    .apps__cta {
+      padding: var(--space-8) var(--space-6);
+    }
+  }
+</style>

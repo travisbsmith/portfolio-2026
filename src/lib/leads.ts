@@ -12,6 +12,8 @@ export interface Lead {
   timezone?: string;
   referral?: string;
   additionalNotes?: string;
+  launchDate?: string;
+  hasVisualDesigner?: string;
   stage: LeadStage;
   internalNotes: string;
   stripeCustomerId: string;

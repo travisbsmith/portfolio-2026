@@ -183,8 +183,8 @@ const faqJsonLd = {
         <h2 class="shopify__section-title">Who I help</h2>
         <div class="shopify__audience">
           <article class="shopify__audience-card">
-            <h3 class="shopify__audience-title">Just getting started</h3>
-            <p>You've got a product and you're setting up on Shopify. I help you get it right from the start — theme, products, checkout, and the apps that actually matter. No wasted time, no wrong turns.</p>
+            <h3 class="shopify__audience-title">Building toward a launch</h3>
+            <p>You have a product and a target date. I help you build the foundation correctly — store architecture, education content, email waitlist, and the right app stack — so launch day isn't a scramble.</p>
           </article>
           <article class="shopify__audience-card">
             <h3 class="shopify__audience-title">Live and trying to grow</h3>
@@ -233,11 +233,24 @@ const faqJsonLd = {
                 <h3 class="shopify__service-name">Store Launch Sprint</h3>
               </div>
             </div>
-            <p class="shopify__service-desc">For founders ready to go from zero to live. Theme selection and setup, product pages, navigation, checkout config, your starter app stack, and a 90-day growth roadmap. Delivered in 2–3 weeks.</p>
-            <p class="shopify__service-fit">Comes with a retainer offer at the end — once the store is right, the question is how to grow it.</p>
+            <p class="shopify__service-desc">For founders building toward a launch. Monthly engagement covering store architecture, consumer education content, email waitlist setup, app stack selection, and the UX decisions that matter before day one. 10–15 hours/month.</p>
+            <p class="shopify__service-fit">Good if you have a target launch date and want to build it right the first time — not fix it later.</p>
             <Button href={CAL_LINK} variant="secondary" size="sm">Book intro call</Button>
           </article>
 
+        </div>
+      </div>
+    </section>
+
+    <!-- Resources -->
+    <section class="shopify__section shopify__section--alt">
+      <div class="container container--narrow">
+        <h2 class="shopify__section-title">Free resources</h2>
+        <div class="shopify__resources">
+          <a href="/resources/app-recommendations" class="shopify__resource-link">
+            <span class="shopify__resource-title">Shopify App Recommendations →</span>
+            <span class="shopify__resource-desc">Which apps are worth it, which to skip, and how to avoid getting locked in. From someone who helped build the platform.</span>
+          </a>
         </div>
       </div>
     </section>
@@ -616,6 +629,45 @@ const faqJsonLd = {
     color: var(--color-text-tertiary);
     line-height: 1.6;
     font-style: italic;
+  }
+
+  /* ── Resources ── */
+  .shopify__resources {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .shopify__resource-link {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    padding: var(--space-6);
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    transition: border-color 0.15s;
+    text-decoration: none;
+  }
+
+  .shopify__resource-link:hover {
+    border-color: var(--color-accent);
+  }
+
+  .shopify__resource-title {
+    font-size: var(--text-base);
+    font-weight: 500;
+    color: var(--color-text);
+  }
+
+  .shopify__resource-link:hover .shopify__resource-title {
+    color: var(--color-accent);
+  }
+
+  .shopify__resource-desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-tertiary);
+    line-height: 1.6;
   }
 
   /* ── What I don't ── */

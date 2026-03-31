@@ -46,6 +46,8 @@ export const POST: APIRoute = async ({ request, url, redirect }) => {
     timezone: body.timezone ?? '',
     referral: body.referral ?? '',
     additionalNotes: body.notes ?? '',
+    launchDate: body.launch_date ?? '',
+    hasVisualDesigner: body.has_visual_designer ?? '',
     stage: 'Lead',
     internalNotes: '',
     stripeCustomerId: '',
