@@ -2,6 +2,7 @@
 export const prerender = false;
 
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import DashboardNav from '../../components/DashboardNav.astro';
 import { getLeads } from '../../lib/leads';
 import Stripe from 'stripe';
 
@@ -34,12 +35,13 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
 <BaseLayout title={`${lead.name} — Dashboard`} description="Lead detail">
 <div class="lead-page">
 
+  <DashboardNav active="clients" />
+
   <!-- ── Header ── -->
   <header class="lead-header">
     <div class="container">
       <div class="lead-header__inner">
         <div class="lead-header__left">
-          <a href="/dashboard" class="back-link">&larr; Dashboard</a>
           <div class="lead-header__title">
             <h1>{lead.name}</h1>
             <a href={`mailto:${lead.email}`} class="lead-email">{lead.email}</a>

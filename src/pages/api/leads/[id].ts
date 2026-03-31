@@ -1,5 +1,5 @@
 import type { APIRoute } from 'astro';
-import { updateLead } from '../../../lib/leads';
+import { updateLead, deleteLead } from '../../../lib/leads';
 
 export const prerender = false;
 
@@ -25,6 +25,22 @@ export const PATCH: APIRoute = async ({ request, params, cookies }) => {
   if (!updated) return new Response('Not found', { status: 404 });
 
   return new Response(JSON.stringify(updated), {
+    status: 200,
+    headers: { 'Content-Type': 'application/json' },
+  });
+};
+
+export const DELETE: APIRoute = async ({ params, cookies }) => {
+  const session = cookies.get('dashboard_session')?.value;
+  if (session !== 'authenticated') return new Response('Unauthorized', { status: 401 });
+
+  const id = params.id;
+  if (!id) return new Response('Missing id', { status: 400 });
+
+  const deleted = await deleteLead(id);
+  if (!deleted) return new Response('Not found', { status: 404 });
+
+  return new Response(JSON.stringify({ ok: true }), {
     status: 200,
     headers: { 'Content-Type': 'application/json' },
   });

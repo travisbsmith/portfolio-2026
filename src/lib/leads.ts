@@ -1,4 +1,4 @@
-export type LeadStage = 'Lead' | 'Call Scheduled' | 'Proposal Sent' | 'Active' | 'Closed';
+export type LeadStage = 'Lead' | 'Call Scheduled' | 'Proposal Sent' | 'Active' | 'Closed' | 'Archived';
 
 export interface Lead {
   id: string;
@@ -60,4 +60,13 @@ export async function updateLead(id: string, patch: Partial<Lead>): Promise<Lead
   leads[idx] = { ...leads[idx], ...patch, updatedAt: new Date().toISOString() };
   await kv.set(KV_KEY, leads);
   return leads[idx];
+}
+
+export async function deleteLead(id: string): Promise<boolean> {
+  const kv = await getKV();
+  const leads = await getLeads();
+  const filtered = leads.filter((l) => l.id !== id);
+  if (filtered.length === leads.length) return false;
+  await kv.set(KV_KEY, filtered);
+  return true;
 }
