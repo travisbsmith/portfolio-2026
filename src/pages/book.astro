@@ -3,10 +3,6 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 
-const BASIN_ENDPOINT = 'https://usebasin.com/f/ec85376522d8';
-
-// The page users are sent to after submission
-const SUCCESS_URL = 'https://fully-operational.com/booked';
 ---
 
 <BaseLayout
@@ -45,13 +41,11 @@ const SUCCESS_URL = 'https://fully-operational.com/booked';
       <form
         id="booking-form"
         class="book__form"
-        action={BASIN_ENDPOINT}
+        action="/api/leads/new"
         method="POST"
       >
-        <!-- Basin: redirect after success -->
-        <input type="hidden" name="_next" value={SUCCESS_URL} />
-        <!-- Basin: spam honeypot -->
-        <input type="text" name="_gotcha" style="display:none" />
+        <!-- Honeypot spam trap -->
+        <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
 
         <!-- Section 1: About You -->
         <fieldset class="book__fieldset">
