@@ -475,23 +475,32 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
   }
 
   .stage-badge {
-    display: inline-block;
-    padding: 2px var(--space-2);
-    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     text-transform: uppercase;
-    letter-spacing: 0.04em;
-    background: var(--color-bg-alt);
-    border: 1px solid var(--color-border);
+    letter-spacing: 0.05em;
+    font-weight: 500;
   }
 
-  .stage-active { border-color: #38a169; color: #38a169; }
-  .stage-lead { border-color: #d69e2e; color: #d69e2e; }
-  .stage-call-scheduled { border-color: #4299e1; color: #4299e1; }
-  .stage-proposal-sent { border-color: var(--color-accent); color: var(--color-accent); }
-  .stage-closed { border-color: var(--color-text-tertiary); color: var(--color-text-tertiary); }
-  .stage-archived { border-color: var(--color-border); color: var(--color-text-tertiary); }
+  .stage-badge::before {
+    content: '';
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    background: currentColor;
+  }
+
+  .stage-active       { color: #38a169; }
+  .stage-lead         { color: #d69e2e; }
+  .stage-call-scheduled { color: #4299e1; }
+  .stage-proposal-sent  { color: var(--color-accent); }
+  .stage-closed       { color: var(--color-text-tertiary); }
+  .stage-archived     { color: var(--color-text-tertiary); }
 
   /* ── Archive/Delete ── */
   .btn-danger {
