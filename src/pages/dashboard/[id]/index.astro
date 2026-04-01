@@ -5,6 +5,8 @@ import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DashboardNav from '../../../components/DashboardNav.astro';
 import { getLeads } from '../../../lib/leads';
 import { isAuthenticated } from '../../../lib/auth';
+import { getTimeEntries } from '../../../lib/time';
+import { matchService } from '../../../lib/services';
 import Stripe from 'stripe';
 
 if (!isAuthenticated(Astro.cookies)) return Astro.redirect('/dashboard');
@@ -27,6 +29,16 @@ if (lead.stripeCustomerId) {
 
 // Find latest open invoice URL for follow-up pre-fill
 const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
+
+// Time tracking
+const timeEntries = await getTimeEntries(lead.id);
+const serviceConfig = matchService(lead.serviceInterest ?? '');
+const contractHours = serviceConfig?.contractHoursPerMonth ?? null;
+const now = new Date();
+const thisMonthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}`;
+const monthlyHours = timeEntries
+  .filter(e => e.date.startsWith(thisMonthPrefix))
+  .reduce((sum, e) => sum + e.hours, 0);
 ---
 
 <BaseLayout title={`${lead.name} — Dashboard`} description="Lead detail">
@@ -190,6 +202,66 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
             placeholder="Notes from the call — what they said, key problems, budget signals, next steps..."
             data-lead-id={lead.id}
           >{lead.internalNotes}</textarea>
+        </div>
+      </section>
+
+      <!-- 4. Time Tracking -->
+      <section class="card" id="time-card">
+        <div class="card__header">
+          <h2>Time</h2>
+          <div class="time-header-right">
+            {contractHours && (
+              <span class="time-month-total" id="time-month-label">
+                {monthlyHours.toFixed(1)} / {contractHours} hrs this month
+              </span>
+            )}
+            {!contractHours && timeEntries.length > 0 && (
+              <span class="time-month-total" id="time-month-label">
+                {monthlyHours.toFixed(1)} hrs this month
+              </span>
+            )}
+          </div>
+        </div>
+        <div class="card__body">
+          <form id="time-form" class="time-log-form">
+            <div class="time-form-row">
+              <div class="form-row">
+                <label for="time-date">Date</label>
+                <input type="date" id="time-date" name="date" required value={thisMonthPrefix + '-' + String(now.getDate()).padStart(2, '0')} />
+              </div>
+              <div class="form-row">
+                <label for="time-hours">Hours</label>
+                <select id="time-hours" name="hours">
+                  {[0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8].map(h => (
+                    <option value={h}>{h}</option>
+                  ))}
+                </select>
+              </div>
+              <div class="form-row time-desc-row">
+                <label for="time-desc">Description</label>
+                <input type="text" id="time-desc" name="description" placeholder="What you worked on..." />
+              </div>
+              <div class="time-form-actions">
+                <button type="submit" class="btn-save" id="time-submit">Log</button>
+              </div>
+            </div>
+            <div id="time-feedback" class="form-feedback"></div>
+          </form>
+
+          {timeEntries.length > 0 ? (
+            <div class="time-list" id="time-list">
+              {timeEntries.map(entry => (
+                <div class="time-entry" data-entry-id={entry.id}>
+                  <div class="time-entry__date">{entry.date}</div>
+                  <div class="time-entry__hours">{entry.hours}h</div>
+                  <div class="time-entry__desc">{entry.description || '—'}</div>
+                  <button class="time-entry__delete" aria-label="Delete entry" data-entry-id={entry.id}>&times;</button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p class="empty" id="time-empty">No time logged yet.</p>
+          )}
         </div>
       </section>
 
@@ -954,6 +1026,98 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
     font-size: var(--text-sm);
     margin: 0;
   }
+
+  /* ── Time tracking ── */
+  .time-header-right {
+    display: flex;
+    align-items: center;
+  }
+
+  .time-month-total {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+
+  .time-log-form {
+    margin-bottom: var(--space-4);
+  }
+
+  .time-form-row {
+    display: flex;
+    gap: var(--space-3);
+    align-items: flex-end;
+  }
+
+  .time-form-row .form-row {
+    margin-bottom: 0;
+  }
+
+  .time-form-row .form-row:first-child { flex: 0 0 130px; }
+  .time-form-row .form-row:nth-child(2) { flex: 0 0 80px; }
+  .time-desc-row { flex: 1 !important; }
+
+  .time-form-actions {
+    flex-shrink: 0;
+    padding-bottom: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .time-form-row { flex-wrap: wrap; }
+    .time-form-row .form-row { flex: 1 1 120px; }
+  }
+
+  .time-list {
+    display: flex;
+    flex-direction: column;
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-2);
+  }
+
+  .time-entry {
+    display: grid;
+    grid-template-columns: 100px 48px 1fr 28px;
+    gap: var(--space-3);
+    align-items: center;
+    padding: var(--space-3) 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .time-entry:last-child { border-bottom: none; }
+
+  .time-entry__date {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+
+  .time-entry__hours {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+    text-align: right;
+  }
+
+  .time-entry__desc {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .time-entry__delete {
+    background: none;
+    border: none;
+    color: var(--color-text-tertiary);
+    cursor: pointer;
+    font-size: var(--text-base);
+    line-height: 1;
+    padding: 2px 4px;
+    border-radius: var(--radius-sm);
+    transition: color 0.12s;
+    text-align: center;
+  }
+
+  .time-entry__delete:hover { color: #e53e3e; }
 </style>
 
 <script define:vars={{
@@ -962,6 +1126,8 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
   leadName: lead.name,
   serviceInterest: lead.serviceInterest,
   latestOpenInvoiceUrl: latestOpenInvoice?.hosted_invoice_url ?? '',
+  contractHoursPerMonth: contractHours,
+  thisMonthPrefix,
 }}>
 
 async function patchLead(patch: Record<string, string>, statusEl: HTMLElement) {
@@ -1145,4 +1311,118 @@ document.getElementById('stripe-id-save').addEventListener('click', () =>
   patchLead({ stripeCustomerId: (document.getElementById('stripe-customer-id') as HTMLInputElement).value },
     document.getElementById('stripe-id-status') as HTMLElement)
 );
+
+// ── Time tracking ──
+const timeForm = document.getElementById('time-form') as HTMLFormElement;
+const timeFeedback = document.getElementById('time-feedback')!;
+const timeList = document.getElementById('time-list');
+const timeEmpty = document.getElementById('time-empty');
+const timeMonthLabel = document.getElementById('time-month-label');
+
+function getMonthlyTotal(): number {
+  let total = 0;
+  document.querySelectorAll<HTMLElement>('.time-entry').forEach(entry => {
+    const dateEl = entry.querySelector('.time-entry__date');
+    const hoursEl = entry.querySelector('.time-entry__hours');
+    if (dateEl?.textContent?.startsWith(thisMonthPrefix) && hoursEl) {
+      total += parseFloat(hoursEl.textContent!) || 0;
+    }
+  });
+  return total;
+}
+
+function updateMonthLabel() {
+  if (!timeMonthLabel) return;
+  const total = getMonthlyTotal();
+  if (contractHoursPerMonth) {
+    timeMonthLabel.textContent = `${total.toFixed(1)} / ${contractHoursPerMonth} hrs this month`;
+  } else {
+    timeMonthLabel.textContent = `${total.toFixed(1)} hrs this month`;
+  }
+}
+
+timeForm?.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('time-submit') as HTMLButtonElement;
+  btn.disabled = true;
+  timeFeedback.textContent = '';
+
+  const date = (timeForm.elements.namedItem('date') as HTMLInputElement).value;
+  const hours = parseFloat((timeForm.elements.namedItem('hours') as HTMLSelectElement).value);
+  const description = (timeForm.elements.namedItem('description') as HTMLInputElement).value.trim();
+
+  try {
+    const res = await fetch(`/api/time/${leadId}`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date, hours, description }),
+    });
+    const entry = await res.json();
+    if (!res.ok) throw new Error(entry.error ?? 'Failed');
+
+    // Inject new row at top of list
+    const row = document.createElement('div');
+    row.className = 'time-entry';
+    row.dataset.entryId = entry.id;
+    row.innerHTML = `
+      <div class="time-entry__date">${entry.date}</div>
+      <div class="time-entry__hours">${entry.hours}h</div>
+      <div class="time-entry__desc">${entry.description || '—'}</div>
+      <button class="time-entry__delete" data-entry-id="${entry.id}" aria-label="Delete">&times;</button>
+    `;
+    attachDeleteHandler(row.querySelector('.time-entry__delete')!);
+
+    if (timeList) {
+      timeList.insertAdjacentElement('afterbegin', row);
+    } else {
+      // First entry — create list, remove empty state
+      const list = document.createElement('div');
+      list.className = 'time-list';
+      list.id = 'time-list';
+      list.appendChild(row);
+      timeEmpty?.replaceWith(list);
+    }
+
+    timeEmpty?.remove();
+    updateMonthLabel();
+    (timeForm.elements.namedItem('description') as HTMLInputElement).value = '';
+  } catch (err: any) {
+    timeFeedback.textContent = err.message ?? 'Error logging time';
+    timeFeedback.className = 'form-feedback error';
+  } finally {
+    btn.disabled = false;
+  }
+});
+
+function attachDeleteHandler(btn: HTMLElement) {
+  btn.addEventListener('click', async () => {
+    const entryId = btn.dataset.entryId!;
+    btn.textContent = '…';
+    try {
+      const res = await fetch(`/api/time/${leadId}`, {
+        method: 'DELETE',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ entryId }),
+      });
+      if (res.ok) {
+        btn.closest('.time-entry')?.remove();
+        updateMonthLabel();
+        const remaining = document.querySelectorAll('.time-entry').length;
+        if (remaining === 0) {
+          const empty = document.createElement('p');
+          empty.className = 'empty';
+          empty.id = 'time-empty';
+          empty.textContent = 'No time logged yet.';
+          document.querySelector('.time-list')?.replaceWith(empty);
+        }
+      } else {
+        btn.textContent = '×';
+      }
+    } catch {
+      btn.textContent = '×';
+    }
+  });
+}
+
+document.querySelectorAll<HTMLElement>('.time-entry__delete').forEach(attachDeleteHandler);
 </script>

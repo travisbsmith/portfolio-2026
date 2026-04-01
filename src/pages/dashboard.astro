@@ -6,6 +6,7 @@ import DashboardNav from '../components/DashboardNav.astro';
 import Stripe from 'stripe';
 import { getLeads, type Lead } from '../lib/leads';
 import { SESSION_COOKIE, SESSION_VALUE } from '../lib/auth';
+import { matchService } from '../lib/services';
 const DASHBOARD_PASSWORD = import.meta.env.DASHBOARD_PASSWORD ?? process.env.DASHBOARD_PASSWORD;
 
 let isAuthenticated = false;
@@ -74,6 +75,44 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     // Stripe not configured
   }
 }
+
+// ── Revenue widget stats ──
+const monthStart = new Date();
+monthStart.setDate(1);
+monthStart.setHours(0, 0, 0, 0);
+const monthStartUnix = Math.floor(monthStart.getTime() / 1000);
+const yearStart = new Date(monthStart.getFullYear(), 0, 1);
+const yearStartUnix = Math.floor(yearStart.getTime() / 1000);
+
+const proposalLeads = activeLeads.filter(l => l.stage === 'Proposal Sent');
+const pipelineValue = proposalLeads.reduce((sum, l) => {
+  const svc = matchService(l.serviceInterest ?? '');
+  return sum + (svc ? svc.priceCents / 100 : 0);
+}, 0);
+
+const clientsActive = activeLeads.filter(l => l.stage === 'Active');
+const activeMRR = clientsActive.reduce((sum, l) => {
+  const svc = matchService(l.serviceInterest ?? '');
+  return sum + (svc?.isRecurring ? svc.priceCents / 100 : 0);
+}, 0);
+
+let revenueThisMonth = 0;
+let revenueYTD = 0;
+if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY)) {
+  try {
+    const stripeR = new Stripe(import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY ?? '');
+    const paidInvoices = await stripeR.invoices.list({ status: 'paid', created: { gte: yearStartUnix }, limit: 100 });
+    for (const inv of paidInvoices.data) {
+      const amt = (inv.amount_paid ?? 0) / 100;
+      revenueYTD += amt;
+      if (inv.created >= monthStartUnix) revenueThisMonth += amt;
+    }
+  } catch { /* Stripe not configured */ }
+}
+
+function fmt$(n: number): string {
+  return n === 0 ? '$0' : '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
 ---
 
 <BaseLayout title="Dashboard — Travis Smith" description="Private dashboard">
@@ -117,9 +156,35 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
             </a>
           )}
 
+          <div class="stats-strip">
+            <div class="stat-card">
+              <div class="stat-label">Pipeline</div>
+              <div class="stat-value">{fmt$(pipelineValue)}</div>
+              <div class="stat-sub">{proposalLeads.length} open proposal{proposalLeads.length !== 1 ? 's' : ''}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">This Month</div>
+              <div class="stat-value">{fmt$(revenueThisMonth)}</div>
+              <div class="stat-sub">paid invoices</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">Active MRR</div>
+              <div class="stat-value">{fmt$(activeMRR)}</div>
+              <div class="stat-sub">{clientsActive.length} active client{clientsActive.length !== 1 ? 's' : ''}</div>
+            </div>
+            <div class="stat-card">
+              <div class="stat-label">YTD Revenue</div>
+              <div class="stat-value">{fmt$(revenueYTD)}</div>
+              <div class="stat-sub">{new Date().getFullYear()} total</div>
+            </div>
+          </div>
+
           <div class="section-header">
             <h2>Clients</h2>
-            <button class="btn-primary" id="new-invoice-btn">+ New Invoice</button>
+            <div class="header-actions">
+              <button class="btn-secondary" id="new-lead-btn">+ New Lead</button>
+              <button class="btn-primary" id="new-invoice-btn">+ New Invoice</button>
+            </div>
           </div>
 
           {activeLeads.length === 0 && archivedLeads.length === 0 ? (
@@ -316,6 +381,60 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     </div>
   </div>
 
+  <!-- ═══════════════════════════════════════════
+       NEW LEAD MODAL
+  ════════════════════════════════════════════ -->
+  <div id="new-lead-modal" class="modal" aria-hidden="true">
+    <div class="modal-backdrop"></div>
+    <div class="modal-dialog">
+      <div class="modal-header">
+        <h2>New Lead</h2>
+        <button class="modal-close-lead" aria-label="Close">&times;</button>
+      </div>
+      <form id="new-lead-form" class="modal-body">
+        <div class="form-row">
+          <label for="nl-name">Name *</label>
+          <input type="text" id="nl-name" name="name" required placeholder="Jane Founder" />
+        </div>
+        <div class="form-row">
+          <label for="nl-email">Email *</label>
+          <input type="email" id="nl-email" name="email" required placeholder="jane@example.com" />
+        </div>
+        <div class="form-row">
+          <label for="nl-service">Service Interest</label>
+          <select id="nl-service" name="serviceInterest">
+            <option value="">— not set —</option>
+            <option value="Clarity Session">Clarity Session ($500)</option>
+            <option value="Store Launch Sprint">Store Launch Sprint ($2,500)</option>
+            <option value="Insider Retainer">Insider Retainer ($3,500/mo)</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="nl-stage">Stage</label>
+          <select id="nl-stage" name="stage">
+            <option value="Lead">Lead</option>
+            <option value="Call Scheduled">Call Scheduled</option>
+            <option value="Proposal Sent">Proposal Sent</option>
+            <option value="Active">Active</option>
+          </select>
+        </div>
+        <div class="form-row">
+          <label for="nl-store">Store URL</label>
+          <input type="text" id="nl-store" name="storeUrl" placeholder="example.myshopify.com" />
+        </div>
+        <div class="form-row">
+          <label for="nl-notes">Notes</label>
+          <textarea id="nl-notes" name="notes" rows="3" placeholder="How they found you, what they need..."></textarea>
+        </div>
+        <div id="new-lead-feedback" class="form-feedback"></div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary modal-close-lead-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Add Lead</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
 </BaseLayout>
 
 <style>
@@ -479,6 +598,49 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     color: var(--color-text-secondary);
   }
 
+  /* ── Stats strip ── */
+  .stats-strip {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-4);
+    margin-bottom: var(--space-6);
+  }
+
+  @media (max-width: 768px) {
+    .stats-strip { grid-template-columns: repeat(2, 1fr); }
+  }
+
+  .stat-card {
+    background: var(--color-bg);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-5);
+  }
+
+  .stat-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.07em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-1);
+  }
+
+  .stat-value {
+    font-size: var(--text-2xl);
+    font-weight: 600;
+    color: var(--color-text);
+    line-height: 1.1;
+    margin-bottom: 4px;
+  }
+
+  .stat-sub {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+  }
+
+  /* ── Section header ── */
   .section-header {
     display: flex;
     justify-content: space-between;
@@ -489,6 +651,11 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
   .section-header h2 {
     font-size: var(--text-xl);
     margin: 0;
+  }
+
+  .header-actions {
+    display: flex;
+    gap: var(--space-2);
   }
 
   /* ── Empty state ── */
@@ -1179,6 +1346,70 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
   followupModal.querySelector('.modal-close-followup')?.addEventListener('click', closeFollowupModal);
   followupModal.querySelector('.modal-close-followup-btn')?.addEventListener('click', closeFollowupModal);
   followupModal.querySelector('.modal-backdrop')?.addEventListener('click', closeFollowupModal);
+
+  // ── New Lead modal ──
+  const newLeadModal = document.getElementById('new-lead-modal')!;
+  const newLeadForm = document.getElementById('new-lead-form') as HTMLFormElement;
+  const newLeadFeedback = document.getElementById('new-lead-feedback')!;
+
+  document.getElementById('new-lead-btn')?.addEventListener('click', () => {
+    newLeadModal.classList.add('open');
+    newLeadModal.setAttribute('aria-hidden', 'false');
+  });
+
+  function closeNewLeadModal() {
+    newLeadModal.classList.remove('open');
+    newLeadModal.setAttribute('aria-hidden', 'true');
+    newLeadFeedback.textContent = '';
+    newLeadFeedback.className = 'form-feedback';
+    newLeadForm.reset();
+  }
+
+  newLeadModal.querySelector('.modal-close-lead')?.addEventListener('click', closeNewLeadModal);
+  newLeadModal.querySelector('.modal-close-lead-btn')?.addEventListener('click', closeNewLeadModal);
+  newLeadModal.querySelector('.modal-backdrop')?.addEventListener('click', closeNewLeadModal);
+
+  newLeadForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const btn = newLeadForm.querySelector<HTMLButtonElement>('[type="submit"]')!;
+    btn.disabled = true;
+    btn.textContent = 'Saving…';
+    newLeadFeedback.textContent = '';
+    newLeadFeedback.className = 'form-feedback';
+
+    const data = {
+      name: (newLeadForm.elements.namedItem('name') as HTMLInputElement).value.trim(),
+      email: (newLeadForm.elements.namedItem('email') as HTMLInputElement).value.trim(),
+      serviceInterest: (newLeadForm.elements.namedItem('serviceInterest') as HTMLSelectElement).value,
+      stage: (newLeadForm.elements.namedItem('stage') as HTMLSelectElement).value,
+      storeUrl: (newLeadForm.elements.namedItem('storeUrl') as HTMLInputElement).value.trim(),
+      notes: (newLeadForm.elements.namedItem('notes') as HTMLTextAreaElement).value.trim(),
+    };
+
+    try {
+      const res = await fetch('/api/leads/manual', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data),
+      });
+      const json = await res.json();
+      if (res.ok) {
+        newLeadFeedback.textContent = 'Lead added ✓ — reloading…';
+        newLeadFeedback.className = 'form-feedback success';
+        setTimeout(() => location.reload(), 1200);
+      } else {
+        newLeadFeedback.textContent = json.error ?? 'Something went wrong';
+        newLeadFeedback.className = 'form-feedback error';
+        btn.disabled = false;
+        btn.textContent = 'Add Lead';
+      }
+    } catch {
+      newLeadFeedback.textContent = 'Network error — try again';
+      newLeadFeedback.className = 'form-feedback error';
+      btn.disabled = false;
+      btn.textContent = 'Add Lead';
+    }
+  });
 
   followupForm.addEventListener('submit', async (e) => {
     e.preventDefault();

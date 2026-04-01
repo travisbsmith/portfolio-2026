@@ -3,6 +3,7 @@ export interface ServiceConfig {
   priceCents: number;
   isRecurring: boolean;
   invoiceAmountStr: string;
+  contractHoursPerMonth?: number;
 }
 
 export const SERVICES: Record<string, ServiceConfig> = {
@@ -23,6 +24,7 @@ export const SERVICES: Record<string, ServiceConfig> = {
     priceCents: 350000,
     isRecurring: true,
     invoiceAmountStr: '3500',
+    contractHoursPerMonth: 12,
   },
 };
 
