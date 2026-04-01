@@ -30,54 +30,70 @@ export interface Lead {
 
 const KV_KEY = 'leads';
 
-async function getKV() {
+function kvConfig() {
   const url = process.env.KV_REST_API_URL;
   const token = process.env.KV_REST_API_TOKEN;
   if (!url || !token) throw new Error('KV env vars not set');
-  const { createClient } = await import('@vercel/kv');
-  return createClient({ url, token });
+  return { url, token };
+}
+
+// Use the Upstash REST API directly — avoids any @vercel/kv abstraction issues.
+async function kvFetch(command: string[]): Promise<any> {
+  const { url, token } = kvConfig();
+  const res = await fetch(`${url}/${command.map(encodeURIComponent).join('/')}`, {
+    headers: { Authorization: `Bearer ${token}` },
+  });
+  if (!res.ok) throw new Error(`KV error ${res.status}: ${await res.text()}`);
+  const json = await res.json();
+  return json.result;
+}
+
+function parseLead(raw: unknown): Lead {
+  return (typeof raw === 'string' ? JSON.parse(raw) : raw) as Lead;
 }
 
 export async function getLeads(): Promise<Lead[]> {
   try {
-    const kv = await getKV();
-    const hash = await kv.hgetall<Record<string, string>>(KV_KEY);
-    if (!hash) return [];
-    return Object.values(hash).map((v) => (typeof v === 'string' ? JSON.parse(v) : v) as Lead);
-  } catch {
+    // HGETALL returns [field, value, field, value, ...] as a flat array
+    const result: string[] | null = await kvFetch(['hgetall', KV_KEY]);
+    if (!result || result.length === 0) return [];
+    const leads: Lead[] = [];
+    for (let i = 0; i < result.length; i += 2) {
+      leads.push(parseLead(result[i + 1]));
+    }
+    return leads;
+  } catch (e) {
+    console.error('getLeads error:', e);
     return [];
   }
 }
 
 export async function getLead(id: string): Promise<Lead | null> {
   try {
-    const kv = await getKV();
-    const raw = await kv.hget<string>(KV_KEY, id);
+    const raw = await kvFetch(['hget', KV_KEY, id]);
     if (!raw) return null;
-    return (typeof raw === 'string' ? JSON.parse(raw) : raw) as Lead;
-  } catch {
+    return parseLead(raw);
+  } catch (e) {
+    console.error('getLead error:', e);
     return null;
   }
 }
 
 export async function saveLead(lead: Lead): Promise<void> {
-  const kv = await getKV();
-  await kv.hset(KV_KEY, { [lead.id]: JSON.stringify(lead) });
+  await kvFetch(['hset', KV_KEY, lead.id, JSON.stringify(lead)]);
 }
 
 export async function updateLead(id: string, patch: Partial<Lead>): Promise<Lead | null> {
-  const kv = await getKV();
   const existing = await getLead(id);
   if (!existing) return null;
   const updated: Lead = { ...existing, ...patch, updatedAt: new Date().toISOString() };
-  await kv.hset(KV_KEY, { [id]: JSON.stringify(updated) });
+  await kvFetch(['hset', KV_KEY, id, JSON.stringify(updated)]);
   return updated;
 }
 
 export async function deleteLead(id: string): Promise<boolean> {
-  const kv = await getKV();
   const existing = await getLead(id);
   if (!existing) return false;
-  await kv.hdel(KV_KEY, id);
+  await kvFetch(['hdel', KV_KEY, id]);
   return true;
 }
