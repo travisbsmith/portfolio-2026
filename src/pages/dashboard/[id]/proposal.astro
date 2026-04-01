@@ -686,7 +686,7 @@ document.getElementById('btn-send').addEventListener('click', async () => {
       await fetch(`/api/leads/${leadId}`, {
         method: 'PATCH',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ stage: 'Proposal Sent' }),
+        body: JSON.stringify({ stage: 'Proposal Sent', proposalHtml: html, proposalSubject: subject }),
       });
       // Clear draft
       localStorage.removeItem(DRAFT_KEY);

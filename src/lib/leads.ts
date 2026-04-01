@@ -20,6 +20,8 @@ export interface Lead {
   stage: LeadStage;
   internalNotes: string;
   stripeCustomerId: string;
+  proposalHtml?: string;
+  proposalSubject?: string;
   createdAt: string;
   updatedAt: string;
 }
