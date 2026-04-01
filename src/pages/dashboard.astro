@@ -127,7 +127,7 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
                       <th>Stage</th>
                       <th>Latest Invoice</th>
                       <th>Amount</th>
-                      <th>Actions</th>
+                      <th></th>
                     </tr>
                   </thead>
                   <tbody id="active-leads-body">
@@ -619,15 +619,14 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     border: none;
     cursor: pointer;
     font-size: 18px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text);
     padding: var(--space-1) var(--space-2);
     border-radius: var(--radius-sm);
     line-height: 1;
-    transition: color 0.15s, background 0.15s;
+    transition: background 0.15s;
   }
 
   .row-menu-btn:hover {
-    color: var(--color-text);
     background: var(--color-bg-alt);
   }
 
