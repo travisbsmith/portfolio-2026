@@ -1082,8 +1082,8 @@ document.getElementById('btn-invoice').addEventListener('click', () => {
 document.getElementById('btn-followup').addEventListener('click', () => {
   const firstName = leadName.split(' ')[0];
   const body = latestOpenInvoiceUrl
-    ? `Hi ${firstName},\n\nJust a quick check-in — your invoice is still open.\n\nView and pay here: ${latestOpenInvoiceUrl}\n\nLet me know if you have any questions.\n\n— Travis`
-    : `Hi ${firstName},\n\nJust following up on our conversation — happy to answer any questions or chat more about next steps.\n\n— Travis`;
+    ? `Hi ${firstName},\n\nJust a quick check-in — your invoice is still open.\n\nView and pay here: ${latestOpenInvoiceUrl}\n\nLet me know if you have any questions.\n\n— Travis\ntravis@fully-operational.com`
+    : `Hi ${firstName},\n\nJust following up on our conversation — happy to answer any questions or chat more about next steps.\n\nIf you'd like to book a call: https://cal.com/fullyoperational\n\n— Travis\ntravis@fully-operational.com`;
   document.getElementById('fu-body').value = body;
   openPanel('followup');
 });

@@ -37,7 +37,7 @@ const TEMPLATES: Record<string, { subject: string; price: string; intro: string;
 <p><strong>$500 flat</strong></p>
 <p>To book: Pay here → [Stripe link] and I'll send a calendar invite.</p>
 <p>Questions? Just reply here.</p>
-<p>— Travis<br>travis@fully-operational.com</p>`,
+<p>— Travis<br>travis@fully-operational.com<br><a href="https://cal.com/fullyoperational">cal.com/fullyoperational</a></p>`,
   },
   'Store Launch Sprint': {
     subject: `Proposal: ${lead.name} × Fully Operational`,
@@ -62,7 +62,7 @@ const TEMPLATES: Record<string, { subject: string; price: string; intro: string;
 <p><strong>$2,500/month</strong> — Month 1 is on me while we establish the engagement.</p>
 <p>To get started: Reply here and I'll send a kickoff doc with what I need from you to begin.</p>
 <p>Questions? Just reply.</p>
-<p>— Travis<br>travis@fully-operational.com</p>`,
+<p>— Travis<br>travis@fully-operational.com<br><a href="https://cal.com/fullyoperational">cal.com/fullyoperational</a></p>`,
   },
   'Insider Retainer': {
     subject: `Proposal: ${lead.name} × Fully Operational`,
@@ -82,7 +82,7 @@ const TEMPLATES: Record<string, { subject: string; price: string; intro: string;
 <p><strong>$3,500/month</strong></p>
 <p>To get started: Pay the first month here → [Stripe link] and I'll send an onboarding doc.</p>
 <p>Questions? Just reply.</p>
-<p>— Travis<br>travis@fully-operational.com</p>`,
+<p>— Travis<br>travis@fully-operational.com<br><a href="https://cal.com/fullyoperational">cal.com/fullyoperational</a></p>`,
   },
 };
 
@@ -108,7 +108,7 @@ const defaultBody = template?.body ?? `<h2>[Service Name] — [Price]</h2>
 <h3>Investment</h3>
 <p><strong>[PRICE]</strong></p>
 <p>To get started: [Next step]</p>
-<p>— Travis<br>travis@fully-operational.com</p>`;
+<p>— Travis<br>travis@fully-operational.com<br><a href="https://cal.com/fullyoperational">cal.com/fullyoperational</a></p>`;
 ---
 
 <BaseLayout title={`Proposal — ${lead.name}`} description="Write and send a proposal">
@@ -635,7 +635,7 @@ const BLANK_BODY = `<h2>[Service Name] — [Price]</h2>
 <h3>Investment</h3>
 <p><strong>[PRICE]</strong></p>
 <p>To get started: [Next step]</p>
-<p>— Travis<br>travis@fully-operational.com</p>`;
+<p>— Travis<br>travis@fully-operational.com<br><a href="https://cal.com/fullyoperational">cal.com/fullyoperational</a></p>`;
 
 document.querySelectorAll('.tpl-btn').forEach(btn => {
   btn.addEventListener('click', () => {

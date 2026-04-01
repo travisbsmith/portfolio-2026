@@ -53,6 +53,12 @@ if (isAuthenticated) {
 const activeLeads = leads.filter(l => l.stage !== 'Archived');
 const archivedLeads = leads.filter(l => l.stage === 'Archived');
 
+// Next upcoming meeting across all active leads
+const now = new Date();
+const nextCall = activeLeads
+  .filter(l => l.nextMeetingISO && new Date(l.nextMeetingISO) > now)
+  .sort((a, b) => new Date(a.nextMeetingISO!).getTime() - new Date(b.nextMeetingISO!).getTime())[0] ?? null;
+
 // Fetch Stripe invoices per lead
 const stripeInvoicesByClient: Record<string, any[]> = {};
 if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY)) {
@@ -106,6 +112,17 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
 
       <main class="dashboard-main">
         <div class="container">
+
+          {nextCall && (
+            <a href={`/dashboard/${nextCall.id}`} class="next-call-card">
+              <div class="next-call-label">Next call</div>
+              <div class="next-call-info">
+                <span class="next-call-name">{nextCall.name}</span>
+                <span class="next-call-dot">·</span>
+                <span class="next-call-time">{nextCall.nextMeeting}</span>
+              </div>
+            </a>
+          )}
 
           <div class="section-header">
             <h2>Clients</h2>
@@ -435,6 +452,57 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
   /* ── Dashboard main ── */
   .dashboard-main {
     padding: var(--space-8) 0;
+  }
+
+  /* ── Next Call card ── */
+  .next-call-card {
+    display: flex;
+    align-items: center;
+    gap: var(--space-6);
+    padding: var(--space-4) var(--space-6);
+    background: var(--color-bg);
+    border: 1px solid var(--color-accent);
+    border-radius: var(--radius-md);
+    margin-bottom: var(--space-6);
+    text-decoration: none;
+    transition: background 0.15s;
+  }
+
+  .next-call-card:hover {
+    background: var(--color-bg-alt);
+  }
+
+  .next-call-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-accent);
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .next-call-info {
+    display: flex;
+    align-items: center;
+    gap: var(--space-3);
+    flex-wrap: wrap;
+  }
+
+  .next-call-name {
+    font-size: var(--text-sm);
+    font-weight: 600;
+    color: var(--color-text);
+  }
+
+  .next-call-dot {
+    color: var(--color-text-tertiary);
+  }
+
+  .next-call-time {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
   }
 
   .section-header {
