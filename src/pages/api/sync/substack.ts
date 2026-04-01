@@ -1,6 +1,8 @@
 import type { APIRoute } from 'astro';
 import { createClient } from '@vercel/kv';
-import Parser from 'rss-parser';
+// rss-parser uses `export =` — must use createRequire to avoid verbatimModuleSyntax error
+import { createRequire } from 'module';
+const Parser = createRequire(import.meta.url)('rss-parser');
 
 export const prerender = false;
 
