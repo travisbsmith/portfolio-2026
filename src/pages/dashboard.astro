@@ -143,6 +143,7 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
                             <div class="client-name">{lead.name}</div>
                             <div class="client-email">{lead.email}</div>
                             {lead.storeUrl && <div class="client-store"><a href={lead.storeUrl} target="_blank" rel="noopener">{lead.storeUrl.replace(/^https?:\/\//, '')}</a></div>}
+                            {lead.nextMeeting && <div class="client-meeting">📅 {lead.nextMeeting}</div>}
                           </td>
                           <td>
                             <div class="service-interest">
@@ -463,6 +464,13 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-accent);
+  }
+
+  .client-meeting {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    margin-top: 3px;
   }
 
   .service-interest {

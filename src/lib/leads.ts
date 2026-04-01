@@ -14,6 +14,7 @@ export interface Lead {
   additionalNotes?: string;
   launchDate?: string;
   hasVisualDesigner?: string;
+  nextMeeting?: string;
   stage: LeadStage;
   internalNotes: string;
   stripeCustomerId: string;
