@@ -5,8 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import DashboardNav from '../components/DashboardNav.astro';
 import Stripe from 'stripe';
 import { getLeads, type Lead } from '../lib/leads';
-import { SESSION_COOKIE, generateSessionToken, isAuthenticated as checkAuth } from '../lib/auth';
-import { matchService } from '../lib/services';
+import { SESSION_COOKIE, SESSION_VALUE } from '../lib/auth';
 const DASHBOARD_PASSWORD = import.meta.env.DASHBOARD_PASSWORD ?? process.env.DASHBOARD_PASSWORD;
 
 let isAuthenticated = false;
@@ -24,7 +23,7 @@ if (Astro.request.method === 'POST') {
 
   const password = formData.get('password');
   if (password === DASHBOARD_PASSWORD) {
-    Astro.cookies.set(SESSION_COOKIE, generateSessionToken(), {
+    Astro.cookies.set(SESSION_COOKIE, SESSION_VALUE, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
@@ -37,7 +36,7 @@ if (Astro.request.method === 'POST') {
   }
 }
 
-isAuthenticated = checkAuth(Astro.cookies);
+isAuthenticated = Astro.cookies.get(SESSION_COOKIE)?.value === SESSION_VALUE;
 
 // Leads from KV
 let leads: Lead[] = [];
@@ -58,72 +57,23 @@ const nextCall = activeLeads
   .filter(l => l.nextMeetingISO && new Date(l.nextMeetingISO).getTime() > nowMs)
   .sort((a, b) => new Date(a.nextMeetingISO!).getTime() - new Date(b.nextMeetingISO!).getTime())[0] ?? null;
 
-// Fetch Stripe invoices per lead + revenue stats
+// Fetch Stripe invoices per lead
 const stripeInvoicesByClient: Record<string, any[]> = {};
-let revenueThisMonth = 0;
-let activeMRR = 0;
-let nextRenewal: { name: string; date: string } | null = null;
-
 if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY)) {
   try {
     const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY ?? '');
     const stripeLeads = leads.filter(l => l.stripeCustomerId);
-
-    const monthStart = new Date();
-    monthStart.setDate(1);
-    monthStart.setHours(0, 0, 0, 0);
-
-    const [invoiceResults, paidInvoices, activeSubs] = await Promise.allSettled([
-      Promise.allSettled(stripeLeads.map(l => stripe.invoices.list({ customer: l.stripeCustomerId, limit: 5 }))),
-      stripe.invoices.list({ status: 'paid', created: { gte: Math.floor(monthStart.getTime() / 1000) }, limit: 100 }),
-      stripe.subscriptions.list({ status: 'active', limit: 100 }),
-    ]);
-
-    // Per-lead invoices
-    if (invoiceResults.status === 'fulfilled') {
-      invoiceResults.value.forEach((result, i) => {
-        stripeInvoicesByClient[stripeLeads[i].email] =
-          result.status === 'fulfilled' ? result.value.data : [];
-      });
-    }
-
-    // Revenue this month
-    if (paidInvoices.status === 'fulfilled') {
-      revenueThisMonth = paidInvoices.value.data.reduce((sum, inv) => sum + (inv.amount_paid ?? 0), 0);
-    }
-
-    // MRR + next renewal
-    if (activeSubs.status === 'fulfilled') {
-      for (const sub of activeSubs.value.data) {
-        const monthly = sub.items.data.reduce((sum, item) => {
-          const price = item.price;
-          const amt = price.unit_amount ?? 0;
-          if (price.recurring?.interval === 'year') return sum + Math.round(amt / 12);
-          return sum + amt;
-        }, 0);
-        activeMRR += monthly;
-
-        // Find next renewal — match to lead name via customer
-        const firstItem = sub.items.data[0] as any;
-        const renewsAt = new Date(((firstItem?.current_period_end ?? 0) as number) * 1000);
-        const lead = stripeLeads.find(l => l.stripeCustomerId === sub.customer);
-        if (lead && (!nextRenewal || renewsAt < new Date(nextRenewal.date))) {
-          nextRenewal = {
-            name: lead.name,
-            date: renewsAt.toLocaleDateString('en-US', { month: 'short', day: 'numeric' }),
-          };
-        }
-      }
-    }
+    const results = await Promise.allSettled(
+      stripeLeads.map(l => stripe.invoices.list({ customer: l.stripeCustomerId, limit: 5 }))
+    );
+    results.forEach((result, i) => {
+      stripeInvoicesByClient[stripeLeads[i].email] =
+        result.status === 'fulfilled' ? result.value.data : [];
+    });
   } catch {
     // Stripe not configured
   }
 }
-
-// Pipeline value: sum of service prices for leads in Proposal Sent stage
-const pipelineValueCents = activeLeads
-  .filter(l => l.stage === 'Proposal Sent')
-  .reduce((sum, l) => sum + (matchService(l.serviceInterest)?.priceCents ?? 0), 0);
 ---
 
 <BaseLayout title="Dashboard — Travis Smith" description="Private dashboard">
@@ -167,31 +117,9 @@ const pipelineValueCents = activeLeads
             </a>
           )}
 
-          <div class="revenue-strip">
-            <div class="revenue-stat">
-              <div class="revenue-label">Pipeline</div>
-              <div class="revenue-value">{pipelineValueCents > 0 ? `$${(pipelineValueCents / 100).toLocaleString('en-US')}` : '—'}</div>
-            </div>
-            <div class="revenue-stat">
-              <div class="revenue-label">Revenue this month</div>
-              <div class="revenue-value">{revenueThisMonth > 0 ? `$${(revenueThisMonth / 100).toLocaleString('en-US')}` : '—'}</div>
-            </div>
-            <div class="revenue-stat">
-              <div class="revenue-label">Active MRR</div>
-              <div class="revenue-value">{activeMRR > 0 ? `$${(activeMRR / 100).toLocaleString('en-US')}/mo` : '—'}</div>
-            </div>
-            <div class="revenue-stat">
-              <div class="revenue-label">Next renewal</div>
-              <div class="revenue-value">{nextRenewal ? `${nextRenewal.name} · ${nextRenewal.date}` : '—'}</div>
-            </div>
-          </div>
-
           <div class="section-header">
             <h2>Clients</h2>
-            <div class="section-header-actions">
-              <button class="btn-secondary" id="new-lead-btn">+ New Lead</button>
-              <button class="btn-primary" id="new-invoice-btn">+ New Invoice</button>
-            </div>
+            <button class="btn-primary" id="new-invoice-btn">+ New Invoice</button>
           </div>
 
           {activeLeads.length === 0 && archivedLeads.length === 0 ? (
@@ -310,56 +238,6 @@ const pipelineValueCents = activeLeads
       </main>
     </div>
   )}
-
-  <!-- ═══════════════════════════════════════════
-       NEW LEAD MODAL
-  ════════════════════════════════════════════ -->
-  <div id="new-lead-modal" class="modal" aria-hidden="true">
-    <div class="modal-backdrop"></div>
-    <div class="modal-dialog">
-      <div class="modal-header">
-        <h2>Add Lead</h2>
-        <button class="modal-close-new-lead" aria-label="Close">&times;</button>
-      </div>
-      <form id="new-lead-form" class="modal-body">
-        <div class="form-row">
-          <label for="nl-name">Name</label>
-          <input type="text" id="nl-name" name="name" required placeholder="Jane Founder" />
-        </div>
-        <div class="form-row">
-          <label for="nl-email">Email</label>
-          <input type="email" id="nl-email" name="email" required placeholder="jane@example.com" />
-        </div>
-        <div class="form-row">
-          <label for="nl-service">Service interest</label>
-          <select id="nl-service" name="serviceInterest">
-            <option value="">— Select —</option>
-            <option value="Clarity Session">Clarity Session</option>
-            <option value="Store Launch Sprint">Store Launch Sprint</option>
-            <option value="Insider Retainer">Insider Retainer</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="nl-stage">Stage</label>
-          <select id="nl-stage" name="stage">
-            <option value="Lead">Lead</option>
-            <option value="Call Scheduled">Call Scheduled</option>
-            <option value="Proposal Sent">Proposal Sent</option>
-            <option value="Active">Active</option>
-          </select>
-        </div>
-        <div class="form-row">
-          <label for="nl-notes">Notes</label>
-          <textarea id="nl-notes" name="internalNotes" rows="3" placeholder="How you met, referral source, etc."></textarea>
-        </div>
-        <div id="new-lead-feedback" class="form-feedback"></div>
-        <div class="modal-actions">
-          <button type="button" class="btn-secondary modal-close-new-lead-btn">Cancel</button>
-          <button type="submit" class="btn-primary" id="save-new-lead-btn">Add Lead</button>
-        </div>
-      </form>
-    </div>
-  </div>
 
   <!-- ═══════════════════════════════════════════
        NEW INVOICE MODAL
@@ -601,41 +479,6 @@ const pipelineValueCents = activeLeads
     color: var(--color-text-secondary);
   }
 
-  /* ── Revenue strip ── */
-  .revenue-strip {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: var(--space-4);
-    margin-bottom: var(--space-6);
-  }
-
-  .revenue-stat {
-    background: var(--color-bg-alt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    padding: var(--space-4);
-  }
-
-  .revenue-label {
-    font-size: var(--text-xs);
-    color: var(--color-text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.05em;
-    margin-bottom: var(--space-1);
-  }
-
-  .revenue-value {
-    font-size: var(--text-lg);
-    font-weight: 600;
-    font-variant-numeric: tabular-nums;
-  }
-
-  @media (max-width: 768px) {
-    .revenue-strip {
-      grid-template-columns: repeat(2, 1fr);
-    }
-  }
-
   .section-header {
     display: flex;
     justify-content: space-between;
@@ -646,11 +489,6 @@ const pipelineValueCents = activeLeads
   .section-header h2 {
     font-size: var(--text-xl);
     margin: 0;
-  }
-
-  .section-header-actions {
-    display: flex;
-    gap: var(--space-2);
   }
 
   /* ── Empty state ── */
@@ -1237,66 +1075,6 @@ const pipelineValueCents = activeLeads
         } else { btn.disabled = false; btn.textContent = 'Delete'; }
       } catch { btn.disabled = false; btn.textContent = 'Delete'; }
     });
-  });
-
-  // ── New Lead modal ──
-  const newLeadModal = document.getElementById('new-lead-modal')!;
-  const newLeadForm = document.getElementById('new-lead-form') as HTMLFormElement;
-  const newLeadFeedback = document.getElementById('new-lead-feedback')!;
-  const saveNewLeadBtn = document.getElementById('save-new-lead-btn') as HTMLButtonElement;
-
-  document.getElementById('new-lead-btn')?.addEventListener('click', () => {
-    newLeadModal.classList.add('open');
-    newLeadModal.setAttribute('aria-hidden', 'false');
-    (newLeadForm.elements.namedItem('name') as HTMLInputElement)?.focus();
-  });
-
-  function closeNewLeadModal() {
-    newLeadModal.classList.remove('open');
-    newLeadModal.setAttribute('aria-hidden', 'true');
-    newLeadFeedback.textContent = '';
-    newLeadFeedback.className = 'form-feedback';
-    newLeadForm.reset();
-  }
-
-  newLeadModal.querySelector('.modal-close-new-lead')?.addEventListener('click', closeNewLeadModal);
-  newLeadModal.querySelector('.modal-close-new-lead-btn')?.addEventListener('click', closeNewLeadModal);
-  newLeadModal.querySelector('.modal-backdrop')?.addEventListener('click', closeNewLeadModal);
-
-  newLeadForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    saveNewLeadBtn.disabled = true;
-    saveNewLeadBtn.textContent = 'Adding…';
-    newLeadFeedback.textContent = '';
-    newLeadFeedback.className = 'form-feedback';
-
-    const data = {
-      name: (newLeadForm.elements.namedItem('name') as HTMLInputElement).value.trim(),
-      email: (newLeadForm.elements.namedItem('email') as HTMLInputElement).value.trim(),
-      serviceInterest: (newLeadForm.elements.namedItem('serviceInterest') as HTMLSelectElement).value,
-      stage: (newLeadForm.elements.namedItem('stage') as HTMLSelectElement).value,
-      internalNotes: (newLeadForm.elements.namedItem('internalNotes') as HTMLTextAreaElement).value.trim(),
-      storeUrl: '',
-      storeStatus: '',
-      challenge: '',
-    };
-
-    try {
-      const res = await fetch('/api/leads/new', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error(await res.text());
-      newLeadFeedback.textContent = 'Lead added!';
-      newLeadFeedback.className = 'form-feedback success';
-      setTimeout(() => { closeNewLeadModal(); window.location.reload(); }, 800);
-    } catch (err: any) {
-      newLeadFeedback.textContent = err.message || 'Something went wrong.';
-      newLeadFeedback.className = 'form-feedback error';
-      saveNewLeadBtn.disabled = false;
-      saveNewLeadBtn.textContent = 'Add Lead';
-    }
   });
 
   // ── Invoice modal ──

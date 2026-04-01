@@ -4,9 +4,11 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: '0 6 * * *'  # Rebuild daily at 6 AM UTC to sync Substack posts
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: "deploy"
@@ -28,9 +30,27 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Sync Substack posts
+        run: npm run sync
+
+      - name: Sync analytics
+        run: npm run sync:analytics
+        env:
+          UMAMI_API_KEY: ${{ secrets.UMAMI_API_KEY }}
+
+      - name: Commit cache if changed
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add src/data/posts-cache.json src/data/analytics-cache.json
+          git diff --staged --quiet || git commit -m "Sync Substack posts and analytics [skip ci]"
+          git push || true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
       - name: Ping IndexNow (notify Bing/ChatGPT)
         run: npx tsx scripts/ping-indexnow.ts
 
       # Vercel deploys automatically via GitHub integration on push to main.
-      # Substack and analytics sync now run as Vercel cron jobs — no daily
-      # rebuild needed here.
+      # The daily cron triggers a cache sync + commit above, which Vercel
+      # picks up as a new push and rebuilds the site automatically.
