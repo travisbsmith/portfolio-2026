@@ -12,7 +12,8 @@ import * as path from 'path';
 
 const UMAMI_API_URL = 'https://api.umami.is/v1';
 const UMAMI_WEBSITE_ID = 'c6cedcf7-fb2d-4ff2-bf5f-8a584da45fb6';
-const UMAMI_API_KEY = process.env.UMAMI_API_KEY || 'api_4u21H1bmxzBX1D5uo0y3K3HstHNO1O9r';
+const UMAMI_API_KEY = process.env.UMAMI_API_KEY;
+if (!UMAMI_API_KEY) throw new Error('UMAMI_API_KEY env var is required');
 const CACHE_FILE = path.join(process.cwd(), 'src/data/analytics-cache.json');
 
 interface AnalyticsCache {

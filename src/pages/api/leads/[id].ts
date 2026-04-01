@@ -1,14 +1,13 @@
 import type { APIRoute } from 'astro';
 import { updateLead, deleteLead } from '../../../lib/leads';
-import { SESSION_COOKIE, SESSION_VALUE } from '../../../lib/auth';
+import { isAuthenticated } from '../../../lib/auth';
 
 export const prerender = false;
 
 // PATCH /api/leads/:id — update stage, internalNotes, stripeCustomerId
 // Called from dashboard JS; secured via session cookie
 export const PATCH: APIRoute = async ({ request, params, cookies }) => {
-  const session = cookies.get(SESSION_COOKIE)?.value;
-  if (session !== SESSION_VALUE) {
+  if (!isAuthenticated(cookies)) {
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -32,8 +31,7 @@ export const PATCH: APIRoute = async ({ request, params, cookies }) => {
 };
 
 export const DELETE: APIRoute = async ({ params, cookies }) => {
-  const session = cookies.get(SESSION_COOKIE)?.value;
-  if (session !== SESSION_VALUE) return new Response('Unauthorized', { status: 401 });
+  if (!isAuthenticated(cookies)) return new Response('Unauthorized', { status: 401 });
 
   const id = params.id;
   if (!id) return new Response('Missing id', { status: 400 });

@@ -20,6 +20,10 @@ export interface Lead {
   stage: LeadStage;
   internalNotes: string;
   stripeCustomerId: string;
+  completedChecks?: string[];
+  utmSource?: string;
+  utmMedium?: string;
+  utmContent?: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -37,39 +41,43 @@ async function getKV() {
 export async function getLeads(): Promise<Lead[]> {
   try {
     const kv = await getKV();
-    return (await kv.get<Lead[]>(KV_KEY)) ?? [];
+    const hash = await kv.hgetall<Record<string, string>>(KV_KEY);
+    if (!hash) return [];
+    return Object.values(hash).map((v) => (typeof v === 'string' ? JSON.parse(v) : v) as Lead);
   } catch {
     return [];
   }
 }
 
+export async function getLead(id: string): Promise<Lead | null> {
+  try {
+    const kv = await getKV();
+    const raw = await kv.hget<string>(KV_KEY, id);
+    if (!raw) return null;
+    return (typeof raw === 'string' ? JSON.parse(raw) : raw) as Lead;
+  } catch {
+    return null;
+  }
+}
+
 export async function saveLead(lead: Lead): Promise<void> {
   const kv = await getKV();
-  const leads = await getLeads();
-  const idx = leads.findIndex((l) => l.id === lead.id);
-  if (idx >= 0) {
-    leads[idx] = { ...leads[idx], ...lead, updatedAt: new Date().toISOString() };
-  } else {
-    leads.unshift(lead);
-  }
-  await kv.set(KV_KEY, leads);
+  await kv.hset(KV_KEY, { [lead.id]: JSON.stringify(lead) });
 }
 
 export async function updateLead(id: string, patch: Partial<Lead>): Promise<Lead | null> {
   const kv = await getKV();
-  const leads = await getLeads();
-  const idx = leads.findIndex((l) => l.id === id);
-  if (idx < 0) return null;
-  leads[idx] = { ...leads[idx], ...patch, updatedAt: new Date().toISOString() };
-  await kv.set(KV_KEY, leads);
-  return leads[idx];
+  const existing = await getLead(id);
+  if (!existing) return null;
+  const updated: Lead = { ...existing, ...patch, updatedAt: new Date().toISOString() };
+  await kv.hset(KV_KEY, { [id]: JSON.stringify(updated) });
+  return updated;
 }
 
 export async function deleteLead(id: string): Promise<boolean> {
   const kv = await getKV();
-  const leads = await getLeads();
-  const filtered = leads.filter((l) => l.id !== id);
-  if (filtered.length === leads.length) return false;
-  await kv.set(KV_KEY, filtered);
+  const existing = await getLead(id);
+  if (!existing) return false;
+  await kv.hdel(KV_KEY, id);
   return true;
 }

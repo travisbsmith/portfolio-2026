@@ -34,22 +34,23 @@ export const POST: APIRoute = async ({ request, url, redirect }) => {
   }
 
   const now = new Date().toISOString();
+  const validStages = ['Lead', 'Call Scheduled', 'Proposal Sent', 'Active', 'Closed', 'Archived'];
   const lead: Lead = {
     id: `lead_${Date.now()}`,
     name: body.name ?? 'Unknown',
     email: body.email ?? '',
-    storeUrl: body.store_url ?? '',
-    storeStatus: body.store_status ?? '',
+    storeUrl: body.store_url ?? body.storeUrl ?? '',
+    storeStatus: body.store_status ?? body.storeStatus ?? '',
     challenge: body.challenge ?? '',
-    serviceInterest: body.service_interest ?? '',
+    serviceInterest: body.service_interest ?? body.serviceInterest ?? '',
     availability: body.availability ?? '',
     timezone: body.timezone ?? '',
     referral: body.referral ?? '',
-    additionalNotes: body.notes ?? '',
-    launchDate: body.launch_date ?? '',
-    hasVisualDesigner: body.has_visual_designer ?? '',
-    stage: 'Lead',
-    internalNotes: '',
+    additionalNotes: body.notes ?? body.additionalNotes ?? '',
+    launchDate: body.launch_date ?? body.launchDate ?? '',
+    hasVisualDesigner: body.has_visual_designer ?? body.hasVisualDesigner ?? '',
+    stage: validStages.includes(body.stage) ? (body.stage as Lead['stage']) : 'Lead',
+    internalNotes: body.internalNotes ?? '',
     stripeCustomerId: '',
     createdAt: now,
     updatedAt: now,
@@ -87,8 +88,8 @@ export const POST: APIRoute = async ({ request, url, redirect }) => {
     console.error('Failed to send lead notification email:', e);
   }
 
-  // Webhook call → return JSON; direct form post → redirect
-  if (secret) {
+  // JSON request (webhook or dashboard) → return JSON; form post → redirect
+  if (contentType.includes('application/json')) {
     return new Response(JSON.stringify({ ok: true, id: lead.id }), {
       status: 200,
       headers: { 'Content-Type': 'application/json' },
