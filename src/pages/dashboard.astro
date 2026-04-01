@@ -145,8 +145,10 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
                             {lead.storeUrl && <div class="client-store"><a href={lead.storeUrl} target="_blank" rel="noopener">{lead.storeUrl.replace(/^https?:\/\//, '')}</a></div>}
                           </td>
                           <td>
-                            <div class="service-interest">{lead.serviceInterest || '—'}</div>
-                            {lead.storeStatus && <div class="store-status-small">{lead.storeStatus}</div>}
+                            <div class="service-interest">
+                              {lead.serviceInterest ? lead.serviceInterest.replace(/\s*\(\$[\d,]+(?:\/\w+)?\)/g, '') : '—'}
+                              {lead.storeStatus && <span class="store-status-sep"> · {lead.storeStatus}</span>}
+                            </div>
                           </td>
                           <td>
                             <span class={`stage-badge stage-${lead.stage.toLowerCase().replace(/\s+/g, '-')}`}>
@@ -467,11 +469,8 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
     font-size: var(--text-sm);
   }
 
-  .store-status-small {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
+  .store-status-sep {
     color: var(--color-text-tertiary);
-    margin-top: 2px;
   }
 
   .stage-badge {
