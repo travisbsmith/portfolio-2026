@@ -5,9 +5,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import DashboardNav from '../components/DashboardNav.astro';
 import Stripe from 'stripe';
 import { getLeads, type Lead } from '../lib/leads';
-
-const SESSION_COOKIE = 'dashboard_session';
-const SESSION_VALUE = 'authenticated';
+import { SESSION_COOKIE, SESSION_VALUE } from '../lib/auth';
 const DASHBOARD_PASSWORD = import.meta.env.DASHBOARD_PASSWORD ?? process.env.DASHBOARD_PASSWORD;
 
 let isAuthenticated = false;
@@ -54,9 +52,9 @@ const activeLeads = leads.filter(l => l.stage !== 'Archived');
 const archivedLeads = leads.filter(l => l.stage === 'Archived');
 
 // Next upcoming meeting across all active leads
-const now = new Date();
+const nowMs = Date.now();
 const nextCall = activeLeads
-  .filter(l => l.nextMeetingISO && new Date(l.nextMeetingISO) > now)
+  .filter(l => l.nextMeetingISO && new Date(l.nextMeetingISO).getTime() > nowMs)
   .sort((a, b) => new Date(a.nextMeetingISO!).getTime() - new Date(b.nextMeetingISO!).getTime())[0] ?? null;
 
 // Fetch Stripe invoices per lead
@@ -64,21 +62,16 @@ const stripeInvoicesByClient: Record<string, any[]> = {};
 if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY)) {
   try {
     const stripe = new Stripe(import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_SECRET_KEY ?? '');
-    for (const lead of leads) {
-      if (lead.stripeCustomerId) {
-        try {
-          const invoices = await stripe.invoices.list({
-            customer: lead.stripeCustomerId,
-            limit: 5,
-          });
-          stripeInvoicesByClient[lead.email] = invoices.data;
-        } catch {
-          stripeInvoicesByClient[lead.email] = [];
-        }
-      }
-    }
+    const stripeLeads = leads.filter(l => l.stripeCustomerId);
+    const results = await Promise.allSettled(
+      stripeLeads.map(l => stripe.invoices.list({ customer: l.stripeCustomerId, limit: 5 }))
+    );
+    results.forEach((result, i) => {
+      stripeInvoicesByClient[stripeLeads[i].email] =
+        result.status === 'fulfilled' ? result.value.data : [];
+    });
   } catch {
-    // Stripe not configured yet
+    // Stripe not configured
   }
 }
 ---
@@ -426,25 +419,6 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
   }
 
   .btn-secondary:hover {
-    border-color: var(--color-accent);
-    color: var(--color-accent);
-  }
-
-  .btn-sm {
-    padding: var(--space-1) var(--space-3);
-    font-size: var(--text-xs);
-    border-radius: var(--radius-sm);
-  }
-
-  .btn-outline {
-    background: transparent;
-    border: 1px solid var(--color-border);
-    font-family: inherit;
-    cursor: pointer;
-    transition: all var(--duration-fast) var(--ease);
-  }
-
-  .btn-outline:hover {
     border-color: var(--color-accent);
     color: var(--color-accent);
   }

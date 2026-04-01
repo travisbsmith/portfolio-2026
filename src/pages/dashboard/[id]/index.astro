@@ -4,13 +4,10 @@ export const prerender = false;
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DashboardNav from '../../../components/DashboardNav.astro';
 import { getLeads } from '../../../lib/leads';
+import { isAuthenticated } from '../../../lib/auth';
 import Stripe from 'stripe';
 
-// Auth
-const SESSION_COOKIE = 'dashboard_session';
-if (Astro.cookies.get(SESSION_COOKIE)?.value !== 'authenticated') {
-  return Astro.redirect('/dashboard');
-}
+if (!isAuthenticated(Astro.cookies)) return Astro.redirect('/dashboard');
 
 // Load lead
 const { id } = Astro.params;
@@ -360,19 +357,6 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
     gap: var(--space-6);
     min-width: 0;
   }
-
-  .back-link {
-    font-family: var(--font-mono);
-    font-size: var(--text-xs);
-    color: var(--color-text-tertiary);
-    text-transform: uppercase;
-    letter-spacing: 0.08em;
-    white-space: nowrap;
-    flex-shrink: 0;
-    transition: color 0.15s;
-  }
-
-  .back-link:hover { color: var(--color-accent); }
 
   .lead-header__title {
     display: flex;
@@ -980,6 +964,29 @@ const latestOpenInvoice = invoices.find(inv => inv.status === 'open');
   latestOpenInvoiceUrl: latestOpenInvoice?.hosted_invoice_url ?? '',
 }}>
 
+async function patchLead(patch: Record<string, string>, statusEl: HTMLElement) {
+  statusEl.textContent = 'Saving...';
+  statusEl.className = 'save-status saving';
+  try {
+    const res = await fetch(`/api/leads/${leadId}`, {
+      method: 'PATCH',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(patch),
+    });
+    if (res.ok) {
+      statusEl.textContent = 'Saved ✓';
+      statusEl.className = 'save-status saved';
+      setTimeout(() => { statusEl.textContent = ''; }, 2000);
+    } else {
+      statusEl.textContent = 'Error';
+      statusEl.className = 'save-status error';
+    }
+  } catch {
+    statusEl.textContent = 'Error';
+    statusEl.className = 'save-status error';
+  }
+}
+
 // ── Call guide toggle ──
 const guideToggle = document.getElementById('guide-toggle');
 const guideBody = document.getElementById('guide-body');
@@ -1001,28 +1008,9 @@ guideToggle.addEventListener('click', () => {
 const stageSelect = document.getElementById('stage-select');
 const stageStatus = document.getElementById('stage-status');
 
-stageSelect.addEventListener('change', async () => {
-  stageStatus.textContent = 'Saving...';
-  stageStatus.className = 'save-status saving';
-  try {
-    const res = await fetch(`/api/leads/${leadId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ stage: stageSelect.value }),
-    });
-    if (res.ok) {
-      stageStatus.textContent = 'Saved ✓';
-      stageStatus.className = 'save-status saved';
-      setTimeout(() => { stageStatus.textContent = ''; }, 2000);
-    } else {
-      stageStatus.textContent = 'Error';
-      stageStatus.className = 'save-status error';
-    }
-  } catch {
-    stageStatus.textContent = 'Error';
-    stageStatus.className = 'save-status error';
-  }
-});
+stageSelect.addEventListener('change', () =>
+  patchLead({ stage: stageSelect.value }, stageStatus)
+);
 
 // ── Notes auto-save ──
 const notesTextarea = document.getElementById('notes-textarea');
@@ -1032,27 +1020,8 @@ let notesTimer = null;
 notesTextarea.addEventListener('input', () => {
   notesStatus.textContent = '';
   clearTimeout(notesTimer);
-  notesTimer = setTimeout(async () => {
-    notesStatus.textContent = 'Saving...';
-    notesStatus.className = 'save-status saving';
-    try {
-      const res = await fetch(`/api/leads/${leadId}`, {
-        method: 'PATCH',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ internalNotes: notesTextarea.value }),
-      });
-      if (res.ok) {
-        notesStatus.textContent = 'Saved ✓';
-        notesStatus.className = 'save-status saved';
-        setTimeout(() => { notesStatus.textContent = ''; }, 2000);
-      } else {
-        notesStatus.textContent = 'Error saving';
-        notesStatus.className = 'save-status error';
-      }
-    } catch {
-      notesStatus.textContent = 'Error saving';
-      notesStatus.className = 'save-status error';
-    }
+  notesTimer = setTimeout(() => {
+    patchLead({ internalNotes: notesTextarea.value }, notesStatus);
   }, 800);
 });
 
@@ -1167,54 +1136,13 @@ document.getElementById('followup-form').addEventListener('submit', async (e) =>
 });
 
 // ── Next Meeting save ──
-document.getElementById('next-meeting-save').addEventListener('click', async () => {
-  const input = document.getElementById('next-meeting-input');
-  const status = document.getElementById('next-meeting-status');
-  status.textContent = 'Saving...';
-  status.className = 'save-status saving';
-  try {
-    const res = await fetch(`/api/leads/${leadId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ nextMeeting: input.value }),
-    });
-    if (res.ok) {
-      status.textContent = 'Saved ✓';
-      status.className = 'save-status saved';
-      setTimeout(() => { status.textContent = ''; }, 2000);
-    } else {
-      status.textContent = 'Error';
-      status.className = 'save-status error';
-    }
-  } catch {
-    status.textContent = 'Error';
-    status.className = 'save-status error';
-  }
-});
+document.getElementById('next-meeting-save').addEventListener('click', () =>
+  patchLead({ nextMeeting: (document.getElementById('next-meeting-input') as HTMLInputElement).value },
+    document.getElementById('next-meeting-status') as HTMLElement)
+);
 
-// ── Stripe Customer ID save ──
-document.getElementById('stripe-id-save').addEventListener('click', async () => {
-  const input = document.getElementById('stripe-customer-id');
-  const status = document.getElementById('stripe-id-status');
-  status.textContent = 'Saving...';
-  status.className = 'save-status saving';
-  try {
-    const res = await fetch(`/api/leads/${leadId}`, {
-      method: 'PATCH',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ stripeCustomerId: input.value }),
-    });
-    if (res.ok) {
-      status.textContent = 'Saved ✓';
-      status.className = 'save-status saved';
-      setTimeout(() => { status.textContent = ''; }, 2000);
-    } else {
-      status.textContent = 'Error';
-      status.className = 'save-status error';
-    }
-  } catch {
-    status.textContent = 'Error';
-    status.className = 'save-status error';
-  }
-});
+document.getElementById('stripe-id-save').addEventListener('click', () =>
+  patchLead({ stripeCustomerId: (document.getElementById('stripe-customer-id') as HTMLInputElement).value },
+    document.getElementById('stripe-id-status') as HTMLElement)
+);
 </script>

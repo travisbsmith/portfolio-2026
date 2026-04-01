@@ -6,10 +6,8 @@ import DashboardNav from '../components/DashboardNav.astro';
 import * as fs from 'fs';
 import * as path from 'path';
 
-const SESSION_COOKIE = 'dashboard_session';
-if (Astro.cookies.get(SESSION_COOKIE)?.value !== 'authenticated') {
-  return Astro.redirect('/dashboard');
-}
+import { isAuthenticated } from '../lib/auth';
+if (!isAuthenticated(Astro.cookies)) return Astro.redirect('/dashboard');
 
 // Analytics cache
 let analyticsData: any = null;

@@ -4,12 +4,9 @@ export const prerender = false;
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import DashboardNav from '../../../components/DashboardNav.astro';
 import { getLeads } from '../../../lib/leads';
+import { isAuthenticated } from '../../../lib/auth';
 
-// Auth
-const SESSION_COOKIE = 'dashboard_session';
-if (Astro.cookies.get(SESSION_COOKIE)?.value !== 'authenticated') {
-  return Astro.redirect('/dashboard');
-}
+if (!isAuthenticated(Astro.cookies)) return Astro.redirect('/dashboard');
 
 // Load lead
 const { id } = Astro.params;

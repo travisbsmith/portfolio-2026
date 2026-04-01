@@ -5,8 +5,6 @@ import { createHmac, timingSafeEqual } from 'crypto';
 
 export const prerender = false;
 
-const CAL_LINK = 'https://cal.com/fullyoperational';
-
 function verifySignature(body: string, signature: string, secret: string): boolean {
   try {
     const hmac = createHmac('sha256', secret);
@@ -23,15 +21,19 @@ function verifySignature(body: string, signature: string, secret: string): boole
 
 function formatMeetingTime(iso: string): string {
   return new Date(iso).toLocaleString('en-US', {
-    weekday: 'short',
-    month: 'short',
-    day: 'numeric',
-    hour: 'numeric',
-    minute: '2-digit',
-    timeZoneName: 'short',
+    weekday: 'short', month: 'short', day: 'numeric',
+    hour: 'numeric', minute: '2-digit', timeZoneName: 'short',
     timeZone: 'America/Chicago',
   });
 }
+
+function dashboardLink(id: string): string {
+  return `<a href="https://fully-operational.com/dashboard/${id}" style="color:#ff5722">View in Dashboard →</a>`;
+}
+
+const ok = () => new Response(JSON.stringify({ ok: true }), {
+  status: 200, headers: { 'Content-Type': 'application/json' },
+});
 
 export const POST: APIRoute = async ({ request }) => {
   const rawBody = await request.text();
@@ -43,7 +45,6 @@ export const POST: APIRoute = async ({ request }) => {
     return new Response('Bad JSON', { status: 400 });
   }
 
-  // Verify signature if secret is configured
   const secret = import.meta.env.CAL_WEBHOOK_SECRET ?? process.env.CAL_WEBHOOK_SECRET;
   if (secret) {
     const sig = request.headers.get('x-cal-signature-256') ?? '';
@@ -52,125 +53,98 @@ export const POST: APIRoute = async ({ request }) => {
     }
   }
 
-  const trigger = payload.triggerEvent ?? '';
+  const trigger: string = payload.triggerEvent ?? '';
   const booking = payload.payload ?? {};
   const attendees: any[] = booking.attendees ?? [];
   const guest = attendees[0] ?? {};
   const responses = booking.responses ?? {};
   const bookingUid: string = booking.uid ?? '';
-
   const name: string = guest.name ?? responses.name?.value ?? 'Unknown';
   const email: string = guest.email ?? responses.email?.value ?? '';
 
-  // ── BOOKING_CANCELLED ──────────────────────────────────────────────────────
-  if (trigger === 'BOOKING_CANCELLED') {
+  // ── Cancellation + reschedule: shared leads fetch ─────────────────────────
+  if (trigger === 'BOOKING_CANCELLED' || trigger === 'BOOKING_RESCHEDULED') {
     const leads = await getLeads();
     const existing = leads.find(l =>
       l.calBookingUid === bookingUid || l.email.toLowerCase() === email.toLowerCase()
     );
-    if (existing) {
-      await updateLead(existing.id, {
-        nextMeeting: '',
-        nextMeetingISO: '',
-        stage: 'Lead',
-        internalNotes: existing.internalNotes
-          ? `${existing.internalNotes}\n\nCall cancelled (cal.com) — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`
-          : `Call cancelled (cal.com) — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
-      });
-      try {
-        await sendEmail({
-          to: 'travis@fully-operational.com',
-          subject: `Call cancelled: ${name}`,
-          html: `<p style="font-family:monospace">
-            <strong>${name}</strong> cancelled their call.<br><br>
-            <a href="https://fully-operational.com/dashboard/${existing.id}" style="color:#ff5722">View in Dashboard →</a>
-          </p>`,
+
+    if (trigger === 'BOOKING_CANCELLED') {
+      if (existing) {
+        const note = `Call cancelled (cal.com) — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`;
+        await updateLead(existing.id, {
+          nextMeeting: '',
+          nextMeetingISO: '',
+          stage: 'Lead',
+          internalNotes: existing.internalNotes ? `${existing.internalNotes}\n\n${note}` : note,
         });
-      } catch { /* non-fatal */ }
+        try {
+          await sendEmail({
+            to: 'travis@fully-operational.com',
+            subject: `Call cancelled: ${name}`,
+            html: `<p style="font-family:monospace"><strong>${name}</strong> cancelled their call.<br><br>${dashboardLink(existing.id)}</p>`,
+          });
+        } catch { /* non-fatal */ }
+      }
+      return ok();
     }
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200, headers: { 'Content-Type': 'application/json' },
-    });
+
+    if (trigger === 'BOOKING_RESCHEDULED') {
+      const startISO: string = booking.startTime ?? '';
+      const nextMeeting = startISO ? formatMeetingTime(startISO) : '';
+      if (existing) {
+        await updateLead(existing.id, {
+          nextMeeting,
+          nextMeetingISO: startISO,
+          calBookingUid: bookingUid,
+          stage: 'Call Scheduled',
+        });
+        try {
+          await sendEmail({
+            to: 'travis@fully-operational.com',
+            subject: `Call rescheduled: ${name} → ${nextMeeting}`,
+            html: `<p style="font-family:monospace"><strong>${name}</strong> rescheduled.<br>New time: <strong>${nextMeeting}</strong><br><br>${dashboardLink(existing.id)}</p>`,
+          });
+        } catch { /* non-fatal */ }
+      }
+      return ok();
+    }
   }
 
-  // ── BOOKING_RESCHEDULED ────────────────────────────────────────────────────
-  if (trigger === 'BOOKING_RESCHEDULED') {
-    const startISO: string = booking.startTime ?? '';
-    const nextMeeting = startISO ? formatMeetingTime(startISO) : '';
-    const leads = await getLeads();
-    const existing = leads.find(l =>
-      l.calBookingUid === bookingUid || l.email.toLowerCase() === email.toLowerCase()
-    );
-    if (existing) {
-      await updateLead(existing.id, {
-        nextMeeting,
-        nextMeetingISO: startISO,
-        calBookingUid: bookingUid,
-        stage: 'Call Scheduled',
-      });
-      try {
-        await sendEmail({
-          to: 'travis@fully-operational.com',
-          subject: `Call rescheduled: ${name} → ${nextMeeting}`,
-          html: `<p style="font-family:monospace">
-            <strong>${name}</strong> rescheduled their call.<br>
-            New time: <strong>${nextMeeting}</strong><br><br>
-            <a href="https://fully-operational.com/dashboard/${existing.id}" style="color:#ff5722">View in Dashboard →</a>
-          </p>`,
-        });
-      } catch { /* non-fatal */ }
-    }
-    return new Response(JSON.stringify({ ok: true }), {
-      status: 200, headers: { 'Content-Type': 'application/json' },
-    });
-  }
-
-  // ── BOOKING_CREATED ────────────────────────────────────────────────────────
+  // ── Skip unknown events ────────────────────────────────────────────────────
   if (trigger !== 'BOOKING_CREATED') {
     return new Response(JSON.stringify({ ok: true, skipped: true }), {
       status: 200, headers: { 'Content-Type': 'application/json' },
     });
   }
 
-  const timezone: string = guest.timeZone ?? '';
-  const storeUrl: string        = responses.store_url?.value ?? '';
-  const storeStatus: string     = responses.store_status?.value ?? '';
-  const serviceInterest: string = responses.service_interest?.value ?? '';
-  const challenge: string       = responses.challenge?.value ?? '';
-  const referral: string        = responses.referral?.value ?? '';
-  const launchDate: string      = responses.launch_date?.value ?? '';
-  const hasVisualDesigner: string = responses.has_visual_designer?.value ?? '';
-  const additionalNotes: string = responses.notes?.value
-    ?? booking.additionalNotes
-    ?? booking.description
-    ?? '';
-
+  // ── New booking ────────────────────────────────────────────────────────────
   const startISO: string = booking.startTime ?? '';
   const nextMeeting = startISO ? formatMeetingTime(startISO) : 'TBD';
-
   const now = new Date().toISOString();
+
   const lead: Lead = {
     id: `lead_${Date.now()}`,
     name,
     email,
-    storeUrl,
-    storeStatus,
-    challenge,
-    serviceInterest,
-    availability: nextMeeting,
-    timezone,
-    referral,
-    additionalNotes,
-    launchDate,
-    hasVisualDesigner,
+    storeUrl:          responses.store_url?.value ?? '',
+    storeStatus:       responses.store_status?.value ?? '',
+    challenge:         responses.challenge?.value ?? '',
+    serviceInterest:   responses.service_interest?.value ?? '',
+    availability:      nextMeeting,
+    timezone:          guest.timeZone ?? '',
+    referral:          responses.referral?.value ?? '',
+    additionalNotes:   responses.notes?.value ?? booking.additionalNotes ?? booking.description ?? '',
+    launchDate:        responses.launch_date?.value ?? '',
+    hasVisualDesigner: responses.has_visual_designer?.value ?? '',
     nextMeeting,
-    nextMeetingISO: startISO,
-    calBookingUid: bookingUid,
-    stage: 'Call Scheduled',
-    internalNotes: `Booked via cal.com — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
-    stripeCustomerId: '',
-    createdAt: now,
-    updatedAt: now,
+    nextMeetingISO:    startISO,
+    calBookingUid:     bookingUid,
+    stage:             'Call Scheduled',
+    internalNotes:     `Booked via cal.com — ${new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}`,
+    stripeCustomerId:  '',
+    createdAt:         now,
+    updatedAt:         now,
   };
 
   try {
@@ -183,25 +157,24 @@ export const POST: APIRoute = async ({ request }) => {
   }
 
   try {
+    const rows = [
+      ['Name', name], ['Email', `<a href="mailto:${email}">${email}</a>`],
+      ['Call time', `<strong>${nextMeeting}</strong>`],
+      ...(lead.storeUrl        ? [['Store URL',    lead.storeUrl]]        : []),
+      ...(lead.storeStatus     ? [['Store status', lead.storeStatus]]     : []),
+      ...(lead.serviceInterest ? [['Interested in',lead.serviceInterest]] : []),
+      ...(lead.challenge       ? [['Challenge',    lead.challenge]]       : []),
+      ...(lead.referral        ? [['Referral',     lead.referral]]        : []),
+      ...(lead.additionalNotes ? [['Notes',        lead.additionalNotes]] : []),
+    ].map(([l, v]) => `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">${l}</td><td style="padding:6px 12px">${v}</td></tr>`).join('');
+
     await sendEmail({
       to: 'travis@fully-operational.com',
       subject: `Call booked: ${name} — ${nextMeeting}`,
       html: `
         <h2 style="font-family:monospace;margin-bottom:16px">New call booked via cal.com</h2>
-        <table style="border-collapse:collapse;width:100%;font-family:monospace;font-size:14px">
-          <tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Name</td><td style="padding:6px 12px">${name}</td></tr>
-          <tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Email</td><td style="padding:6px 12px"><a href="mailto:${email}">${email}</a></td></tr>
-          <tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Call time</td><td style="padding:6px 12px"><strong>${nextMeeting}</strong></td></tr>
-          ${storeUrl ? `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Store URL</td><td style="padding:6px 12px">${storeUrl}</td></tr>` : ''}
-          ${storeStatus ? `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Store status</td><td style="padding:6px 12px">${storeStatus}</td></tr>` : ''}
-          ${serviceInterest ? `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Interested in</td><td style="padding:6px 12px">${serviceInterest}</td></tr>` : ''}
-          ${challenge ? `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Challenge</td><td style="padding:6px 12px;white-space:pre-wrap">${challenge}</td></tr>` : ''}
-          ${referral ? `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Referral</td><td style="padding:6px 12px">${referral}</td></tr>` : ''}
-          ${additionalNotes ? `<tr><td style="padding:6px 12px;color:#666;white-space:nowrap">Notes</td><td style="padding:6px 12px;white-space:pre-wrap">${additionalNotes}</td></tr>` : ''}
-        </table>
-        <p style="margin-top:24px">
-          <a href="https://fully-operational.com/dashboard/${lead.id}" style="background:#ff5722;color:white;padding:10px 20px;text-decoration:none;font-family:monospace;border-radius:4px">View in Dashboard →</a>
-        </p>
+        <table style="border-collapse:collapse;width:100%;font-family:monospace;font-size:14px">${rows}</table>
+        <p style="margin-top:24px">${dashboardLink(lead.id)}</p>
       `,
     });
   } catch (e) {
