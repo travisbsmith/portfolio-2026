@@ -26,50 +26,61 @@ export interface Lead {
 
 const KV_KEY = 'leads';
 
-async function getKV() {
-  const url = process.env.KV_REST_API_URL;
+function kvHeaders(): Record<string, string> {
   const token = process.env.KV_REST_API_TOKEN;
-  if (!url || !token) throw new Error('KV env vars not set');
-  const { createClient } = await import('@vercel/kv');
-  return createClient({ url, token });
+  if (!token) throw new Error('KV_REST_API_TOKEN not set');
+  return { Authorization: `Bearer ${token}` };
+}
+
+function kvBase(): string {
+  const base = process.env.KV_REST_API_URL;
+  if (!base) throw new Error('KV_REST_API_URL not set');
+  return base;
 }
 
 export async function getLeads(): Promise<Lead[]> {
   try {
-    const kv = await getKV();
-    return (await kv.get<Lead[]>(KV_KEY)) ?? [];
+    const res = await fetch(`${kvBase()}/get/${KV_KEY}`, { headers: kvHeaders() });
+    const json = await res.json() as { result: string | null };
+    if (!json.result) return [];
+    return typeof json.result === 'string' ? JSON.parse(json.result) : json.result;
   } catch {
     return [];
   }
 }
 
+async function setLeads(leads: Lead[]): Promise<void> {
+  await fetch(`${kvBase()}/set/${KV_KEY}`, {
+    method: 'POST',
+    headers: { ...kvHeaders(), 'Content-Type': 'application/json' },
+    body: JSON.stringify(JSON.stringify(leads)),
+  });
+}
+
 export async function saveLead(lead: Lead): Promise<void> {
-  const kv = await getKV();
   const leads = await getLeads();
-  const idx = leads.findIndex((l) => l.id === lead.id);
+  const idx = leads.findIndex(l => l.id === lead.id);
   if (idx >= 0) {
     leads[idx] = { ...leads[idx], ...lead, updatedAt: new Date().toISOString() };
   } else {
     leads.unshift(lead);
   }
-  await kv.set(KV_KEY, leads);
+  await setLeads(leads);
 }
 
 export async function updateLead(id: string, patch: Partial<Lead>): Promise<Lead | null> {
-  const kv = await getKV();
   const leads = await getLeads();
-  const idx = leads.findIndex((l) => l.id === id);
+  const idx = leads.findIndex(l => l.id === id);
   if (idx < 0) return null;
   leads[idx] = { ...leads[idx], ...patch, updatedAt: new Date().toISOString() };
-  await kv.set(KV_KEY, leads);
+  await setLeads(leads);
   return leads[idx];
 }
 
 export async function deleteLead(id: string): Promise<boolean> {
-  const kv = await getKV();
   const leads = await getLeads();
-  const filtered = leads.filter((l) => l.id !== id);
+  const filtered = leads.filter(l => l.id !== id);
   if (filtered.length === leads.length) return false;
-  await kv.set(KV_KEY, filtered);
+  await setLeads(filtered);
   return true;
 }
