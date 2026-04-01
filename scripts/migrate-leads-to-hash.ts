@@ -67,6 +67,9 @@ async function migrate() {
   await kv.set('leads_array_backup', existing);
   console.log('Backed up old array to "leads_array_backup"');
 
+  // Delete the old string key before writing the hash
+  await kv.del('leads');
+
   // Write all leads as hash fields
   await kv.hset('leads', entries);
   console.log('Migration complete.');
