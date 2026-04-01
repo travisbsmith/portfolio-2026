@@ -39,6 +39,7 @@ const thisMonthPrefix = `${now.getFullYear()}-${String(now.getMonth() + 1).padSt
 const monthlyHours = timeEntries
   .filter(e => e.date.startsWith(thisMonthPrefix))
   .reduce((sum, e) => sum + e.hours, 0);
+const totalHours = timeEntries.reduce((sum, e) => sum + e.hours, 0);
 ---
 
 <BaseLayout title={`${lead.name} — Dashboard`} description="Lead detail">
@@ -210,16 +211,11 @@ const monthlyHours = timeEntries
         <div class="card__header">
           <h2>Time</h2>
           <div class="time-header-right">
-            {contractHours && (
-              <span class="time-month-total" id="time-month-label">
-                {monthlyHours.toFixed(1)} / {contractHours} hrs this month
-              </span>
-            )}
-            {!contractHours && timeEntries.length > 0 && (
-              <span class="time-month-total" id="time-month-label">
-                {monthlyHours.toFixed(1)} hrs this month
-              </span>
-            )}
+            <span class="time-month-total" id="time-month-label">
+              {contractHours
+                ? `${monthlyHours.toFixed(1)} / ${contractHours} hrs this month`
+                : `${monthlyHours.toFixed(1)} hrs this month`}{totalHours > monthlyHours ? ` · ${totalHours.toFixed(1)} total` : ''}
+            </span>
           </div>
         </div>
         <div class="card__body">
@@ -232,14 +228,20 @@ const monthlyHours = timeEntries
               <div class="form-row">
                 <label for="time-hours">Hours</label>
                 <select id="time-hours" name="hours">
-                  {[0.25,0.5,0.75,1,1.25,1.5,1.75,2,2.5,3,3.5,4,4.5,5,5.5,6,6.5,7,7.5,8].map(h => (
-                    <option value={h}>{h}</option>
+                  {[
+                    [0.25,'0.25 hrs'],[0.5,'0.5 hrs'],[0.75,'0.75 hrs'],
+                    [1,'1 hr'],[1.25,'1.25 hrs'],[1.5,'1.5 hrs'],[1.75,'1.75 hrs'],
+                    [2,'2 hrs'],[2.5,'2.5 hrs'],[3,'3 hrs'],[3.5,'3.5 hrs'],
+                    [4,'4 hrs'],[4.5,'4.5 hrs'],[5,'5 hrs'],[6,'6 hrs'],[7,'7 hrs'],[8,'8 hrs'],
+                  ].map(([v,l]) => (
+                    <option value={v}>{l}</option>
                   ))}
                 </select>
               </div>
               <div class="form-row time-desc-row">
                 <label for="time-desc">Description</label>
-                <input type="text" id="time-desc" name="description" placeholder="What you worked on..." />
+                <input type="text" id="time-desc" name="description" placeholder="What you worked on..." list="time-desc-list" autocomplete="off" />
+                <datalist id="time-desc-list"></datalist>
               </div>
               <div class="time-form-actions">
                 <button type="submit" class="btn-save" id="time-submit">Log</button>
@@ -1128,13 +1130,14 @@ const monthlyHours = timeEntries
   latestOpenInvoiceUrl: latestOpenInvoice?.hosted_invoice_url ?? '',
   contractHoursPerMonth: contractHours,
   thisMonthPrefix,
+  totalHoursAll: totalHours,
 }}>
 
-async function patchLead(patch: Record<string, string>, statusEl: HTMLElement) {
+async function patchLead(patch, statusEl) {
   statusEl.textContent = 'Saving...';
   statusEl.className = 'save-status saving';
   try {
-    const res = await fetch(`/api/leads/${leadId}`, {
+    const res = await fetch('/api/leads/' + leadId, {
       method: 'PATCH',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(patch),
@@ -1199,13 +1202,10 @@ function openPanel(name) {
 }
 
 document.getElementById('btn-invoice').addEventListener('click', () => {
-  // Pre-fill service from serviceInterest
-  const serviceMap = { 'Clarity Session': 'Clarity Session', 'Store Launch Sprint': 'Store Launch Sprint', 'Insider Retainer': 'Insider Retainer' };
   const serviceEl = document.getElementById('inv-service');
   for (const opt of serviceEl.options) {
     if (serviceInterest && serviceInterest.includes(opt.value)) { opt.selected = true; break; }
   }
-  // Pre-fill amount
   const amountMap = { 'Clarity Session': '500', 'Store Launch Sprint': '2500', 'Insider Retainer': '3500' };
   const amountEl = document.getElementById('inv-amount');
   for (const [key, val] of Object.entries(amountMap)) {
@@ -1217,8 +1217,8 @@ document.getElementById('btn-invoice').addEventListener('click', () => {
 document.getElementById('btn-followup').addEventListener('click', () => {
   const firstName = leadName.split(' ')[0];
   const body = latestOpenInvoiceUrl
-    ? `Hi ${firstName},\n\nJust a quick check-in — your invoice is still open.\n\nView and pay here: ${latestOpenInvoiceUrl}\n\nLet me know if you have any questions.\n\n— Travis\ntravis@fully-operational.com`
-    : `Hi ${firstName},\n\nJust following up on our conversation — happy to answer any questions or chat more about next steps.\n\nIf you'd like to book a call: https://cal.com/fullyoperational\n\n— Travis\ntravis@fully-operational.com`;
+    ? 'Hi ' + firstName + ',\n\nJust a quick check-in — your invoice is still open.\n\nView and pay here: ' + latestOpenInvoiceUrl + '\n\nLet me know if you have any questions.\n\n— Travis\ntravis@fully-operational.com'
+    : 'Hi ' + firstName + ',\n\nJust following up on our conversation — happy to answer any questions or chat more about next steps.\n\nIf you\'d like to book a call: https://cal.com/fullyoperational\n\n— Travis\ntravis@fully-operational.com';
   document.getElementById('fu-body').value = body;
   openPanel('followup');
 });
@@ -1250,11 +1250,11 @@ document.getElementById('invoice-form').addEventListener('submit', async (e) => 
     });
     const json = await res.json();
     if (res.ok) {
-      feedback.textContent = `Invoice sent ✓`;
+      feedback.textContent = 'Invoice sent ✓';
       feedback.className = 'form-feedback success';
       setTimeout(() => location.reload(), 1500);
     } else {
-      feedback.textContent = json.error ?? 'Something went wrong';
+      feedback.textContent = json.error || 'Something went wrong';
       feedback.className = 'form-feedback error';
     }
   } catch {
@@ -1273,16 +1273,12 @@ document.getElementById('followup-form').addEventListener('submit', async (e) =>
   btn.disabled = true; btn.textContent = 'Sending…';
   feedback.textContent = ''; feedback.className = 'form-feedback';
   const body = document.getElementById('fu-body').value;
-  const html = body.split('\n').map(l => `<p>${l || '&nbsp;'}</p>`).join('');
+  const html = body.split('\n').map(l => '<p>' + (l || '&nbsp;') + '</p>').join('');
   try {
     const res = await fetch('/api/email/send', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        to: leadEmail,
-        subject: document.getElementById('fu-subject').value,
-        html,
-      }),
+      body: JSON.stringify({ to: leadEmail, subject: document.getElementById('fu-subject').value, html }),
     });
     const json = await res.json();
     if (res.ok) {
@@ -1290,7 +1286,7 @@ document.getElementById('followup-form').addEventListener('submit', async (e) =>
       feedback.className = 'form-feedback success';
       setTimeout(() => { document.getElementById('panel-followup').hidden = true; feedback.textContent = ''; }, 1500);
     } else {
-      feedback.textContent = json.error ?? 'Something went wrong';
+      feedback.textContent = json.error || 'Something went wrong';
       feedback.className = 'form-feedback error';
     }
   } catch {
@@ -1301,119 +1297,93 @@ document.getElementById('followup-form').addEventListener('submit', async (e) =>
   }
 });
 
-// ── Next Meeting save ──
+// ── Next Meeting / Stripe ID save ──
 document.getElementById('next-meeting-save').addEventListener('click', () =>
-  patchLead({ nextMeeting: (document.getElementById('next-meeting-input') as HTMLInputElement).value },
-    document.getElementById('next-meeting-status') as HTMLElement)
+  patchLead({ nextMeeting: document.getElementById('next-meeting-input').value },
+    document.getElementById('next-meeting-status'))
 );
 
 document.getElementById('stripe-id-save').addEventListener('click', () =>
-  patchLead({ stripeCustomerId: (document.getElementById('stripe-customer-id') as HTMLInputElement).value },
-    document.getElementById('stripe-id-status') as HTMLElement)
+  patchLead({ stripeCustomerId: document.getElementById('stripe-customer-id').value },
+    document.getElementById('stripe-id-status'))
 );
 
 // ── Time tracking ──
-const timeForm = document.getElementById('time-form') as HTMLFormElement;
-const timeFeedback = document.getElementById('time-feedback')!;
-const timeList = document.getElementById('time-list');
-const timeEmpty = document.getElementById('time-empty');
+const timeForm = document.getElementById('time-form');
+const timeFeedback = document.getElementById('time-feedback');
 const timeMonthLabel = document.getElementById('time-month-label');
 
-function getMonthlyTotal(): number {
+function getMonthly() {
   let total = 0;
-  document.querySelectorAll<HTMLElement>('.time-entry').forEach(entry => {
+  document.querySelectorAll('.time-entry').forEach(entry => {
     const dateEl = entry.querySelector('.time-entry__date');
     const hoursEl = entry.querySelector('.time-entry__hours');
-    if (dateEl?.textContent?.startsWith(thisMonthPrefix) && hoursEl) {
-      total += parseFloat(hoursEl.textContent!) || 0;
+    if (dateEl && dateEl.textContent && dateEl.textContent.startsWith(thisMonthPrefix) && hoursEl) {
+      total += parseFloat(hoursEl.textContent) || 0;
     }
   });
   return total;
 }
 
-function updateMonthLabel() {
-  if (!timeMonthLabel) return;
-  const total = getMonthlyTotal();
-  if (contractHoursPerMonth) {
-    timeMonthLabel.textContent = `${total.toFixed(1)} / ${contractHoursPerMonth} hrs this month`;
-  } else {
-    timeMonthLabel.textContent = `${total.toFixed(1)} hrs this month`;
-  }
+function getTotal() {
+  let total = 0;
+  document.querySelectorAll('.time-entry').forEach(entry => {
+    const hoursEl = entry.querySelector('.time-entry__hours');
+    if (hoursEl) total += parseFloat(hoursEl.textContent) || 0;
+  });
+  return total;
 }
 
-timeForm?.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const btn = document.getElementById('time-submit') as HTMLButtonElement;
-  btn.disabled = true;
-  timeFeedback.textContent = '';
+function updateTimeLabel() {
+  if (!timeMonthLabel) return;
+  const month = getMonthly();
+  const total = getTotal();
+  let text = contractHoursPerMonth
+    ? month.toFixed(1) + ' / ' + contractHoursPerMonth + ' hrs this month'
+    : month.toFixed(1) + ' hrs this month';
+  if (total > month) text += ' · ' + total.toFixed(1) + ' total';
+  timeMonthLabel.textContent = text;
+}
 
-  const date = (timeForm.elements.namedItem('date') as HTMLInputElement).value;
-  const hours = parseFloat((timeForm.elements.namedItem('hours') as HTMLSelectElement).value);
-  const description = (timeForm.elements.namedItem('description') as HTMLInputElement).value.trim();
-
-  try {
-    const res = await fetch(`/api/time/${leadId}`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ date, hours, description }),
-    });
-    const entry = await res.json();
-    if (!res.ok) throw new Error(entry.error ?? 'Failed');
-
-    // Inject new row at top of list
-    const row = document.createElement('div');
-    row.className = 'time-entry';
-    row.dataset.entryId = entry.id;
-    row.innerHTML = `
-      <div class="time-entry__date">${entry.date}</div>
-      <div class="time-entry__hours">${entry.hours}h</div>
-      <div class="time-entry__desc">${entry.description || '—'}</div>
-      <button class="time-entry__delete" data-entry-id="${entry.id}" aria-label="Delete">&times;</button>
-    `;
-    attachDeleteHandler(row.querySelector('.time-entry__delete')!);
-
-    if (timeList) {
-      timeList.insertAdjacentElement('afterbegin', row);
-    } else {
-      // First entry — create list, remove empty state
-      const list = document.createElement('div');
-      list.className = 'time-list';
-      list.id = 'time-list';
-      list.appendChild(row);
-      timeEmpty?.replaceWith(list);
+function updateDescSuggestions() {
+  const datalist = document.getElementById('time-desc-list');
+  if (!datalist) return;
+  datalist.innerHTML = '';
+  const seen = new Set();
+  document.querySelectorAll('.time-entry__desc').forEach(el => {
+    const text = el.textContent && el.textContent.trim();
+    if (text && text !== '—' && !seen.has(text)) {
+      seen.add(text);
+      const opt = document.createElement('option');
+      opt.value = text;
+      datalist.appendChild(opt);
     }
+  });
+}
 
-    timeEmpty?.remove();
-    updateMonthLabel();
-    (timeForm.elements.namedItem('description') as HTMLInputElement).value = '';
-  } catch (err: any) {
-    timeFeedback.textContent = err.message ?? 'Error logging time';
-    timeFeedback.className = 'form-feedback error';
-  } finally {
-    btn.disabled = false;
-  }
-});
+updateDescSuggestions();
 
-function attachDeleteHandler(btn: HTMLElement) {
+function attachDeleteHandler(btn) {
   btn.addEventListener('click', async () => {
-    const entryId = btn.dataset.entryId!;
+    const entryId = btn.dataset.entryId;
     btn.textContent = '…';
     try {
-      const res = await fetch(`/api/time/${leadId}`, {
+      const res = await fetch('/api/time/' + leadId, {
         method: 'DELETE',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ entryId }),
       });
       if (res.ok) {
-        btn.closest('.time-entry')?.remove();
-        updateMonthLabel();
-        const remaining = document.querySelectorAll('.time-entry').length;
-        if (remaining === 0) {
+        btn.closest('.time-entry').remove();
+        updateTimeLabel();
+        updateDescSuggestions();
+        if (document.querySelectorAll('.time-entry').length === 0) {
           const empty = document.createElement('p');
           empty.className = 'empty';
           empty.id = 'time-empty';
           empty.textContent = 'No time logged yet.';
-          document.querySelector('.time-list')?.replaceWith(empty);
+          const list = document.querySelector('.time-list');
+          if (list) list.replaceWith(empty);
         }
       } else {
         btn.textContent = '×';
@@ -1424,5 +1394,57 @@ function attachDeleteHandler(btn: HTMLElement) {
   });
 }
 
-document.querySelectorAll<HTMLElement>('.time-entry__delete').forEach(attachDeleteHandler);
+document.querySelectorAll('.time-entry__delete').forEach(attachDeleteHandler);
+
+timeForm && timeForm.addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const btn = document.getElementById('time-submit');
+  btn.disabled = true;
+  timeFeedback.textContent = '';
+
+  const date = timeForm.elements.namedItem('date').value;
+  const hours = parseFloat(timeForm.elements.namedItem('hours').value);
+  const description = timeForm.elements.namedItem('description').value.trim();
+
+  try {
+    const res = await fetch('/api/time/' + leadId, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ date, hours, description }),
+    });
+    const entry = await res.json();
+    if (!res.ok) throw new Error(entry.error || 'Failed');
+
+    const row = document.createElement('div');
+    row.className = 'time-entry';
+    row.dataset.entryId = entry.id;
+    row.innerHTML =
+      '<div class="time-entry__date">' + entry.date + '</div>' +
+      '<div class="time-entry__hours">' + entry.hours + 'h</div>' +
+      '<div class="time-entry__desc">' + (entry.description || '—') + '</div>' +
+      '<button class="time-entry__delete" data-entry-id="' + entry.id + '" aria-label="Delete">×</button>';
+    attachDeleteHandler(row.querySelector('.time-entry__delete'));
+
+    const existingList = document.getElementById('time-list');
+    if (existingList) {
+      existingList.insertAdjacentElement('afterbegin', row);
+    } else {
+      const list = document.createElement('div');
+      list.className = 'time-list';
+      list.id = 'time-list';
+      list.appendChild(row);
+      const empty = document.getElementById('time-empty');
+      if (empty) empty.replaceWith(list);
+    }
+
+    updateTimeLabel();
+    updateDescSuggestions();
+    timeForm.elements.namedItem('description').value = '';
+  } catch (err) {
+    timeFeedback.textContent = (err && err.message) || 'Error logging time';
+    timeFeedback.className = 'form-feedback error';
+  } finally {
+    btn.disabled = false;
+  }
+});
 </script>

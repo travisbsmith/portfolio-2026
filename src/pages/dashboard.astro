@@ -7,6 +7,7 @@ import Stripe from 'stripe';
 import { getLeads, type Lead } from '../lib/leads';
 import { SESSION_COOKIE, SESSION_VALUE } from '../lib/auth';
 import { matchService } from '../lib/services';
+import { getTimeEntries } from '../lib/time';
 const DASHBOARD_PASSWORD = import.meta.env.DASHBOARD_PASSWORD ?? process.env.DASHBOARD_PASSWORD;
 
 let isAuthenticated = false;
@@ -112,6 +113,17 @@ if (isAuthenticated && (import.meta.env.STRIPE_SECRET_KEY ?? process.env.STRIPE_
 
 function fmt$(n: number): string {
   return n === 0 ? '$0' : '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+}
+
+// Fetch time totals for all active leads in parallel
+const timeTotalByLeadId: Record<string, number> = {};
+if (isAuthenticated) {
+  const timeResults = await Promise.allSettled(activeLeads.map(l => getTimeEntries(l.id)));
+  timeResults.forEach((r, i) => {
+    timeTotalByLeadId[activeLeads[i].id] = r.status === 'fulfilled'
+      ? r.value.reduce((sum, e) => sum + e.hours, 0)
+      : 0;
+  });
 }
 ---
 
@@ -220,6 +232,9 @@ function fmt$(n: number): string {
                               <div class="client-email">{lead.email}</div>
                               {lead.storeUrl && <div class="client-store">{lead.storeUrl.replace(/^https?:\/\//, '')}</div>}
                               {lead.nextMeeting && <div class="client-meeting">📅 {lead.nextMeeting}</div>}
+                              {(timeTotalByLeadId[lead.id] ?? 0) > 0 && (
+                                <div class="client-time">{timeTotalByLeadId[lead.id].toFixed(1)} hrs logged</div>
+                              )}
                             </a>
                           </td>
                           <td>
@@ -614,7 +629,7 @@ function fmt$(n: number): string {
     background: var(--color-bg);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    padding: var(--space-4) var(--space-5);
+    padding: var(--space-5) var(--space-6);
   }
 
   .stat-label {
@@ -687,6 +702,13 @@ function fmt$(n: number): string {
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-accent);
+    margin-top: 3px;
+  }
+
+  .client-time {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
     margin-top: 3px;
   }
 
