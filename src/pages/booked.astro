@@ -7,84 +7,39 @@ import Button from '../components/Button.astro';
 
 <BaseLayout
   title="You're booked — Travis Smith | Shopify Expert"
-  description="Your intro call request has been received. Pick a time that works for you."
+  description="Your intro call is booked. See you soon."
 >
   <Navigation />
 
   <main class="booked">
     <div class="container container--narrow">
-
       <div class="booked__card">
         <span class="booked__check" aria-hidden="true">✓</span>
-        <span class="label">Request received</span>
-        <h1 class="booked__title">You're all set.</h1>
+        <span class="label">Call booked</span>
+        <h1 class="booked__title">You're on the calendar.</h1>
         <p class="booked__body">
-          I've got your answers. Skip the back-and-forth — grab a time below and I'll send a calendar invite with the video call link.
+          Check your email for a calendar invite with the Google Meet link. See you soon.
         </p>
+        <div class="booked__cta">
+          <Button href="/shopify" variant="secondary" size="sm">Back to the consulting page</Button>
+          <a class="booked__email-link" href="mailto:hello@fully-operational.com">
+            Questions? Email me directly →
+          </a>
+        </div>
       </div>
-
-      <!-- Cal.com inline scheduling embed -->
-      <!-- Event slug: fullyoperational/intro-chat -->
-      <div class="booked__cal-wrapper">
-        <div id="cal-inline"></div>
-      </div>
-
-      <div class="booked__footer">
-        <Button href="/shopify" variant="secondary" size="sm">Back to the consulting page</Button>
-        <a class="booked__email-link" href="mailto:hello@fully-operational.com">
-          Prefer email? Reach me directly →
-        </a>
-      </div>
-
     </div>
   </main>
 
   <Footer />
 </BaseLayout>
 
-<!-- Cal.com embed script -->
-<script is:inline>
-  (function (C, A, L) {
-    let p = function (a, ar) { a.q.push(ar); };
-    let d = C.document;
-    C.Cal = C.Cal || function () {
-      let cal = C.Cal;
-      let ar = arguments;
-      if (!cal.loaded) {
-        cal.ns = {};
-        cal.q = cal.q || [];
-        d.head.appendChild(d.createElement("script")).src = A;
-        cal.loaded = true;
-      }
-      if (ar[0] === L) {
-        const api = function () { p(api, arguments); };
-        const namespace = ar[1];
-        api.q = api.q || [];
-        typeof namespace === "string" ? (cal.ns[namespace] = api) && p(api, ar) : p(cal, ar);
-        return;
-      }
-      p(cal, ar);
-    };
-  })(window, "https://app.cal.com/embed/embed.js", "init");
-
-  Cal("init", { origin: "https://cal.com" });
-
-  Cal("inline", {
-    elementOrSelector: "#cal-inline",
-    config: { layout: "month_view" },
-    calLink: "fullyoperational/intro-chat",
-  });
-
-  Cal("ui", {
-    hideEventTypeDetails: false,
-    layout: "month_view",
-  });
-</script>
-
 <style>
   .booked {
     padding-top: calc(64px + var(--space-20));
     padding-bottom: var(--space-20);
+    min-height: 80vh;
+    display: flex;
+    align-items: flex-start;
   }
 
   .booked__card {
@@ -92,7 +47,6 @@ import Button from '../components/Button.astro';
     flex-direction: column;
     gap: var(--space-6);
     max-width: 540px;
-    margin-bottom: var(--space-12);
   }
 
   .booked__check {
@@ -128,23 +82,12 @@ import Button from '../components/Button.astro';
     line-height: 1.7;
   }
 
-  .booked__cal-wrapper {
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    margin-bottom: var(--space-10);
-  }
-
-  #cal-inline {
-    width: 100%;
-    min-height: 600px;
-  }
-
-  .booked__footer {
+  .booked__cta {
     display: flex;
     align-items: center;
     gap: var(--space-6);
     flex-wrap: wrap;
+    margin-top: var(--space-2);
   }
 
   .booked__email-link {

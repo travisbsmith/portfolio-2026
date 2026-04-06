@@ -15,11 +15,11 @@ import Footer from '../components/Footer.astro';
     <div class="container container--narrow">
 
       <!-- Header -->
-      <header class="book__header">
+      <header class="book__header" id="book-header">
         <span class="label">Free Intro Call</span>
         <h1 class="book__title">Let's talk about your store</h1>
         <p class="book__subtitle">
-          Fill this out and I'll reply within one business day with a few time options. No pitch — just a real conversation about what you're building.
+          Tell me a bit about what you're building, then grab a time that works for you.
         </p>
         <div class="book__meta">
           <span class="book__meta-item">
@@ -41,8 +41,7 @@ import Footer from '../components/Footer.astro';
       <form
         id="booking-form"
         class="book__form"
-        action="https://app.fully-operational.com/api/leads/new"
-        method="POST"
+        novalidate
       >
         <!-- Honeypot spam trap -->
         <input type="text" name="_gotcha" style="display:none" tabindex="-1" autocomplete="off" />
@@ -142,7 +141,7 @@ import Footer from '../components/Footer.astro';
             <div class="book__radio-group book__radio-group--cards">
 
               <label class="book__service-card">
-                <input type="radio" name="service_interest" value="Clarity Session ($350)" required />
+                <input type="radio" name="service_interest" value="Clarity Session ($500)" required />
                 <div class="book__service-card-content">
                   <span class="book__service-card-name">Clarity Session</span>
                   <p class="book__service-card-desc">90-min audit + written action plan within 48 hrs</p>
@@ -150,7 +149,7 @@ import Footer from '../components/Footer.astro';
               </label>
 
               <label class="book__service-card">
-                <input type="radio" name="service_interest" value="Insider Retainer ($2,500/mo)" />
+                <input type="radio" name="service_interest" value="Insider Retainer ($3,500/mo)" />
                 <div class="book__service-card-content">
                   <span class="book__service-card-name">Insider Retainer</span>
                   <p class="book__service-card-desc">Ongoing advisory — 2 calls/mo, async Slack, monthly audit</p>
@@ -158,7 +157,7 @@ import Footer from '../components/Footer.astro';
               </label>
 
               <label class="book__service-card">
-                <input type="radio" name="service_interest" value="Store Launch Sprint ($1,800)" />
+                <input type="radio" name="service_interest" value="Store Launch Sprint ($2,500)" />
                 <div class="book__service-card-content">
                   <span class="book__service-card-name">Store Launch Sprint</span>
                   <p class="book__service-card-desc">Zero to live in 2–3 weeks — theme, products, apps, roadmap</p>
@@ -177,88 +176,7 @@ import Footer from '../components/Footer.astro';
           </div>
         </fieldset>
 
-        <!-- Section 3: Availability -->
-        <fieldset class="book__fieldset">
-          <legend class="book__legend">Your availability</legend>
-          <p class="book__fieldset-hint">All times are Central Time (CT). I'll reply with specific options that work for both of us.</p>
-
-          <div class="book__field">
-            <label class="book__label">Preferred days <span class="book__required">*</span></label>
-            <div class="book__check-group">
-              <label class="book__check-label">
-                <input type="checkbox" name="available_days" value="Monday" />
-                <span>Mon</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_days" value="Tuesday" />
-                <span>Tue</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_days" value="Wednesday" />
-                <span>Wed</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_days" value="Thursday" />
-                <span>Thu</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_days" value="Friday" />
-                <span>Fri</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="book__field">
-            <label class="book__label">Preferred time ranges (CT) <span class="book__required">*</span></label>
-            <div class="book__check-group">
-              <label class="book__check-label">
-                <input type="checkbox" name="available_times" value="Morning (8–11am CT)" />
-                <span>Morning 8–11am</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_times" value="Midday (11am–1pm CT)" />
-                <span>Midday 11am–1pm</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_times" value="Afternoon (1–4pm CT)" />
-                <span>Afternoon 1–4pm</span>
-              </label>
-              <label class="book__check-label">
-                <input type="checkbox" name="available_times" value="Evening (4–6pm CT)" />
-                <span>Evening 4–6pm</span>
-              </label>
-            </div>
-          </div>
-
-          <div class="book__field">
-            <label class="book__label" for="timezone">Your timezone</label>
-            <select
-              class="book__input book__input--sm book__select"
-              id="timezone"
-              name="timezone"
-            >
-              <option value="">Select timezone…</option>
-              <optgroup label="United States">
-                <option value="ET (America/New_York)">Eastern — ET</option>
-                <option value="CT (America/Chicago)">Central — CT</option>
-                <option value="MT (America/Denver)">Mountain — MT</option>
-                <option value="PT (America/Los_Angeles)">Pacific — PT</option>
-                <option value="AKT (America/Anchorage)">Alaska — AKT</option>
-                <option value="HT (Pacific/Honolulu)">Hawaii — HT</option>
-              </optgroup>
-              <optgroup label="Other">
-                <option value="GMT">GMT / UTC</option>
-                <option value="CET (Europe/Paris)">Central Europe — CET</option>
-                <option value="EET (Europe/Helsinki)">Eastern Europe — EET</option>
-                <option value="IST (Asia/Kolkata)">India — IST</option>
-                <option value="JST (Asia/Tokyo)">Japan — JST</option>
-                <option value="AEST (Australia/Sydney)">Australia East — AEST</option>
-              </optgroup>
-            </select>
-          </div>
-        </fieldset>
-
-        <!-- Section 4: Anything else -->
+        <!-- Section 3: Anything Else -->
         <fieldset class="book__fieldset">
           <legend class="book__legend">Anything else</legend>
 
@@ -305,15 +223,31 @@ import Footer from '../components/Footer.astro';
 
         <!-- Submit -->
         <div class="book__submit">
-          <button class="book__submit-btn" type="submit">
-            Send request
+          <button class="book__submit-btn" type="submit" id="submit-btn">
+            Choose a time →
           </button>
-          <p class="book__submit-note">
-            I'll reply within one business day with a few time options via email.
+          <p class="book__submit-note" id="submit-note">
+            Pick a time that works for you on the next step.
           </p>
+          <p class="book__error" id="submit-error" style="display:none"></p>
         </div>
 
       </form>
+
+      <!-- Cal.com scheduling — shown after form submission -->
+      <div id="cal-section" style="display:none">
+        <div class="cal-header">
+          <span class="cal-header__check" aria-hidden="true">✓</span>
+          <div>
+            <p class="cal-header__label">You're all set — one last step</p>
+            <h2 class="cal-header__title">Pick a time for your call</h2>
+            <p class="cal-header__sub">30 minutes · Google Meet · Free</p>
+          </div>
+        </div>
+        <div class="cal-embed-wrapper">
+          <div id="cal-inline"></div>
+        </div>
+      </div>
 
     </div>
   </main>
@@ -321,18 +255,100 @@ import Footer from '../components/Footer.astro';
   <Footer />
 </BaseLayout>
 
-<script>
-  // Show launch date field for pre-launch store statuses
+<!-- Cal.com embed script (deferred until after submit) -->
+<script is:inline>
+  // ── Launch date conditional ──
   const statusInputs = document.querySelectorAll('input[name="store_status"]');
   const launchDateField = document.getElementById('launch-date-field');
-
   function updateLaunchDateVisibility() {
-    const selected = (document.querySelector('input[name="store_status"]:checked') as HTMLInputElement)?.value ?? '';
+    const selected = document.querySelector('input[name="store_status"]:checked')?.value ?? '';
     const prelaunch = selected === 'Not started yet' || selected === 'In progress, not live';
     if (launchDateField) launchDateField.style.display = prelaunch ? 'flex' : 'none';
   }
+  statusInputs.forEach(i => i.addEventListener('change', updateLaunchDateVisibility));
 
-  statusInputs.forEach(input => input.addEventListener('change', updateLaunchDateVisibility));
+  // ── Cal.com loader ──
+  function loadCal(name, email) {
+    (function (C, A, L) {
+      let p = function (a, ar) { a.q.push(ar); };
+      let d = C.document;
+      C.Cal = C.Cal || function () {
+        let cal = C.Cal; let ar = arguments;
+        if (!cal.loaded) {
+          cal.ns = {}; cal.q = cal.q || [];
+          d.head.appendChild(d.createElement('script')).src = A;
+          cal.loaded = true;
+        }
+        if (ar[0] === L) {
+          const api = function () { p(api, arguments); };
+          const ns = ar[1];
+          api.q = api.q || [];
+          typeof ns === 'string' ? (cal.ns[ns] = api) && p(api, ar) : p(cal, ar);
+          return;
+        }
+        p(cal, ar);
+      };
+    })(window, 'https://app.cal.com/embed/embed.js', 'init');
+
+    Cal('init', { origin: 'https://cal.com' });
+    Cal('inline', {
+      elementOrSelector: '#cal-inline',
+      calLink: 'fullyoperational/intro-chat',
+      config: {
+        layout: 'month_view',
+        name: name,
+        email: email,
+      },
+    });
+    Cal('ui', { hideEventTypeDetails: false, layout: 'month_view' });
+  }
+
+  // ── Form submission ──
+  const form = document.getElementById('booking-form');
+  const submitBtn = document.getElementById('submit-btn');
+  const submitNote = document.getElementById('submit-note');
+  const submitError = document.getElementById('submit-error');
+  const calSection = document.getElementById('cal-section');
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    // Basic validation
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Saving your details…';
+    if (submitError) submitError.style.display = 'none';
+
+    const name = document.getElementById('name').value;
+    const email = document.getElementById('email').value;
+
+    try {
+      const res = await fetch('https://app.fully-operational.com/api/leads/new', {
+        method: 'POST',
+        headers: { 'Accept': 'application/json' },
+        body: new FormData(form),
+      });
+
+      if (!res.ok) throw new Error('Server error');
+
+      // Hide form, show Cal.com
+      form.style.display = 'none';
+      document.getElementById('book-header').style.display = 'none';
+      calSection.style.display = 'block';
+      loadCal(name, email);
+    } catch {
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Choose a time →';
+      if (submitError) {
+        submitError.textContent = 'Something went wrong — please try again or email hello@fully-operational.com.';
+        submitError.style.display = 'block';
+      }
+    }
+  });
 </script>
 
 <style>
@@ -417,12 +433,6 @@ import Footer from '../components/Footer.astro';
     padding-bottom: var(--space-4);
   }
 
-  .book__fieldset-hint {
-    font-size: var(--text-sm);
-    color: var(--color-text-tertiary);
-    margin-top: calc(var(--space-2) * -1);
-  }
-
   .book__row {
     display: flex;
     gap: var(--space-6);
@@ -493,7 +503,7 @@ import Footer from '../components/Footer.astro';
     cursor: pointer;
   }
 
-  /* ── Radio group (inline) ── */
+  /* ── Radio group ── */
   .book__radio-group {
     display: flex;
     flex-direction: column;
@@ -517,7 +527,7 @@ import Footer from '../components/Footer.astro';
     cursor: pointer;
   }
 
-  /* ── Service cards (radio) ── */
+  /* ── Service cards ── */
   .book__radio-group--cards {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
@@ -568,44 +578,6 @@ import Footer from '../components/Footer.astro';
     margin: 0;
   }
 
-  /* ── Checkboxes ── */
-  .book__check-group {
-    display: flex;
-    flex-wrap: wrap;
-    gap: var(--space-3);
-  }
-
-  .book__check-label {
-    display: flex;
-    align-items: center;
-    gap: var(--space-2);
-    font-size: var(--text-sm);
-    color: var(--color-text-secondary);
-    cursor: pointer;
-    padding: var(--space-2) var(--space-4);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
-    transition: border-color var(--duration-fast) var(--ease), background var(--duration-fast) var(--ease);
-  }
-
-  .book__check-label:hover {
-    border-color: var(--color-border-strong);
-  }
-
-  .book__check-label input[type="checkbox"] {
-    accent-color: var(--color-accent);
-    width: 14px;
-    height: 14px;
-    flex-shrink: 0;
-    cursor: pointer;
-  }
-
-  .book__check-label:has(input:checked) {
-    border-color: var(--color-text);
-    background: var(--color-bg-alt);
-    color: var(--color-text);
-  }
-
   /* ── Submit ── */
   .book__submit {
     display: flex;
@@ -629,18 +601,82 @@ import Footer from '../components/Footer.astro';
     transition: background var(--duration-fast) var(--ease), opacity var(--duration-fast) var(--ease);
   }
 
-  .book__submit-btn:hover {
+  .book__submit-btn:hover:not(:disabled) {
     background: var(--color-accent);
   }
 
-  .book__submit-btn:active {
-    opacity: 0.85;
+  .book__submit-btn:disabled {
+    opacity: 0.5;
+    cursor: default;
   }
 
   .book__submit-note {
     font-size: var(--text-sm);
     color: var(--color-text-tertiary);
     line-height: 1.5;
+  }
+
+  .book__error {
+    font-size: var(--text-sm);
+    color: #c0392b;
+    line-height: 1.5;
+  }
+
+  /* ── Cal.com section ── */
+  .cal-header {
+    display: flex;
+    align-items: flex-start;
+    gap: var(--space-5);
+    margin-bottom: var(--space-10);
+  }
+
+  .cal-header__check {
+    display: inline-flex;
+    width: 36px;
+    height: 36px;
+    flex-shrink: 0;
+    border-radius: 50%;
+    background: var(--color-accent);
+    color: white;
+    font-size: var(--text-sm);
+    font-weight: 600;
+    align-items: center;
+    justify-content: center;
+    font-family: var(--font-mono);
+    margin-top: 4px;
+  }
+
+  .cal-header__label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--color-text-tertiary);
+    margin-bottom: var(--space-2);
+  }
+
+  .cal-header__title {
+    font-size: clamp(1.5rem, 3vw, var(--text-3xl));
+    font-weight: 500;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+    margin-bottom: var(--space-2);
+  }
+
+  .cal-header__sub {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+  }
+
+  .cal-embed-wrapper {
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+  }
+
+  #cal-inline {
+    width: 100%;
+    min-height: 600px;
   }
 
   /* ── Responsive ── */
