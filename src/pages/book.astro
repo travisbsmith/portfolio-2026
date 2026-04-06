@@ -41,7 +41,7 @@ import Footer from '../components/Footer.astro';
       <form
         id="booking-form"
         class="book__form"
-        action="/api/leads/new"
+        action="https://app.fully-operational.com/api/leads/new"
         method="POST"
       >
         <!-- Honeypot spam trap -->
@@ -113,10 +113,9 @@ import Footer from '../components/Footer.astro';
             <label class="book__label" for="launch_date">Target launch date</label>
             <input
               class="book__input book__input--sm"
-              type="text"
+              type="date"
               id="launch_date"
               name="launch_date"
-              placeholder="e.g. September 2026, Q4 this year"
             />
             <span class="book__hint">Helps me understand your timeline. No pressure if it's flexible.</span>
           </div>
@@ -233,13 +232,29 @@ import Footer from '../components/Footer.astro';
 
           <div class="book__field">
             <label class="book__label" for="timezone">Your timezone</label>
-            <input
-              class="book__input book__input--sm"
-              type="text"
+            <select
+              class="book__input book__input--sm book__select"
               id="timezone"
               name="timezone"
-              placeholder="e.g. EST, PST, GMT+1"
-            />
+            >
+              <option value="">Select timezone…</option>
+              <optgroup label="United States">
+                <option value="ET (America/New_York)">Eastern — ET</option>
+                <option value="CT (America/Chicago)">Central — CT</option>
+                <option value="MT (America/Denver)">Mountain — MT</option>
+                <option value="PT (America/Los_Angeles)">Pacific — PT</option>
+                <option value="AKT (America/Anchorage)">Alaska — AKT</option>
+                <option value="HT (Pacific/Honolulu)">Hawaii — HT</option>
+              </optgroup>
+              <optgroup label="Other">
+                <option value="GMT">GMT / UTC</option>
+                <option value="CET (Europe/Paris)">Central Europe — CET</option>
+                <option value="EET (Europe/Helsinki)">Eastern Europe — EET</option>
+                <option value="IST (Asia/Kolkata)">India — IST</option>
+                <option value="JST (Asia/Tokyo)">Japan — JST</option>
+                <option value="AEST (Australia/Sydney)">Australia East — AEST</option>
+              </optgroup>
+            </select>
           </div>
         </fieldset>
 
@@ -470,6 +485,12 @@ import Footer from '../components/Footer.astro';
 
   .book__input--sm {
     max-width: 240px;
+  }
+
+  .book__select {
+    appearance: auto;
+    -webkit-appearance: auto;
+    cursor: pointer;
   }
 
   /* ── Radio group (inline) ── */
