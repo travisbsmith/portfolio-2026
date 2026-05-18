@@ -1,0 +1,429 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+---
+
+<BaseLayout
+  title="Shopify Marketing Attribution — What to Watch and What It Means | Travis Smith"
+  description="A plain-English guide to reading your Shopify marketing attribution data — what the sources actually mean, what to look at weekly, and how to fix the most common tracking gaps."
+>
+  <Navigation />
+
+  <main class="attr">
+    <div class="container container--narrow">
+
+      <header class="attr__header">
+        <span class="label">Resource</span>
+        <h1 class="attr__title">Shopify Marketing Attribution</h1>
+        <p class="attr__subtitle">
+          What the numbers actually mean, what to check and how often, and how to fix the gaps that make your data misleading.
+        </p>
+        <p class="attr__byline">By Travis Smith — former Head of Design at Shopify, 2020–2025</p>
+      </header>
+
+      <!-- What attribution is -->
+      <section class="attr__section">
+        <h2 class="attr__section-title">What attribution is — and what it gets wrong</h2>
+        <p class="attr__body">
+          Attribution is Shopify's way of answering: where did this customer come from? When someone places an order, Shopify looks at the UTM parameters on their session URL, the referring domain, or their session history and records the source.
+        </p>
+        <p class="attr__body">
+          The default model is <strong>last-click</strong>: the channel that drove the session in which the purchase happened gets full credit. This is consistent and easy to read — but it systematically understates channels that build awareness (social, content, word of mouth) and overstates channels that close (branded search, direct).
+        </p>
+        <div class="attr__callout">
+          <p>A customer sees your product on Instagram three times, then Googles your brand name and buys. Attribution records this as "organic search." Instagram gets no credit. That doesn't mean Instagram didn't matter — it means last-click doesn't capture the full journey. Read the data knowing this.</p>
+        </div>
+      </section>
+
+      <!-- The four sources -->
+      <section class="attr__section">
+        <h2 class="attr__section-title">The four main sources — and what they really mean</h2>
+
+        <div class="attr__sources">
+
+          <div class="attr__source">
+            <h3 class="attr__source-title">Direct</h3>
+            <p class="attr__body">
+              Sessions where Shopify can't identify a source — no UTM parameters, no referring domain. This is the most misunderstood number in the dashboard.
+            </p>
+            <p class="attr__body">
+              Direct is <em>not</em> just people who typed your URL directly. It also includes email link clicks without UTM parameters, some social referrals (especially from mobile apps that strip referrer headers), and traffic from tools like Linktree when the integration isn't configured correctly.
+            </p>
+            <div class="attr__callout attr__callout--warning">
+              <p><strong>If your direct traffic is unusually high</strong> — say, more than 30–40% of sessions — it almost always means you have attribution gaps: emails without UTMs, a social tool with a broken integration, or some other channel that isn't tagging its traffic properly. It's a tracking problem, not a sign that customers love you enough to type your URL.</p>
+            </div>
+          </div>
+
+          <div class="attr__source">
+            <h3 class="attr__source-title">Organic search</h3>
+            <p class="attr__body">
+              Traffic from Google, Bing, and other search engines where you weren't running paid ads. High-intent traffic — someone searched for something, found you in the results, and clicked.
+            </p>
+            <p class="attr__body">
+              Track this monthly and note the trend. Consistent organic search growth means your SEO is working. A sudden drop usually means either a technical issue (pages not indexed, slow load time) or a content gap a competitor has filled.
+            </p>
+          </div>
+
+          <div class="attr__source">
+            <h3 class="attr__source-title">Paid search / paid social</h3>
+            <p class="attr__body">
+              Your ad traffic. These sessions should come with UTM parameters from your campaign setup. If you're running Meta or Google Ads and <em>not</em> seeing corresponding sessions here, your UTM parameters are misconfigured — every sale from those campaigns is landing in "direct."
+            </p>
+            <p class="attr__body">
+              Check this after launching any new campaign. If it doesn't appear within 24–48 hours, the tracking is broken.
+            </p>
+          </div>
+
+          <div class="attr__source">
+            <h3 class="attr__source-title">Referral</h3>
+            <p class="attr__body">
+              Traffic from other sites linking to yours — press mentions, partner sites, social platforms, and external tools. This is also where you'll start to see AI search engines appear: <code>openai.com</code>, <code>perplexity.ai</code>, <code>claude.ai</code>, <code>bing.com</code> (ChatGPT uses Bing for live web results).
+            </p>
+            <p class="attr__body">
+              Check referral traffic monthly. Growing AI referral traffic is a strong signal to invest in structured content and an llms.txt file.
+            </p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Email — the invisible channel -->
+      <section class="attr__section">
+        <h2 class="attr__section-title">Email: the channel that disappears without UTMs</h2>
+        <p class="attr__body">
+          Most founders spend more time on Meta campaigns than on email — even when email is their highest-converting channel. Part of why: email attribution is invisible if you haven't set it up.
+        </p>
+        <p class="attr__body">
+          Every link in every email you send should have UTM parameters appended:
+        </p>
+        <div class="attr__code">
+          <code>?utm_source=klaviyo&amp;utm_medium=email&amp;utm_campaign=abandoned_cart</code>
+        </div>
+        <p class="attr__body">
+          Without these, every click from your email lands in "direct." Your Klaviyo dashboard shows a conversion. Shopify doesn't. When you look at your channel breakdown, email looks like it does nothing — so you spend more on ads.
+        </p>
+        <div class="attr__callout">
+          <p><strong>Fix it once:</strong> In Klaviyo, go to Account → Settings → UTM Tracking and turn on automatic UTM parameters. Every link in every email you send will be tagged going forward. This is a one-time setting.</p>
+        </div>
+      </section>
+
+      <!-- What to look at -->
+      <section class="attr__section">
+        <h2 class="attr__section-title">What to actually look at, and how often</h2>
+
+        <div class="attr__cadence">
+
+          <div class="attr__cadence-block">
+            <h3 class="attr__cadence-title">Weekly — 5 minutes</h3>
+            <ul class="attr__checklist">
+              <li>Total sessions — up, down, or flat vs. last week?</li>
+              <li>Conversion rate — did anything change that might have affected it?</li>
+              <li>Top traffic sources — anything unexpected up or down?</li>
+            </ul>
+          </div>
+
+          <div class="attr__cadence-block">
+            <h3 class="attr__cadence-title">Monthly — 20 minutes</h3>
+            <ul class="attr__checklist">
+              <li>Channel breakdown — what share of sales came from each source?</li>
+              <li>Top landing pages — where are sessions starting? Are campaign pages working?</li>
+              <li>Conversion rate by channel — which channel converts best? (Often email &gt; direct &gt; organic)</li>
+              <li>AI referrals — check for <code>openai.com</code>, <code>perplexity.ai</code>, <code>claude.ai</code>, <code>bing.com</code></li>
+            </ul>
+          </div>
+
+          <div class="attr__cadence-block">
+            <h3 class="attr__cadence-title">When something changes</h3>
+            <ul class="attr__checklist">
+              <li><strong>Direct traffic spike after a new email campaign</strong> → UTM parameters not configured</li>
+              <li><strong>Conversion rate drops with stable traffic</strong> → something changed on the site (new app, page edit, checkout issue)</li>
+              <li><strong>Paid traffic up but conversions flat</strong> → ads are working, landing page isn't</li>
+              <li><strong>TikTok or Instagram traffic showing as direct</strong> → your link-in-bio tool's Shopify integration is broken; test with a direct UTM-tagged link instead</li>
+            </ul>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Common problems -->
+      <section class="attr__section">
+        <h2 class="attr__section-title">Common tracking problems and how to fix them</h2>
+
+        <div class="attr__problems">
+
+          <div class="attr__problem">
+            <h3 class="attr__problem-title">Social traffic showing as direct</h3>
+            <p class="attr__body">The most common cause: your link-in-bio tool (Linktree, Later, etc.) isn't passing UTM parameters to Shopify. Test it by clicking your bio link and checking what session source Shopify records. Fix: use a UTM-tagged URL in the bio link itself, bypassing the third-party tool's tracking.</p>
+          </div>
+
+          <div class="attr__problem">
+            <h3 class="attr__problem-title">Email driving no attributed sales</h3>
+            <p class="attr__body">Almost always means UTMs aren't configured on your email links. Turn on automatic UTM tracking in Klaviyo (one setting) or add UTM parameters manually to every link in your campaigns and flows.</p>
+          </div>
+
+          <div class="attr__problem">
+            <h3 class="attr__problem-title">Klaviyo showing far more contacts than actual subscribers</h3>
+            <p class="attr__body">If Klaviyo shows 1,000+ profiles but you only have ~100 email subscribers, you likely have bot signups or ghost contacts from a previous platform migration. Run a suppression list cleanup: delete contacts with no orders, no email opens, and no marketing consent. A clean list of 100 real subscribers outperforms a dirty list of 1,000 every time — and Klaviyo charges by active profile count.</p>
+          </div>
+
+          <div class="attr__problem">
+            <h3 class="attr__problem-title">No access to campaign or attribution data</h3>
+            <p class="attr__body">If your collaborator or team member can't see Marketing → Attribution, check the permissions on their account. Marketing access is a separate permission from general store access in Shopify's user settings.</p>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- What NOT to track yet -->
+      <section class="attr__section">
+        <h2 class="attr__section-title">What to ignore until you have more volume</h2>
+        <p class="attr__body">
+          For stores doing under $20k/month, most of the advanced reporting in Shopify Analytics isn't statistically meaningful yet. Cohort analysis, customer lifetime value by channel, repeat purchase rate — these numbers exist in your dashboard, but you don't have enough data for them to tell you anything reliable.
+        </p>
+        <p class="attr__body">
+          Start with sessions, conversion rate, and channel source. Get those three numbers stable and understood before you add anything else. Complexity in your analytics before you need it is just noise.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <section class="attr__cta">
+        <h2>Want help reading your specific numbers?</h2>
+        <p>One of the first things I do with a new client is run through their attribution report together. Book a free intro call and I'll tell you what I'd look at in your store specifically.</p>
+        <Button href="/book" size="lg">Book a free 30-min call</Button>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .attr {
+    padding-top: calc(64px + var(--space-12));
+    padding-bottom: var(--space-20);
+  }
+
+  .attr__header {
+    margin-bottom: var(--space-16);
+  }
+
+  .attr__header .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .attr__title {
+    font-size: clamp(1.75rem, 4vw, var(--text-4xl));
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+
+  .attr__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: var(--space-3);
+  }
+
+  .attr__byline {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .attr__section {
+    margin-bottom: var(--space-16);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .attr__section:last-of-type {
+    border-bottom: none;
+  }
+
+  .attr__section-title {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin-bottom: var(--space-6);
+  }
+
+  .attr__body {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-4);
+    max-width: 640px;
+  }
+
+  .attr__body:last-child { margin-bottom: 0; }
+
+  .attr__callout {
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-accent);
+    padding: var(--space-4) var(--space-6);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: var(--space-6) 0;
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  .attr__callout--warning {
+    border-left-color: var(--color-text-tertiary);
+  }
+
+  .attr__callout p { margin: 0; }
+
+  /* Sources */
+  .attr__sources {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-10);
+  }
+
+  .attr__source-title {
+    font-size: var(--text-lg);
+    font-weight: 500;
+    margin-bottom: var(--space-3);
+  }
+
+  /* Code */
+  .attr__code {
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-4) var(--space-6);
+    margin: var(--space-4) 0;
+    max-width: 640px;
+    overflow-x: auto;
+  }
+
+  .attr__code code {
+    font-family: var(--font-mono);
+    font-size: var(--text-sm);
+    color: var(--color-accent);
+    white-space: nowrap;
+  }
+
+  /* Cadence */
+  .attr__cadence {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    max-width: 640px;
+  }
+
+  .attr__cadence-block {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .attr__cadence-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    margin-bottom: var(--space-4);
+  }
+
+  .attr__checklist {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+  }
+
+  .attr__checklist li {
+    font-size: var(--text-sm);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+    padding-left: var(--space-6);
+    position: relative;
+  }
+
+  .attr__checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+  }
+
+  .attr__checklist strong { color: var(--color-text); }
+
+  .attr__checklist code {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    background: var(--color-bg-alt);
+    padding: 1px 4px;
+    border-radius: 3px;
+  }
+
+  /* Problems */
+  .attr__problems {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-8);
+    max-width: 640px;
+  }
+
+  .attr__problem {
+    padding: var(--space-6);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+
+  .attr__problem-title {
+    font-size: var(--text-base);
+    font-weight: 600;
+    margin-bottom: var(--space-3);
+  }
+
+  .attr__problem .attr__body {
+    margin-bottom: 0;
+  }
+
+  /* CTA */
+  .attr__cta {
+    padding: var(--space-12) var(--space-10);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .attr__cta h2 {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .attr__cta p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 480px;
+  }
+
+  @media (max-width: 640px) {
+    .attr__cta {
+      padding: var(--space-8) var(--space-6);
+    }
+  }
+</style>

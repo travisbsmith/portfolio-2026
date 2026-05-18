@@ -1,0 +1,339 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import Button from '../../components/Button.astro';
+---
+
+<BaseLayout
+  title="Shopify Store Setup — The Fundamentals | Travis Smith"
+  description="Products, variants, collections, pages, templates, inventory, metafields — how Shopify actually thinks about these things, and how to get them right the first time."
+>
+  <Navigation />
+
+  <main class="setup">
+    <div class="container container--narrow">
+
+      <header class="setup__header">
+        <span class="label">Resource</span>
+        <h1 class="setup__title">Shopify Store Setup — The Fundamentals</h1>
+        <p class="setup__subtitle">
+          The structural decisions you make when setting up a Shopify store affect everything downstream. Get these five things right from the start and you'll avoid the messy rebuild later.
+        </p>
+        <p class="setup__byline">By Travis Smith — former Head of Design at Shopify, 2020–2025</p>
+      </header>
+
+      <!-- 1. Products & Variants -->
+      <section class="setup__section">
+        <div class="setup__section-label">01</div>
+        <h2 class="setup__section-title">Products and variants</h2>
+        <p class="setup__body">
+          A <strong>product</strong> is the thing you sell. A <strong>variant</strong> is a specific version of that product — different size, color, material, or scent. Shopify tracks inventory, pricing, and SKUs at the variant level.
+        </p>
+        <div class="setup__callout">
+          <p><strong>The rule:</strong> If two items share the same product story but differ only in a configurable attribute (size, color, flavor), they belong as variants under one product — not as separate products.</p>
+        </div>
+        <p class="setup__body">
+          A t-shirt in 4 colors and 5 sizes is <em>one product with 20 variants</em>. If you create 20 separate products, your collections become unmanageable, your analytics fragment, and customers can't compare options on a single page.
+        </p>
+        <h3 class="setup__sub">Common mistake</h3>
+        <p class="setup__body">
+          Creating a separate product for every SKU variant. The store becomes impossible to navigate and your collections surface 40 products when you really only sell 8 things.
+        </p>
+        <h3 class="setup__sub">When to create a new product</h3>
+        <p class="setup__body">
+          When two items have genuinely different product descriptions, use cases, or price points — and a customer would think of them as different things. A shampoo and a conditioner are separate products even if they're sold as a pair. A conditioner in two scents is one product with two variants.
+        </p>
+      </section>
+
+      <!-- 2. Collections -->
+      <section class="setup__section">
+        <div class="setup__section-label">02</div>
+        <h2 class="setup__section-title">Collections</h2>
+        <p class="setup__body">
+          A collection is a group of products that belong together. Shopify has two types:
+        </p>
+        <ul class="setup__list">
+          <li><strong>Manual collections</strong> — you hand-pick which products are included</li>
+          <li><strong>Automated collections</strong> — products are added automatically based on rules you set (tag, price, product type, vendor)</li>
+        </ul>
+        <div class="setup__callout">
+          <p><strong>Organize for shoppers, not for your inventory system.</strong> "Best Sellers," "New Arrivals," "Bundles," "Under $50" — these are collection names that help a customer find what they want. Your supplier code structure is not a collection.</p>
+        </div>
+        <h3 class="setup__sub">Manual vs. automated</h3>
+        <p class="setup__body">
+          Use automated collections once you have more than 10–15 products. Set tagging rules on your products and let collections populate themselves. Manual collections require you to add every new product by hand — which you will eventually forget to do, and the collection will silently go stale.
+        </p>
+        <h3 class="setup__sub">Navigation tip</h3>
+        <p class="setup__body">
+          Your navigation menu should surface the 3–5 collections a first-time customer would actually want. You can have many more collections in the system (for internal filtering, for ads landing pages, for automated emails) without putting them all in your main nav.
+        </p>
+      </section>
+
+      <!-- 3. Pages vs. Templates -->
+      <section class="setup__section">
+        <div class="setup__section-label">03</div>
+        <h2 class="setup__section-title">Pages and page templates</h2>
+        <p class="setup__body">
+          This is the one that trips up almost everyone.
+        </p>
+        <ul class="setup__list">
+          <li>A <strong>page</strong> is a specific piece of content at a fixed URL — your About Us, your FAQ, your Locations page. It contains whatever text and media you put in it.</li>
+          <li>A <strong>page template</strong> is the layout that controls how a page looks — the sections available, the structure, the design. Templates are reusable.</li>
+        </ul>
+        <div class="setup__callout">
+          <p><strong>Key distinction:</strong> Changes to a template affect every page using that template. Changes to page content only affect that one page. Keep design decisions in templates. Keep content in pages.</p>
+        </div>
+        <h3 class="setup__sub">When to create a new template</h3>
+        <p class="setup__body">
+          When you want a page to look structurally different from your other pages. A campaign landing page, an interactive map page, a brand story page with full-bleed sections — these warrant a dedicated template. Don't try to shoehorn them into a default page template and then fight the design.
+        </p>
+        <h3 class="setup__sub">Common mistake</h3>
+        <p class="setup__body">
+          Creating a new page for every campaign or piece of content, each with a slightly different layout — instead of creating one flexible template and reusing it. You end up with 30 pages, each with a slightly different structure, and no consistent way to update them.
+        </p>
+      </section>
+
+      <!-- 4. Inventory -->
+      <section class="setup__section">
+        <div class="setup__section-label">04</div>
+        <h2 class="setup__section-title">Inventory tracking</h2>
+        <p class="setup__body">
+          Shopify tracks inventory at the variant level, and optionally by location. Get this right from day one — fixing it after you've taken orders is painful.
+        </p>
+        <h3 class="setup__sub">The four things to configure</h3>
+        <ul class="setup__checklist">
+          <li>
+            <strong>Turn on "Track quantity"</strong> for every product (or variant). If it's off, Shopify won't decrement stock when someone buys, and you'll oversell.
+          </li>
+          <li>
+            <strong>Decide on "Continue selling when out of stock."</strong> Turn this off for physical products you can't backorder. Turn it on only if you're running a pre-order or can reliably fulfill.
+          </li>
+          <li>
+            <strong>Set accurate starting quantities.</strong> If you're importing from a spreadsheet or previous tool, verify the numbers before you go live. A count of zero means Shopify marks everything out of stock.
+          </li>
+          <li>
+            <strong>Start with one location.</strong> Multi-location inventory is powerful but adds complexity. Add locations only when you have an actual operational reason — second warehouse, retail location, new 3PL address.
+          </li>
+        </ul>
+        <div class="setup__callout">
+          <p><strong>3PL note:</strong> If you're moving to a third-party fulfillment center (ShipBob, Shipmonk, etc.), wait until you're at consistent order volume before making the switch. The 3PL transition adds margin pressure and removes your direct quality control. It's the right move at some point — just not day one.</p>
+        </div>
+      </section>
+
+      <!-- 5. Metafields -->
+      <section class="setup__section">
+        <div class="setup__section-label">05</div>
+        <h2 class="setup__section-title">Metafields</h2>
+        <p class="setup__body">
+          Metafields are custom data fields you add to products, variants, collections, pages, or customers. They store structured information that Shopify's standard fields don't cover — ingredient lists, care instructions, certifications, custom size charts, material sourcing details.
+        </p>
+        <div class="setup__callout">
+          <p><strong>Define your metafields before you start adding products.</strong> If you add products first and define the fields later, you have to go back and fill them in on every product you've already created. Set up the structure first, fill it in as you go.</p>
+        </div>
+        <h3 class="setup__sub">How to set them up</h3>
+        <p class="setup__body">
+          Go to <strong>Settings → Custom Data → Products</strong> and define the fields your store needs. Name them clearly (e.g., "ingredients_list" not "field_1"). Choose the right field type — text, number, date, URL, reference — so the data is useful in both the admin and the storefront.
+        </p>
+        <h3 class="setup__sub">Why this matters more than it seems</h3>
+        <p class="setup__body">
+          Metafields store your data inside Shopify's native structure — not inside a third-party app. That means your data travels with you if you switch themes, doesn't disappear if you uninstall an app, and can be referenced in automations, emails, and theme sections. Brands that skip this end up with product data scattered across three apps that are all fighting to be the source of truth.
+        </p>
+      </section>
+
+      <!-- The deeper principle -->
+      <section class="setup__section">
+        <h2 class="setup__section-title">The underlying principle</h2>
+        <p class="setup__body">
+          Shopify is opinionated. It has a specific model for how products, collections, pages, and inventory should work — and working with that model is dramatically easier than working against it.
+        </p>
+        <p class="setup__body">
+          The founders who run into the most trouble are the ones who bent the structure to fit how they were already thinking, instead of learning how Shopify thinks first. These five fundamentals are the most important parts of that model to understand before you go live.
+        </p>
+      </section>
+
+      <!-- CTA -->
+      <section class="setup__cta">
+        <h2>Want a second set of eyes on your setup?</h2>
+        <p>I do store setup reviews as part of my Clarity Session — 90 minutes, written action plan, and specific recommendations on what to fix before you start driving traffic.</p>
+        <Button href="/book" size="lg">Book a free 30-min call</Button>
+      </section>
+
+    </div>
+  </main>
+
+  <Footer />
+</BaseLayout>
+
+<style>
+  .setup {
+    padding-top: calc(64px + var(--space-12));
+    padding-bottom: var(--space-20);
+  }
+
+  .setup__header {
+    margin-bottom: var(--space-16);
+  }
+
+  .setup__header .label {
+    display: block;
+    margin-bottom: var(--space-4);
+  }
+
+  .setup__title {
+    font-size: clamp(1.75rem, 4vw, var(--text-4xl));
+    font-weight: 500;
+    line-height: 1.15;
+    letter-spacing: -0.02em;
+    margin-bottom: var(--space-4);
+  }
+
+  .setup__subtitle {
+    font-size: var(--text-lg);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 560px;
+    margin-bottom: var(--space-3);
+  }
+
+  .setup__byline {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .setup__section {
+    margin-bottom: var(--space-16);
+    padding-bottom: var(--space-16);
+    border-bottom: 1px solid var(--color-border);
+    position: relative;
+  }
+
+  .setup__section:last-of-type {
+    border-bottom: none;
+  }
+
+  .setup__section-label {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-accent);
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-3);
+  }
+
+  .setup__section-title {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin-bottom: var(--space-6);
+  }
+
+  .setup__sub {
+    font-size: var(--text-base);
+    font-weight: 600;
+    color: var(--color-text);
+    margin: var(--space-6) 0 var(--space-3) 0;
+  }
+
+  .setup__body {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.75;
+    margin-bottom: var(--space-4);
+    max-width: 640px;
+  }
+
+  .setup__body:last-child { margin-bottom: 0; }
+
+  .setup__callout {
+    background: var(--color-bg-alt);
+    border-left: 3px solid var(--color-accent);
+    padding: var(--space-4) var(--space-6);
+    border-radius: 0 var(--radius-md) var(--radius-md) 0;
+    margin: var(--space-6) 0;
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    max-width: 640px;
+  }
+
+  .setup__callout p { margin: 0; }
+
+  .setup__list {
+    padding-left: var(--space-6);
+    margin: 0 0 var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: 640px;
+  }
+
+  .setup__list li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.65;
+  }
+
+  .setup__checklist {
+    list-style: none;
+    padding: 0;
+    margin: var(--space-4) 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    max-width: 640px;
+  }
+
+  .setup__checklist li {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    padding-left: var(--space-8);
+    position: relative;
+  }
+
+  .setup__checklist li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--color-accent);
+    font-family: var(--font-mono);
+  }
+
+  .setup__checklist strong {
+    color: var(--color-text);
+  }
+
+  /* CTA */
+  .setup__cta {
+    padding: var(--space-12) var(--space-10);
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-4);
+    align-items: flex-start;
+  }
+
+  .setup__cta h2 {
+    font-size: var(--text-2xl);
+    font-weight: 500;
+    margin: 0;
+  }
+
+  .setup__cta p {
+    font-size: var(--text-base);
+    color: var(--color-text-secondary);
+    line-height: 1.7;
+    margin: 0;
+    max-width: 480px;
+  }
+
+  @media (max-width: 640px) {
+    .setup__cta {
+      padding: var(--space-8) var(--space-6);
+    }
+  }
+</style>
