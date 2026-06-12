@@ -18,7 +18,7 @@ import Button from '../../components/Button.astro';
         <span class="label">Resource</span>
         <h1 class="collab__title">How to Get Your Shopify Collaborator Code</h1>
         <p class="collab__subtitle">
-          This takes about two minutes. You'll generate a 4-digit code in your Shopify admin and send it to me — then I request access and you approve it. That's it.
+          This takes about two minutes. You'll generate a 4-digit code in your Shopify admin, then send me that code along with your store's <strong>myshopify.com URL</strong> — I request access and you approve it. That's it.
         </p>
         <p class="collab__byline">By Travis Smith — former Head of Design at Shopify, 2020–2025</p>
       </header>
@@ -79,8 +79,14 @@ import Button from '../../components/Button.astro';
           <li class="collab__step">
             <div class="collab__step-num">05</div>
             <div class="collab__step-body">
-              <h3 class="collab__step-title">Send me the 4-digit code</h3>
-              <p>Reply to my email with the code. It's just four digits — something like <strong>7343</strong>. That's all I need.</p>
+              <h3 class="collab__step-title">Send me the code and your myshopify.com URL</h3>
+              <p>Reply to my email with two things:</p>
+              <ol style="margin: var(--space-2) 0 var(--space-3) var(--space-5); padding: 0; display: flex; flex-direction: column; gap: var(--space-1); color: var(--color-text-secondary); font-size: var(--text-base); line-height: 1.7;">
+                <li>Your <strong>4-digit code</strong> — something like <strong>7343</strong></li>
+                <li>Your <strong>myshopify.com URL</strong> — for example, <strong>your-store.myshopify.com</strong></li>
+              </ol>
+              <p>Your myshopify.com URL is your store's permanent internal address. You can find it in your browser's address bar when you're in the Shopify admin — it's the part that ends in <strong>.myshopify.com</strong>, even if your store has a custom domain.</p>
+              <p class="collab__step-note">If your admin URL looks like <em>your-store.myshopify.com/admin</em>, just send me the <em>your-store.myshopify.com</em> part.</p>
             </div>
           </li>
 
